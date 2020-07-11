@@ -10,13 +10,17 @@ class SearchScreen extends StatelessWidget {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-          IconButton(
             icon: Badge(
+              animationType: BadgeAnimationType.scale,
+              animationDuration: Duration(milliseconds: 200),
               child: Icon(Icons.shopping_cart),
-              badgeContent: Text('2'),
+              badgeContent: Text(
+                '2',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
+              ),
             ),
             onPressed: () {},
           ),
