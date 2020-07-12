@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth with ChangeNotifier {
   String _token;
   String _username;
+
   String baseUrl = "https://onlala-api.herokuapp.com/";
+
   String get token {
     return _token;
   }
@@ -84,7 +86,7 @@ class Auth with ChangeNotifier {
         throw HttpException('User Blocked');
       }
     } catch (e) {
-      print(e);
+      throw e;
     }
   }
 }
