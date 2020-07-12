@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/screens/category_products.dart';
 
 import '../widgets/subcat_widget.dart';
 import 'package:http/http.dart' as http;
@@ -44,7 +45,7 @@ class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
         setState(() {
           subCats = resBody['payload'];
         });
-        print(subCats);
+        // print(subCats);
       }
     } catch (e) {
       print(e);
@@ -98,16 +99,16 @@ class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
                             // Navigator.popUntil(context, (route) {
                             //   return count++ == 2;
                             // });
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     // builder: (ctx) => ProductUploadScreen(
-                            //     //   deptName,
-                            //     //   catName,
-                            //     //   subcat['sub_category']['sub_categories'],
-                            //     //   subcat['sub_category']['id'],
-                            //     // ),
-                            //   ),
-                            // );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => SubCatProdPaginatedScreen(
+                                  subcat['sub_category_file'][0]["sub_category"]
+                                      ["sub_categories"],
+                                  subcat['sub_category_file'][0]["sub_category"]
+                                      ['id'],
+                                ),
+                              ),
+                            );
                           }),
                     )
                     .toList(),
