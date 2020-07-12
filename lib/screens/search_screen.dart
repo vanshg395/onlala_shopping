@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
+import 'package:provider/provider.dart';
 import 'package:onlala_shopping/widgets/search_widget.dart';
 import 'package:http/http.dart' as http;
+
 import '../widgets/common_field.dart';
+import '../providers/auth.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -71,21 +74,22 @@ class _SearchScreenState extends State<SearchScreen> {
         title: Text('Search'),
         centerTitle: true,
         actions: <Widget>[
-          IconButton(
-            icon: Badge(
-              animationType: BadgeAnimationType.scale,
-              animationDuration: Duration(milliseconds: 200),
-              child: Icon(Icons.shopping_cart),
-              badgeContent: Text(
-                '2',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
+          if (Provider.of<Auth>(context).isAuth)
+            IconButton(
+              icon: Badge(
+                animationType: BadgeAnimationType.scale,
+                animationDuration: Duration(milliseconds: 200),
+                child: Icon(Icons.shopping_cart),
+                badgeContent: Text(
+                  '2',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
                 ),
               ),
+              onPressed: () {},
             ),
-            onPressed: () {},
-          ),
         ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
