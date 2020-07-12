@@ -7,11 +7,10 @@ class CategorySelector extends StatelessWidget {
 
   CategorySelector(this._categories_list);
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 160,
+      height: 170,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,14 +30,13 @@ class CategorySelector extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                    ..._categories_list.map(
-                        (category)=>CategorySelectorItem(
-                          category['category_image'][0]["image"],
-                          category['name'],
-                          category['id'],
-                        )
-
-                        )
+                  ..._categories_list.map(
+                    (category) => CategorySelectorItem(
+                      category['category_image'][0]["image"],
+                      category['name'],
+                      category['id'],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -50,44 +48,45 @@ class CategorySelector extends StatelessWidget {
 }
 
 class CategorySelectorItem extends StatelessWidget {
-  final String imageUrl,categoryName,id;
-  CategorySelectorItem(this.imageUrl,this.categoryName,this.id);
+  final String imageUrl, categoryName, id;
+  CategorySelectorItem(this.imageUrl, this.categoryName, this.id);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        width: 150,
         child: Column(
           children: <Widget>[
             Container(
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                color: Colors.grey,
-                shape: BoxShape.circle,
-                image: DecorationImage(image: CachedNetworkImageProvider(
-                  imageUrl
-              ), fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
-              ),
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: CachedNetworkImageProvider(imageUrl),
+                      fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
+                  ),
             ),
             SizedBox(
               height: 10,
             ),
-            Text(categoryName),
+            Text(
+              categoryName,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => SubCategorySelectScreen(
-             id,
-             categoryName
-            ),
+            builder: (ctx) => SubCategorySelectScreen(id, categoryName),
           ),
         );
-        print('item clicked');
       },
     );
   }

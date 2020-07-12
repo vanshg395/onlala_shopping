@@ -18,7 +18,7 @@ class ImageSlider extends StatelessWidget {
         options: CarouselOptions(
           viewportFraction: 1,
           height: 250,
-          autoPlay: true,
+          autoPlay: false,
           enableInfiniteScroll: false,
         ),
         items: <Widget>[

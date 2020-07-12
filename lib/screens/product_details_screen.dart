@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import './bulk_inquiry_screen.dart';
 import '../widgets/image_slider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -10,8 +12,9 @@ class ProductDetailsScreen extends StatefulWidget {
 
   final String id;
   final String name;
+  final String url;
 
-  ProductDetailsScreen(@required this.id, @required this.name);
+  ProductDetailsScreen(this.id, this.name, this.url);
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
@@ -660,48 +663,72 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 2, 0),
-                color: Theme.of(context).primaryColor,
-                alignment: Alignment.center,
-                child: Text(
-                  'General Inquiry',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+              child: GestureDetector(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 2, 0),
+                  color: Theme.of(context).primaryColor,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'General Inquiry',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
                 ),
+                onTap: () {
+                  print('hey');
+                },
               ),
             ),
             Expanded(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
-                color: Theme.of(context).primaryColor,
-                alignment: Alignment.center,
-                child: Text(
-                  'Add to Cart',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+              child: GestureDetector(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
+                  color: Theme.of(context).primaryColor,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Add to Cart',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
                 ),
+                onTap: () {
+                  print('ok');
+                },
               ),
             ),
             Expanded(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(2, 5, 0, 0),
-                color: Theme.of(context).primaryColor,
-                alignment: Alignment.center,
-                child: Text(
-                  'Bulk Inquiry',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+              child: GestureDetector(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(2, 5, 0, 0),
+                  color: Theme.of(context).primaryColor,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Bulk Inquiry',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
                 ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) => BulkInquiryScreen(
+                        _data[0]["product"]["product_name"],
+                        _data[0]["product"]["product_description"],
+                        _data[0]["product"]["bulk_order_price"],
+                        widget.url,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],

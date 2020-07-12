@@ -49,14 +49,14 @@ class PopularProducts extends StatelessWidget {
 }
 
 class PopularProductCard extends StatelessWidget {
-  final String product_name;
+  final String productName;
   final String description;
   final String url;
   final String price;
   final String id;
 
   PopularProductCard(
-      this.product_name, this.description, this.url, this.price, this.id);
+      this.productName, this.description, this.url, this.price, this.id);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -97,7 +97,7 @@ class PopularProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      product_name,
+                      productName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.subtitle1.copyWith(),
@@ -124,7 +124,7 @@ class PopularProductCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => ProductDetailsScreen(id, product_name),
+            builder: (ctx) => ProductDetailsScreen(id, productName, url),
           ),
         );
       },

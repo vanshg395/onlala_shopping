@@ -28,8 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getData();
-    getDataforCategories();
-    getDataforPP();
   }
 
   Future<void> getData() async {
@@ -50,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
+    getDataforCategories();
   }
 
   Future<void> getDataforCategories() async {
@@ -67,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
+    getDataforPP();
   }
 
   Future<void> getDataforPP() async {
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _data2 = _data2;
         });
-        print(_data2);
+        // print(_data2);
       }
     } catch (e) {
       print(e);

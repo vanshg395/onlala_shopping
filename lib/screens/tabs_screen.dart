@@ -3,6 +3,7 @@ import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 import './home_screen.dart';
 import './search_screen.dart';
+import './account_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _TabsScreenState extends State<TabsScreen> {
     SearchScreen(),
     HomeScreen(),
     HomeScreen(),
-    HomeScreen(),
+    AccountScreen(),
   ];
   @override
   Widget build(BuildContext context) {
