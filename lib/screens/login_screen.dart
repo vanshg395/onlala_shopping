@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:geocoder/geocoder.dart';
 
+import './register_screen.dart';
 import '../widgets/common_field.dart';
 import '../widgets/common_button.dart';
 
@@ -86,7 +89,79 @@ class LoginScreen extends StatelessWidget {
                     bgColor: Theme.of(context).primaryColor,
                     borderColor: Theme.of(context).primaryColor,
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: FlatButton(
+                    child: Text(
+                      'Sign Up Instead',
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                    ),
+                    onPressed: () async {
+                      Location location = new Location();
+
+                      bool _serviceEnabled;
+                      PermissionStatus _permissionGranted;
+                      LocationData _locationData;
+
+                      _serviceEnabled = await location.serviceEnabled();
+                      if (!_serviceEnabled) {
+                        _serviceEnabled = await location.requestService();
+                        if (!_serviceEnabled) {
+                          return;
+                        }
+                      }
+
+                      _permissionGranted = await location.hasPermission();
+                      if (_permissionGranted == PermissionStatus.denied) {
+                        _permissionGranted = await location.requestPermission();
+                        if (_permissionGranted != PermissionStatus.granted) {
+                          return;
+                        }
+                      }
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        child: Dialog(
+                          child: Container(
+                            height: 120,
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CircularProgressIndicator(),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text('Getting Your Location'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+
+                      _locationData = await location.getLocation();
+                      Navigator.of(context).pop();
+                      print(_locationData.latitude);
+                      print(_locationData.longitude);
+                      final coordinates = Coordinates(
+                        _locationData.latitude,
+                        _locationData.longitude,
+                      );
+                      final address = await Geocoder.local
+                          .findAddressesFromCoordinates(coordinates);
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (ctx) => RegisterScreen(address.first),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),

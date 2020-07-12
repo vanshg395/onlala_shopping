@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 
+import './login_screen.dart';
 import '../widgets/common_field.dart';
 import '../widgets/common_button.dart';
 import '../widgets/common_dropdown.dart';
@@ -7,6 +9,10 @@ import '../widgets/common_dropdown.dart';
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
+
+  final Address address;
+
+  RegisterScreen(this.address);
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -14,6 +20,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _departmentChoice;
   String _sourcingChoice;
   GlobalKey<FormState> _formKey = GlobalKey();
+
+  Future<void> getLocation() async {}
 
   Widget buildPartOne() {
     return Column(
@@ -410,7 +418,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       bgColor: Theme.of(context).primaryColor,
                       borderColor: Theme.of(context).primaryColor,
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: FlatButton(
+                      child: Text(
+                        'Login Instead',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (ctx) => LoginScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
