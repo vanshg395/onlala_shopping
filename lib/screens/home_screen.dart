@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isLoading = false;
+  int _requestCount = 0;
   List<dynamic> _data = [];
   List<dynamic> _data1 = [];
   List<dynamic> _data2 = [];
@@ -28,11 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getData();
+    getDataforCategories();
+    getDataforPP();
   }
 
   Future<void> getData() async {
     setState(() {
-      _isLoading = true;
+      _requestCount++;
     });
     try {
       final url = baseUrl + 'banner/create/';
@@ -48,10 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
-    getDataforCategories();
+    setState(() {
+      _requestCount--;
+    });
   }
 
   Future<void> getDataforCategories() async {
+    setState(() {
+      _requestCount++;
+    });
     try {
       final url = baseUrl + 'categories/show/categories/';
       final response = await http.get(url);
@@ -66,10 +73,15 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
-    getDataforPP();
+    setState(() {
+      _requestCount--;
+    });
   }
 
   Future<void> getDataforPP() async {
+    setState(() {
+      _requestCount++;
+    });
     try {
       final url = baseUrl + 'product/popular/buyer/';
       final response = await http.get(url);
@@ -103,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(e);
     }
     setState(() {
-      _isLoading = false;
+      _requestCount--;
     });
   }
 
@@ -132,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         // bottom: BottomAppBar(child: ,),
       ),
-      body: _isLoading
+      body: _requestCount != 0
           ? Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(
