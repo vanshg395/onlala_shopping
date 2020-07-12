@@ -49,7 +49,7 @@ class _TabsScreenState extends State<TabsScreen> {
               setState(() {
                 _selectedPageIndex = value;
                 _pageController.animateToPage(value,
-                    duration: Duration(milliseconds: 300),
+                    duration: Duration(milliseconds: 200),
                     curve: Curves.linear);
               });
             },

@@ -23,6 +23,18 @@ class LoginScreen extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
+                    'Welcome Back',
+                    style: Theme.of(context).textTheme.headline5.copyWith(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
                     'Email Address',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
@@ -67,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 Center(
                   child: CommonButton(
-                    title: 'Next',
+                    title: 'Login',
                     onPressed: () {},
                     fontSize: 18,
                     borderRadius: 10,
