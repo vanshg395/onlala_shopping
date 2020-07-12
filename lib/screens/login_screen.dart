@@ -33,19 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (ctx) => TabsScreen(),
-        ),
-      );
+      Navigator.of(context).pop(true);
     } catch (e) {
       print(e);
       if (e.toString() == 'Complete Profile') {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (ctx) => TabsScreen(),
-          ),
-        );
+        Navigator.of(context).pop(true);
         showDialog(
           context: context,
           child: AlertDialog(
