@@ -11,6 +11,10 @@ class Auth with ChangeNotifier {
 
   String baseUrl = "https://onlala-api.herokuapp.com/";
 
+  bool get isAuth {
+    return token != null;
+  }
+
   String get token {
     return _token;
   }

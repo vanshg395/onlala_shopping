@@ -29,6 +29,11 @@ class _TabsScreenState extends State<TabsScreen> {
       body: PageView(
         controller: _pageController,
         children: _pages,
+        onPageChanged: (value) {
+          setState(() {
+            _selectedPageIndex = value;
+          });
+        },
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

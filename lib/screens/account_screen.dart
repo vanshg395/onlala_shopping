@@ -204,6 +204,17 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.settings,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 )
               ],
             ),
