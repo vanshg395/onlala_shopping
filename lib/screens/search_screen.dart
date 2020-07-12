@@ -15,16 +15,11 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController(text: '');
   List<dynamic> _data = [];
 
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
 
   // categories/show/categories/
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<void> _search(String searchKey) async {
     print("searhc");
@@ -72,76 +67,85 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Search'),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: Badge(
-                animationType: BadgeAnimationType.scale,
-                animationDuration: Duration(milliseconds: 200),
-                child: Icon(Icons.shopping_cart),
-                badgeContent: Text(
-                  '2',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
+      appBar: AppBar(
+        title: Text('Search'),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Badge(
+              animationType: BadgeAnimationType.scale,
+              animationDuration: Duration(milliseconds: 200),
+              child: Icon(Icons.shopping_cart),
+              badgeContent: Text(
+                '2',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
                 ),
               ),
-              onPressed: () {},
             ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(right: 10),
-                      child: CommonField(
-                        controller: _searchController,
-                        bgColor: Colors.white,
-                        borderColor: Colors.grey,
-                        borderRadius: 10,
-                        placeholder: 'Enter Keywords',
-                        keyboardType: TextInputType.numberWithOptions(
-                          signed: false,
-                          decimal: true,
-                        ),
-                        onChanged: () {
-                          print(_searchController.text);
-                          if (_searchController.text.length > 3) {
-                            _search(_searchController.text);
+            onPressed: () {},
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Container(
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: CommonField(
+                      controller: _searchController,
+                      bgColor: Colors.white,
+                      borderColor: Colors.grey,
+                      borderRadius: 10,
+                      placeholder: 'Enter Keywords',
+                      suffixIcon: InkWell(
+                        child: Icon(Icons.cancel),
+                        onTap: () {
+                          if (_searchController.text != '') {
+                            setState(() {
+                              _searchController.text = '';
+                            });
+                          } else {
+                            FocusScope.of(context).unfocus();
                           }
                         },
                       ),
+                      // onChanged: () {
+                      //   print(_searchController.text);
+                      //   if (_searchController.text.length > 3) {
+                      //     _search(_searchController.text);
+                      //   }
+                      // },
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      _search(_searchController.text);
-                    },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
                   ),
-                ],
-              ),
+                  onPressed: () {
+                    _search(_searchController.text);
+                  },
+                ),
+              ],
             ),
           ),
         ),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[SearchProducts(_data)],
-                  ),
+      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[SearchProducts(_data)],
                 ),
-              ));
+              ),
+            ),
+    );
   }
 }
