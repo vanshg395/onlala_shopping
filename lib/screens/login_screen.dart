@@ -6,7 +6,25 @@ import './register_screen.dart';
 import '../widgets/common_field.dart';
 import '../widgets/common_button.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  GlobalKey<FormState> _formKey = GlobalKey();
+  Map<String, String> _data = {};
+  bool _isLoading = false;
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+
+    // SEND REQUEST HERE USING PROVIDER.
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +70,12 @@ class LoginScreen extends StatelessWidget {
                     borderColor: Colors.grey,
                     borderRadius: 10,
                     placeholder: 'abc@xyz.com',
+                    validator: (value) {
+                      if (value == '') {
+                        return 'This field is required';
+                      }
+                    },
+                    onSaved: (value) {},
                   ),
                 ),
                 SizedBox(
@@ -75,6 +99,12 @@ class LoginScreen extends StatelessWidget {
                     borderColor: Colors.grey,
                     borderRadius: 10,
                     placeholder: 'XXXXXXXX',
+                    validator: (value) {
+                      if (value == '') {
+                        return 'This field is required';
+                      }
+                    },
+                    onSaved: (value) {},
                   ),
                 ),
                 SizedBox(
@@ -83,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                 Center(
                   child: CommonButton(
                     title: 'Login',
-                    onPressed: () {},
+                    onPressed: _submit,
                     fontSize: 18,
                     borderRadius: 10,
                     bgColor: Theme.of(context).primaryColor,

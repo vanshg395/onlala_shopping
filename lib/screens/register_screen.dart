@@ -16,12 +16,31 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  GlobalKey<FormState> _formKey = GlobalKey();
+  Map<String, String> _data = {};
+  bool _isLoading = false;
   int _currentPart = 1;
   String _departmentChoice;
   String _sourcingChoice;
-  GlobalKey<FormState> _formKey = GlobalKey();
 
-  Future<void> getLocation() async {}
+  Future<void> _submit1() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    _currentPart++;
+
+    // SNED REQUEST HERE USIGN PROVIDER.
+  }
+
+  Future<void> _submit2() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+
+    // SNED REQUEST HERE USIGN PROVIDER.
+  }
 
   Widget buildPartOne() {
     return Column(
@@ -59,6 +78,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'John',
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
         SizedBox(
@@ -81,6 +106,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'Doe',
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
         SizedBox(
@@ -103,6 +134,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'abc@xyz.com',
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
         SizedBox(
@@ -126,6 +164,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'XXXXXXXX',
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
       ],
@@ -168,6 +212,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'ABC Inc.',
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
         SizedBox(
@@ -190,6 +240,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'XXXXXXXX',
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
         SizedBox(
@@ -287,6 +343,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 top: 10,
               ),
             ),
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
         SizedBox(
@@ -384,6 +446,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 top: 10,
               ),
             ),
+            validator: (value) {
+              if (value == '') {
+                return 'This field is required.';
+              }
+            },
+            onSaved: (value) {},
           ),
         ),
       ],
@@ -411,8 +479,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   Center(
                     child: CommonButton(
-                      title: 'Next',
-                      onPressed: () {},
+                      title: _currentPart == 1 ? 'Next' : 'Sign Up',
+                      onPressed: _currentPart == 1 ? _submit1 : _submit2,
                       fontSize: 18,
                       borderRadius: 10,
                       bgColor: Theme.of(context).primaryColor,
