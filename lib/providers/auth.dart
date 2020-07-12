@@ -11,4 +11,7 @@ class Auth with ChangeNotifier {
   String get username {
     return _username;
   }
+
+  Future<void> login() async {}
+  Future<void> signup() async {}
 }

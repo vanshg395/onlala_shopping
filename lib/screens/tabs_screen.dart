@@ -3,6 +3,8 @@ import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 import './home_screen.dart';
 import './search_screen.dart';
+import './orders_screen.dart';
+import './chat_screen.dart';
 import './account_screen.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -12,17 +14,22 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
+  PageController _pageController = PageController();
   List<Widget> _pages = [
     HomeScreen(),
     SearchScreen(),
-    HomeScreen(),
-    HomeScreen(),
+    OrdersScreen(),
+    ChatScreen(),
     AccountScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedPageIndex],
+      body: PageView(
+        controller: _pageController,
+        children: _pages,
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -41,6 +48,9 @@ class _TabsScreenState extends State<TabsScreen> {
             onTap: (value) {
               setState(() {
                 _selectedPageIndex = value;
+                _pageController.animateToPage(value,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.linear);
               });
             },
             activeColor: Theme.of(context).primaryColor,

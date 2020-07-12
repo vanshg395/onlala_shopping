@@ -37,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(60),
+          preferredSize: Size.fromHeight(50),
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
             child: Row(

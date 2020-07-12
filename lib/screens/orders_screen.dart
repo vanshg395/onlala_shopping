@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 
-import './auth_view.dart';
-
-class AccountScreen extends StatelessWidget {
+class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account'),
+        title: Text('Orders'),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -28,9 +26,7 @@ class AccountScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: AuthView(),
-      ),
+      body: Container(),
     );
   }
 }
