@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/product_details_screen.dart';
 
 class PopularProducts extends StatelessWidget {
+  final List<dynamic> _ppdata;
+  PopularProducts(this._ppdata);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,10 +30,15 @@ class PopularProducts extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  PopularProductCard(),
-                  PopularProductCard(),
-                  PopularProductCard(),
-                  PopularProductCard(),
+                  ..._ppdata.map(
+                  (ppdata)=> PopularProductCard(
+                    ppdata['product_name'],
+                    ppdata['product_des'],
+                    ppdata['image'],
+                    ppdata['price'],
+                    ppdata["id"]
+                  ),
+                  ),
                 ],
               ),
             ),
@@ -42,6 +50,14 @@ class PopularProducts extends StatelessWidget {
 }
 
 class PopularProductCard extends StatelessWidget {
+  final String product_name;
+  final String description;
+  final String url;
+  final String price;
+  final String id;
+
+
+  PopularProductCard(this.product_name,this.description,this.url,this.price,this.id);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -69,7 +85,11 @@ class PopularProductCard extends StatelessWidget {
                   topLeft: Radius.circular(10),
                   bottomLeft: Radius.circular(10),
                 ),
-                // image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
+                image: DecorationImage(
+                  image:  CachedNetworkImageProvider(
+                      url
+                  ), 
+                  fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
               ),
             ),
             Expanded(
@@ -80,17 +100,17 @@ class PopularProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Product Name',
+                      product_name,
                       style: Theme.of(context).textTheme.subtitle1.copyWith(),
                     ),
                     Text(
-                      'Cillum enim enim cupidatat ad in in ad qui minim cupidatat amet consequat.',
+                      description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.subtitle2.copyWith(),
                     ),
                     Text(
-                      '\$300',
+                      '€ $price' ,
                       style: Theme.of(context).textTheme.subtitle2.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -105,7 +125,9 @@ class PopularProductCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => ProductDetailsScreen(),
+            builder: (ctx) => ProductDetailsScreen(
+              id,product_name
+            ),
           ),
         );
       },

@@ -1,6 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/screens/category_screen.dart';
 
 class CategorySelector extends StatelessWidget {
+  final List<dynamic> _categories_list;
+
+  CategorySelector(this._categories_list);
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,13 +31,14 @@ class CategorySelector extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  CategorySelectorItem(),
-                  CategorySelectorItem(),
-                  CategorySelectorItem(),
-                  CategorySelectorItem(),
-                  CategorySelectorItem(),
-                  CategorySelectorItem(),
-                  CategorySelectorItem(),
+                    ..._categories_list.map(
+                        (category)=>CategorySelectorItem(
+                          category['category_image'][0]["image"],
+                          category['name'],
+                          category['id'],
+                        )
+
+                        )
                 ],
               ),
             ),
@@ -42,10 +50,13 @@ class CategorySelector extends StatelessWidget {
 }
 
 class CategorySelectorItem extends StatelessWidget {
+  final String imageUrl,categoryName,id;
+  CategorySelectorItem(this.imageUrl,this.categoryName,this.id);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
+        
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: <Widget>[
@@ -55,17 +66,27 @@ class CategorySelectorItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.grey,
                 shape: BoxShape.circle,
-                // image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
+                image: DecorationImage(image: CachedNetworkImageProvider(
+                  imageUrl
+              ), fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
               ),
             ),
             SizedBox(
               height: 10,
             ),
-            Text('Category 1'),
+            Text(categoryName),
           ],
         ),
       ),
       onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => SubCategorySelectScreen(
+             id,
+             categoryName
+            ),
+          ),
+        );
         print('item clicked');
       },
     );

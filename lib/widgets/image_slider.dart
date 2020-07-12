@@ -1,7 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:onlala_shopping/widgets/video_preview.dart';
 
 class ImageSlider extends StatelessWidget {
+  final List<dynamic> images;
+  final List<dynamic> videos;
+
+  ImageSlider(this.images,this.videos);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,19 +22,25 @@ class ImageSlider extends StatelessWidget {
           enableInfiniteScroll: false,
         ),
         items: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              // image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
-            ),
+          ...images.map(
+            (pic)=>CachedNetworkImage(
+                imageUrl: pic['product_image'],
+                progressIndicatorBuilder: (context, url, downloadProgress) => 
+                        Container(
+                          height: 40,
+                          width: 40,
+                          child: CircularProgressIndicator(value: downloadProgress.progress)
+                          ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+            )
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.red,
-              // image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
-            ),
-          ),
+          // ...videos.map((e) => 
+          //   VideoPreviewScreen(
+          //     e['product_video']
+          //   )
+          // )
         ],
+        
       ),
     );
   }

@@ -1,13 +1,92 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../widgets/image_slider.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductDetailsScreen extends StatefulWidget {
+  
+  
+  @override
+  _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
+
+
+  final String id;
+  final String name;
+
+  ProductDetailsScreen(@required this.id, @required this.name);
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  bool _isLoading = false;
+  List<dynamic> _data = [];
+  List<dynamic> _data1 = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+    getRelatedproducts();
+  }
+
+  var baseUrl = "https://onlala-api.herokuapp.com/";
+
+
+  Future<void> getData() async {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        final url = baseUrl + 'product/productDetail/?product_id=${widget.id}';
+        final response = await http.get(url);
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          final resBody = json.decode(response.body);
+          setState(() {
+            _data = resBody['payload'];
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    Future<void> getRelatedproducts() async{
+      try {
+        final url = baseUrl + 'product/related/show/';
+        final response = await http.post(url,
+        headers: {
+          'Content-Type':'application/json'
+        },
+        body: json.encode({
+          "product_id" : widget.id
+        }));
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          final resBody = json.decode(response.body);
+          setState(() {
+            _data1 = resBody['payload'];
+          });
+        }
+        print(_data1);
+
+
+      } catch (e) {
+        print(e);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
+
   @override
   Widget build(BuildContext context) {
+    print(widget.id);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Name'),
+        title: Text(widget.name),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.favorite_border),
@@ -15,14 +94,21 @@ class ProductDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
+      body:_isLoading ?
+      Center(
+        child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(
+                  Theme.of(context).primaryColor,
+                ),
+              ),
+            ):  SafeArea(
         bottom: false,
         child: Container(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ImageSlider(),
+                ImageSlider(_data[0]["product"]["pictures"],_data[0]["product"]["videos"]),
                 SizedBox(
                   height: 20,
                 ),
@@ -45,7 +131,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Product Name',
+                        _data[0]["product"]["product_name"],
                         style: Theme.of(context).textTheme.subtitle1.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
@@ -54,7 +140,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         height: 20,
                       ),
                       Text(
-                        '\$ 300 EX-FACTORY',
+                        '\€ ${_data[0]["bulkorder_details"]["bulk_order_price"]} ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
                         style: Theme.of(context).textTheme.subtitle1.copyWith(
                               fontWeight: FontWeight.w700,
                               color: Theme.of(context).primaryColor,
@@ -72,7 +158,7 @@ class ProductDetailsScreen extends StatelessWidget {
                               text: 'Minimum Order: ',
                             ),
                             TextSpan(
-                              text: '60000 Piece',
+                              text: '${_data[0]["product"]["minimum_order_quantity"].toString()} ${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}',
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
@@ -128,7 +214,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '0',
+                          '€ ${_data[0]["sample_details"]["sample_cost"].toString()} ',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -147,7 +233,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '10 to 15 Days',
+                          '${_data[0]["sample_details"]["sample_from_time_range"]} - ${_data[0]["sample_details"]["sample_to_time_range"]} Days',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -166,7 +252,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          'HY7890',
+                          '${_data[0]["sample_details"]["hs_code"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -185,7 +271,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '10 x 5 x 7 cm',
+                          '${_data[0]["sample_details"]["sample_dimension_length"]} X ${_data[0]["sample_details"]["sample_dimension_breadth"]} X ${_data[0]["sample_details"]["sample_dimension_height"]} ${_data[0]["sample_details"]["sample_dimension_unit"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -204,7 +290,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '1500 g',
+                          '${_data[0]["sample_details"]["sample_weight"]} ${_data[0]["sample_details"]["sample_weight_unit"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -223,7 +309,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          'Do velit consectetur culpa duis occaecat occaecat dolore eu amet ea consequat proident.',
+                          '${_data[0]["sample_details"]["sample_policy"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -269,7 +355,7 @@ class ProductDetailsScreen extends StatelessWidget {
                               text: 'Model Number: ',
                             ),
                             TextSpan(
-                              text: '9876HY',
+                              text: '${_data[0]["product"]["model_no"]}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1
@@ -284,7 +370,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        'Ut elit irure pariatur sit nostrud ut consectetur. Enim irure pariatur id ex in et magna ipsum exercitation. Tempor aliqua magna cupidatat adipisicing id et nulla non cillum. Sit fugiat anim nostrud enim dolore non amet incididunt. \n\nEa ullamco enim nostrud ea deserunt consectetur consequat incididunt quis. Sunt irure anim laboris et commodo exercitation duis commodo sunt consequat. Pariatur quis nulla proident anim cillum qui est sint nostrud veniam elit est reprehenderit veniam.',
+                        '${_data[0]["product"]["product_description"]}',
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ],
@@ -318,7 +404,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         height: 20,
                       ),
                       Text(
-                        'Price in \$ (Negotiable)',
+                        'Price in \€ (Negotiable)',
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(
@@ -329,7 +415,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '13/piece EX-FACTORY',
+                          '${_data[0]["bulkorder_details"]["bulk_order_price"]}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]} ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -348,7 +434,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '10 to 15 Days',
+                          '${_data[0]["bulkorder_details"]["bulk_order_from_time_range"]} to ${_data[0]["bulkorder_details"]["bulk_order_to_time_range"]} Days',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -367,7 +453,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '14',
+                          '${_data[0]["product"]["quantity_per_carton"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -386,7 +472,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '10 x 5 x 7 inch',
+                          '${_data[0]["carton_details"]["carton_dimension_length"]} x ${_data[0]["carton_details"]["carton_dimension_breadth"]} x ${_data[0]["carton_details"]["carton_dimension_height"]} ${_data[0]["carton_details"]["carton_dimension_unit"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -405,7 +491,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          '325 Kg',
+                          '${_data[0]["carton_details"]["carton_weight"]} ${_data[0]["carton_details"]["carton_weight_unit"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -454,7 +540,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          'Payment Method',
+                          '${_data[0]["product"]["payment_method"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -473,7 +559,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          'JLN Port (Mumbai)',
+                          '${_data[0]["bulkorder_details"]["bulk_order_port"]}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
@@ -492,7 +578,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
                         child: Text(
-                          'Yes',
+                          _data[0]["product"]["tech_transfer_investment"] ? 'Yes' : 'No',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
