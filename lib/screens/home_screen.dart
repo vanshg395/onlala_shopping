@@ -10,20 +10,15 @@ import '../widgets/popular_products.dart';
 import '../widgets/suggested_products.dart';
 
 class HomeScreen extends StatefulWidget {
-  
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   bool _isLoading = false;
   List<dynamic> _data = [];
   List<dynamic> _data1 = [];
   List<dynamic> _data2 = [];
-  
-
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
 
@@ -46,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
       final response = await http.get(url);
       print(response.statusCode);
       if (response.statusCode == 200) {
-        
         final resBody = json.decode(response.body);
         setState(() {
           _data = resBody['payload'];
@@ -56,17 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
-    
   }
 
   Future<void> getDataforCategories() async {
-    
     try {
       final url = baseUrl + 'categories/show/categories/';
       final response = await http.get(url);
       print(response.statusCode);
       if (response.statusCode == 200) {
-        
         final resBody = json.decode(response.body);
         setState(() {
           _data1 = resBody["categories"];
@@ -79,18 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getDataforPP() async {
-    
     try {
       final url = baseUrl + 'product/popular/buyer/';
       final response = await http.get(url);
       print(response.statusCode);
       if (response.statusCode == 200) {
-        
         final resBody = json.decode(response.body);
-        for(var i=0;i<resBody.length;i++){
+        for (var i = 0; i < resBody.length; i++) {
           var image = '';
-          for(var j=0;j<resBody[i]["pictures"].length;j++){
-            if (resBody[i]["pictures"][j]["image_name"]=="Primary Image"){
+          for (var j = 0; j < resBody[i]["pictures"].length; j++) {
+            if (resBody[i]["pictures"][j]["image_name"] == "Primary Image") {
               image = resBody[i]["pictures"][j]["product_image"];
               break;
             }
@@ -98,11 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
           var price = resBody[i]["sample_details"]["sample_cost"].toString();
           // sample_details
           _data2.add({
-            "image":image,
-            "product_name":resBody[i]["product"]["product_name"].toString(),
-            "product_des":resBody[i]["product"]["product_description"],
-            "price":price.toString(),
-            "id":resBody[i]["product"]["id"]
+            "image": image,
+            "product_name": resBody[i]["product"]["product_name"].toString(),
+            "product_des": resBody[i]["product"]["product_description"],
+            "price": price.toString(),
+            "id": resBody[i]["product"]["id"]
           });
         }
         setState(() {
@@ -143,39 +132,39 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         // bottom: BottomAppBar(child: ,),
       ),
-      body: _isLoading ?
-      Center(
-        child: CircularProgressIndicator(
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(
                   Theme.of(context).primaryColor,
                 ),
               ),
-            ): 
-      SafeArea(
-        bottom: false,
-        child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                BannerWidget(_data),
-                CategorySelector(_data1),
-                Container(
-                  height: 10,
-                  width: double.infinity,
-                  color: Theme.of(context).primaryColor.withOpacity(0.2),
+            )
+          : SafeArea(
+              bottom: false,
+              child: Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      BannerWidget(_data),
+                      CategorySelector(_data1),
+                      Container(
+                        height: 10,
+                        width: double.infinity,
+                        color: Theme.of(context).primaryColor.withOpacity(0.2),
+                      ),
+                      PopularProducts(_data2),
+                      Container(
+                        height: 10,
+                        width: double.infinity,
+                        color: Theme.of(context).primaryColor.withOpacity(0.2),
+                      ),
+                      SuggestedProducts(),
+                    ],
+                  ),
                 ),
-                PopularProducts(_data2),
-                Container(
-                  height: 10,
-                  width: double.infinity,
-                  color: Theme.of(context).primaryColor.withOpacity(0.2),
-                ),
-                SuggestedProducts(),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

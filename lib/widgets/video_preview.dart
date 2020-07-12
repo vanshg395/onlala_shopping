@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
 import 'package:video_player/video_player.dart';
-
 import 'package:chewie/chewie.dart';
 
 class VideoPreviewScreen extends StatefulWidget {
@@ -16,7 +14,6 @@ class VideoPreviewScreen extends StatefulWidget {
 }
 
 class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
-  TargetPlatform _platform;
   VideoPlayerController _videoPlayerController1;
   ChewieController _chewieController;
 
@@ -61,25 +58,24 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('>>>>>>>>>');
-    print(_videoPlayerController1.value.aspectRatio);
-    return  Container(
+    return Container(
+      height: 250,
       child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Center(
-            child: _chewieController == null
-                ? Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(
-                        Theme.of(context).primaryColor,
-                      ),
+        padding: const EdgeInsets.all(10.0),
+        child: Center(
+          child: _chewieController == null
+              ? Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(
+                      Theme.of(context).primaryColor,
                     ),
-                  )
-                : Chewie(
-                    controller: _chewieController,
                   ),
-          ),
+                )
+              : Chewie(
+                  controller: _chewieController,
+                ),
         ),
+      ),
     );
-    }
   }
+}

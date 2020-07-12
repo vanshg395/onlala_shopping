@@ -31,13 +31,12 @@ class PopularProducts extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
                   ..._ppdata.map(
-                  (ppdata)=> PopularProductCard(
-                    ppdata['product_name'],
-                    ppdata['product_des'],
-                    ppdata['image'],
-                    ppdata['price'],
-                    ppdata["id"]
-                  ),
+                    (ppdata) => PopularProductCard(
+                        ppdata['product_name'],
+                        ppdata['product_des'],
+                        ppdata['image'],
+                        ppdata['price'],
+                        ppdata["id"]),
                   ),
                 ],
               ),
@@ -56,8 +55,8 @@ class PopularProductCard extends StatelessWidget {
   final String price;
   final String id;
 
-
-  PopularProductCard(this.product_name,this.description,this.url,this.price,this.id);
+  PopularProductCard(
+      this.product_name, this.description, this.url, this.price, this.id);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -80,17 +79,15 @@ class PopularProductCard extends StatelessWidget {
             Container(
               width: 100,
               decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-                image: DecorationImage(
-                  image:  CachedNetworkImageProvider(
-                      url
-                  ), 
-                  fit: BoxFit.cover)   // ENTER IMAGE LINK FOR CATEGORY
-              ),
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                  image: DecorationImage(
+                      image: CachedNetworkImageProvider(url),
+                      fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
+                  ),
             ),
             Expanded(
               child: Container(
@@ -101,6 +98,8 @@ class PopularProductCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       product_name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.subtitle1.copyWith(),
                     ),
                     Text(
@@ -110,7 +109,7 @@ class PopularProductCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.subtitle2.copyWith(),
                     ),
                     Text(
-                      '€ $price' ,
+                      '€ $price',
                       style: Theme.of(context).textTheme.subtitle2.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -125,9 +124,7 @@ class PopularProductCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => ProductDetailsScreen(
-              id,product_name
-            ),
+            builder: (ctx) => ProductDetailsScreen(id, product_name),
           ),
         );
       },

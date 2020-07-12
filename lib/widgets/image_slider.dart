@@ -7,7 +7,7 @@ class ImageSlider extends StatelessWidget {
   final List<dynamic> images;
   final List<dynamic> videos;
 
-  ImageSlider(this.images,this.videos);
+  ImageSlider(this.images, this.videos);
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +22,25 @@ class ImageSlider extends StatelessWidget {
           enableInfiniteScroll: false,
         ),
         items: <Widget>[
-          ...images.map(
-            (pic)=>CachedNetworkImage(
-                imageUrl: pic['product_image'],
-                progressIndicatorBuilder: (context, url, downloadProgress) => 
-                        Container(
-                          height: 40,
-                          width: 40,
-                          child: CircularProgressIndicator(value: downloadProgress.progress)
-                          ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-            )
-          ),
-          // ...videos.map((e) => 
-          //   VideoPreviewScreen(
-          //     e['product_video']
-          //   )
-          // )
+          ...images
+              .map(
+                (pic) => Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(pic['product_image']),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+          ...videos
+              .map(
+                (e) => VideoPreviewScreen(e['product_video']),
+              )
+              .toList(),
         ],
-        
       ),
     );
   }

@@ -7,7 +7,6 @@ class BannerWidget extends StatelessWidget {
 
   BannerWidget(this._banner);
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,15 +21,22 @@ class BannerWidget extends StatelessWidget {
         ),
         items: <Widget>[
           ..._banner.map(
-            (pic)=>CachedNetworkImage(
-            imageUrl: pic['image'],
-            progressIndicatorBuilder: (context, url, downloadProgress) => 
-                    CircularProgressIndicator(value: downloadProgress.progress),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
+            (pic) => Container(
+              height: 250,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: pic['image'],
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                fit: BoxFit.cover,
+              ),
+            ),
           )
         ],
-        
       ),
     );
   }
