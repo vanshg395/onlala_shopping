@@ -210,14 +210,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 50,
                   ),
                   Center(
-                    child: CommonButton(
-                      title: 'Login',
-                      onPressed: _submit,
-                      fontSize: 18,
-                      borderRadius: 10,
-                      bgColor: Theme.of(context).primaryColor,
-                      borderColor: Theme.of(context).primaryColor,
-                    ),
+                    child: _isLoading
+                        ? CircularProgressIndicator()
+                        : CommonButton(
+                            title: 'Login',
+                            onPressed: _submit,
+                            fontSize: 18,
+                            borderRadius: 10,
+                            bgColor: Theme.of(context).primaryColor,
+                            borderColor: Theme.of(context).primaryColor,
+                          ),
                   ),
                   SizedBox(
                     height: 10,
