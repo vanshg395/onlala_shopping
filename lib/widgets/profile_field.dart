@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+
+class ProfileField extends StatefulWidget {
+  final String label;
+  final String initialData;
+  final Function validator;
+  final Function onSaved;
+  final bool enabled;
+
+  ProfileField({
+    @required this.label,
+    @required this.initialData,
+    this.validator,
+    this.onSaved,
+    this.enabled,
+  });
+
+  @override
+  _ProfileFieldState createState() => _ProfileFieldState();
+}
+
+class _ProfileFieldState extends State<ProfileField> {
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    controller.text = widget.initialData;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      enabled: widget.enabled,
+      decoration: InputDecoration(
+        labelText: widget.label,
+        labelStyle: TextStyle(fontSize: 20),
+        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        disabledBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        enabledBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        errorBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        focusedErrorBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+      ),
+      style: TextStyle(fontSize: 20),
+      validator: widget.validator,
+      onSaved: widget.onSaved,
+    );
+  }
+}

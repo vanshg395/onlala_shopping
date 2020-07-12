@@ -7,6 +7,7 @@ import 'package:geocoder/geocoder.dart';
 
 import './login_screen.dart';
 import './register_screen.dart';
+import 'edit_profile_screen.dart';
 import '../widgets/common_button.dart';
 import './auth_view.dart';
 import '../providers/auth.dart';
@@ -258,6 +259,13 @@ class _AccountScreenState extends State<AccountScreen> {
                               'Edit Profile',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => EditProfileScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
