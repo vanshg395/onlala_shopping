@@ -109,6 +109,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       borderColor: Colors.grey,
                       borderRadius: 10,
                       placeholder: 'Enter Keywords',
+                      onChanged: (value) {
+                        print(value);
+                      },
                       keyboardType: TextInputType.numberWithOptions(
                         signed: false,
                         decimal: true,
