@@ -492,6 +492,11 @@ class _AccountScreenState extends State<AccountScreen> {
                               'Logout',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
+                            onTap: () async {
+                              await Provider.of<Auth>(context, listen: false)
+                                  .logout();
+                              setState(() {});
+                            },
                           ),
                         ),
                       ),
