@@ -13,9 +13,9 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController(text: '');
-    List<dynamic> _data = [];
-    
-    bool _isLoading = true;
+  List<dynamic> _data = [];
+
+  bool _isLoading = true;
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
 
@@ -25,9 +25,6 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
   }
-
-
-
 
   Future<void> _search(String searchKey) async {
     print("searhc");
@@ -40,13 +37,14 @@ class _SearchScreenState extends State<SearchScreen> {
       final response = await http.get(url);
       print(response.statusCode);
       if (response.statusCode == 200) {
-        _data=[];
+        _data = [];
         final resBody = json.decode(response.body)["payload"];
         // print(resBody);
         for (var i = 0; i < resBody.length; i++) {
           var image = '';
           for (var j = 0; j < resBody[i]["product_image"].length; j++) {
-            if (resBody[i]["product_image"][j]["image_name"] == "Primary Image") {
+            if (resBody[i]["product_image"][j]["image_name"] ==
+                "Primary Image") {
               image = resBody[i]["product_image"][j]["product_image"];
               break;
             }
@@ -74,80 +72,76 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Search'),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Badge(
-              animationType: BadgeAnimationType.scale,
-              animationDuration: Duration(milliseconds: 200),
-              child: Icon(Icons.shopping_cart),
-              badgeContent: Text(
-                '2',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
+        appBar: AppBar(
+          title: Text('Search'),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Badge(
+                animationType: BadgeAnimationType.scale,
+                animationDuration: Duration(milliseconds: 200),
+                child: Icon(Icons.shopping_cart),
+                badgeContent: Text(
+                  '2',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
                 ),
               ),
+              onPressed: () {},
             ),
-            onPressed: () {},
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: CommonField(
-                      controller: _searchController,
-                      bgColor: Colors.white,
-                      borderColor: Colors.grey,
-                      borderRadius: 10,
-                      placeholder: 'Enter Keywords',
-                      onChanged: (value) {
-                        print(value);
-                      },
-                      keyboardType: TextInputType.numberWithOptions(
-                        signed: false,
-                        decimal: true,
+          ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: CommonField(
+                        controller: _searchController,
+                        bgColor: Colors.white,
+                        borderColor: Colors.grey,
+                        borderRadius: 10,
+                        placeholder: 'Enter Keywords',
+                        keyboardType: TextInputType.numberWithOptions(
+                          signed: false,
+                          decimal: true,
+                        ),
+                        onChanged: () {
+                          print(_searchController.text);
+                          if (_searchController.text.length > 3) {
+                            _search(_searchController.text);
+                          }
+                        },
                       ),
-                      onChanged: (){
-                        print(_searchController.text);
-                        if(_searchController.text.length>3){
-                          _search(_searchController.text);
-                        }
-                      },
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: Colors.white,
+                  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      _search(_searchController.text);
+                    },
                   ),
-                  onPressed: () {
-                    _search(_searchController.text);
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      body: _isLoading ?Center(child: CircularProgressIndicator()) : Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SearchProducts(_data)
-            ],
-          ),
-        ),
-      )
-    );
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[SearchProducts(_data)],
+                  ),
+                ),
+              ));
   }
 }
