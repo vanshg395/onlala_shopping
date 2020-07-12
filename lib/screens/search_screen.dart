@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
-
+import 'package:onlala_shopping/widgets/search_widget.dart';
+import 'package:http/http.dart' as http;
 import '../widgets/common_field.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -10,8 +13,63 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController(text: '');
+    List<dynamic> _data = [];
+    
+    bool _isLoading = true;
 
-  Future<void> _search(String searchKey) async {}
+  var baseUrl = "https://onlala-api.herokuapp.com/";
+
+  // categories/show/categories/
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
+
+  Future<void> _search(String searchKey) async {
+    print("searhc");
+    // https://onlala-api.herokuapp.com/product/search/?search=
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final url = baseUrl + 'product/search/?search=$searchKey';
+      final response = await http.get(url);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        _data=[];
+        final resBody = json.decode(response.body)["payload"];
+        // print(resBody);
+        for (var i = 0; i < resBody.length; i++) {
+          var image = '';
+          for (var j = 0; j < resBody[i]["product_image"].length; j++) {
+            if (resBody[i]["product_image"][j]["image_name"] == "Primary Image") {
+              image = resBody[i]["product_image"][j]["product_image"];
+              break;
+            }
+          }
+          var price = resBody[i]["sample_details"]["sample_cost"].toString();
+          // sample_details
+          _data.add({
+            "image": image,
+            "product_name": resBody[i]["product"]["product_name"].toString(),
+            "product_des": resBody[i]["product"]["product_description"],
+            "price": price.toString(),
+            "id": resBody[i]["product"]["id"]
+          });
+        }
+        print(_data);
+      }
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +113,12 @@ class _SearchScreenState extends State<SearchScreen> {
                         signed: false,
                         decimal: true,
                       ),
+                      onChanged: (){
+                        print(_searchController.text);
+                        if(_searchController.text.length>3){
+                          _search(_searchController.text);
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -72,13 +136,15 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
-      body: Container(
+      body: _isLoading ?Center(child: CircularProgressIndicator()) : Container(
         child: SingleChildScrollView(
           child: Column(
-            children: <Widget>[],
+            children: <Widget>[
+              SearchProducts(_data)
+            ],
           ),
         ),
-      ),
+      )
     );
   }
 }
