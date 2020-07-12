@@ -13,6 +13,7 @@ class Cart with ChangeNotifier {
 
   Future<void> addItem() async {}
   Future<void> removeItem() async {}
+  Future<void> getItems() async {}
 }
 
 class CartItem {

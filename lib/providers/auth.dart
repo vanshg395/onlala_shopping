@@ -93,4 +93,22 @@ class Auth with ChangeNotifier {
       throw e;
     }
   }
+
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      return false;
+    }
+    final extractedUserData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
+    _token = extractedUserData['token'];
+    notifyListeners();
+    return true;
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
 }

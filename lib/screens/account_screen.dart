@@ -7,6 +7,7 @@ import 'package:geocoder/geocoder.dart';
 
 import './login_screen.dart';
 import './register_screen.dart';
+import 'edit_profile_screen.dart';
 import '../widgets/common_button.dart';
 import './auth_view.dart';
 import '../providers/auth.dart';
@@ -23,23 +24,6 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         title: Text('Account'),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Badge(
-              animationType: BadgeAnimationType.scale,
-              animationDuration: Duration(milliseconds: 200),
-              child: Icon(Icons.shopping_cart),
-              badgeContent: Text(
-                '2',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SafeArea(
         // child: AuthView(),
@@ -258,6 +242,13 @@ class _AccountScreenState extends State<AccountScreen> {
                               'Edit Profile',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => EditProfileScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -492,6 +483,11 @@ class _AccountScreenState extends State<AccountScreen> {
                               'Logout',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
+                            onTap: () async {
+                              await Provider.of<Auth>(context, listen: false)
+                                  .logout();
+                              setState(() {});
+                            },
                           ),
                         ),
                       ),
