@@ -16,7 +16,7 @@ class Cart with ChangeNotifier {
     return items.length;
   }
 
-  Future<void> addItem(String jwtToken, String cartItem, BigInt quantity,
+  Future<void> addItem(String jwtToken, String cartItem, int quantity,
       String productName) async {
     try {
       print('>>>>>>>>>>>>>>addCartItems');
@@ -94,7 +94,6 @@ class Cart with ChangeNotifier {
               productId: responseBody["cart_details"][i]["id"],
               quantity: responseBody["cart_details"][i]["quantity"]));
         }
-        print(_items);
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {

@@ -9,6 +9,7 @@ import './chat_screen.dart';
 import './account_screen.dart';
 import '../providers/cart.dart';
 import '../providers/auth.dart';
+import '../providers/wishlist.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -38,7 +39,9 @@ class _TabsScreenState extends State<TabsScreen> {
       setState(() {
         _isLoading = true;
       });
-      await Provider.of<Cart>(context, listen: false)
+      Provider.of<Cart>(context, listen: false)
+          .getItems(Provider.of<Auth>(context, listen: false).token);
+      await Provider.of<Wishlist>(context, listen: false)
           .getItems(Provider.of<Auth>(context, listen: false).token);
       setState(() {
         _isLoading = false;

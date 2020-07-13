@@ -84,11 +84,14 @@ class Wishlist with ChangeNotifier {
         final responseBody = json.decode(response.body)["payload"];
         _items = [];
         for (var i = 0;
-            i < responseBody["wishlist"]["wished_item"].length;
+            i < responseBody["wishlist"][0]["wished_item"].length;
             i++) {
-          _items.add(WishItem(
-              name: responseBody["wishlist"]["wished_item"][i]["product_name"],
-              productId: responseBody["wishlist"]["wished_item"][i]["id"]));
+          _items.add(
+            WishItem(
+                name: responseBody["wishlist"][0]["wished_item"][i]
+                    ["product_name"],
+                productId: responseBody["wishlist"][0]["wished_item"][i]["id"]),
+          );
         }
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
@@ -98,6 +101,10 @@ class Wishlist with ChangeNotifier {
     } catch (e) {
       throw e;
     }
+  }
+
+  void clearLocalWishlist() {
+    _items = [];
   }
 }
 
