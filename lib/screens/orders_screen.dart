@@ -8,6 +8,7 @@ import '../providers/auth.dart';
 import '../widgets/common_button.dart';
 import './login_screen.dart';
 import './register_screen.dart';
+import './cart_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -36,7 +37,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   ),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => CartScreen(),
+                  ),
+                );
+              },
             ),
         ],
       ),
