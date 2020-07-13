@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:wasm';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlala_shopping/utils/http_exception.dart';
@@ -16,7 +14,17 @@ class Cart with ChangeNotifier {
     return items.length;
   }
 
+<<<<<<< HEAD
   Future<void> addItem(String jwtToken, String cartItem, int quantity,
+=======
+  // Future<CartItem> getifExist(String id) {
+  //   if (_items.where((element) => element.productId == id).length > 0) {
+  //     return _items.where((element) => element.productId == id).toList();
+  //   }
+  // }
+
+  Future<void> addItem(String jwtToken, String cartItem, BigInt quantity,
+>>>>>>> 2432b372cd4196fe16b04482317b28b324c812e6
       String productName) async {
     try {
       print('>>>>>>>>>>>>>>addCartItems');
