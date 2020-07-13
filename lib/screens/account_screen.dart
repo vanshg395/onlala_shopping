@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/screens/bulk_inquiry_status_screen.dart';
+import 'package:onlala_shopping/screens/tnc_screen.dart';
+import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
@@ -209,6 +212,13 @@ class _AccountScreenState extends State<AccountScreen> {
                                 Text('Wishlist'),
                               ],
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => WishlistScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -294,6 +304,13 @@ class _AccountScreenState extends State<AccountScreen> {
                               'Bulk Inquiry Status',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => BulkInquiryStatusScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -450,6 +467,13 @@ class _AccountScreenState extends State<AccountScreen> {
                               'Terms and Conditions',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => TNCScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),

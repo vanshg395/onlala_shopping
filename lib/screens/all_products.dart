@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 
+import './product_details_screen.dart';
+
 class AllProductsScreen extends StatefulWidget {
   @override
   _AllProductsScreenState createState() => _AllProductsScreenState();
@@ -213,11 +215,11 @@ class ProductCard extends StatelessWidget {
         ),
       ),
       onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (ctx) => ProductDetailsScreen(id, productName, url),
-        //   ),
-        // );
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => ProductDetailsScreen(id, productName, url),
+          ),
+        );
       },
     );
   }

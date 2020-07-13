@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
+import 'package:onlala_shopping/providers/wishlist.dart';
+import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:onlala_shopping/widgets/search_widget.dart';
 import 'package:http/http.dart' as http;
+import 'package:websafe_svg/websafe_svg.dart';
 
 import '../providers/cart.dart';
 import './cart_screen.dart';
@@ -76,6 +79,35 @@ class _SearchScreenState extends State<SearchScreen> {
         title: Text('Search'),
         centerTitle: true,
         actions: <Widget>[
+          if (Provider.of<Auth>(context).isAuth)
+            IconButton(
+              icon: Badge(
+                showBadge: Provider.of<Wishlist>(context, listen: false)
+                            .numberOfwishItems ==
+                        0
+                    ? false
+                    : true,
+                animationType: BadgeAnimationType.scale,
+                animationDuration: Duration(milliseconds: 200),
+                child: Icon(Icons.favorite),
+                badgeContent: Text(
+                  Provider.of<Wishlist>(context, listen: false)
+                      .numberOfwishItems
+                      .toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => WishlistScreen(),
+                  ),
+                );
+              },
+            ),
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(
@@ -161,7 +193,11 @@ class _SearchScreenState extends State<SearchScreen> {
           : Container(
               child: SingleChildScrollView(
                 child: Column(
-                  children: <Widget>[SearchProducts(_data)],
+                  children: <Widget>[
+                    _data.length == 0
+                        ? WebsafeSvg.asset('assets/svg/error.svg')
+                        : SearchProducts(_data),
+                  ],
                 ),
               ),
             ),

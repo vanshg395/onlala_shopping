@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
+import 'package:onlala_shopping/providers/wishlist.dart';
+import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:onlala_shopping/widgets/banner.dart';
 import 'package:provider/provider.dart';
 
@@ -129,6 +131,35 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Onlala'),
         centerTitle: true,
         actions: <Widget>[
+          if (Provider.of<Auth>(context).isAuth)
+            IconButton(
+              icon: Badge(
+                showBadge: Provider.of<Wishlist>(context, listen: false)
+                            .numberOfwishItems ==
+                        0
+                    ? false
+                    : true,
+                animationType: BadgeAnimationType.scale,
+                animationDuration: Duration(milliseconds: 200),
+                child: Icon(Icons.favorite),
+                badgeContent: Text(
+                  Provider.of<Wishlist>(context, listen: false)
+                      .numberOfwishItems
+                      .toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => WishlistScreen(),
+                  ),
+                );
+              },
+            ),
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(

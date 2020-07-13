@@ -38,11 +38,14 @@ class Cart with ChangeNotifier {
 
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final responseBody = json.decode(response.body)["payload"];
-        _items.add(CartItem(
+        _items.add(
+          CartItem(
             name: productName,
             cartId: responseBody["cart_item"],
             productId: responseBody["id"],
-            quantity: responseBody["quantity"]));
+            quantity: responseBody["quantity"],
+          ),
+        );
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {

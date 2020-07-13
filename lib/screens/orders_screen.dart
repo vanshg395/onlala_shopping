@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
+import 'package:onlala_shopping/providers/wishlist.dart';
+import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
@@ -24,6 +26,35 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: Text('Orders'),
         centerTitle: true,
         actions: <Widget>[
+          if (Provider.of<Auth>(context).isAuth)
+            IconButton(
+              icon: Badge(
+                showBadge: Provider.of<Wishlist>(context, listen: false)
+                            .numberOfwishItems ==
+                        0
+                    ? false
+                    : true,
+                animationType: BadgeAnimationType.scale,
+                animationDuration: Duration(milliseconds: 200),
+                child: Icon(Icons.favorite),
+                badgeContent: Text(
+                  Provider.of<Wishlist>(context, listen: false)
+                      .numberOfwishItems
+                      .toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => WishlistScreen(),
+                  ),
+                );
+              },
+            ),
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(

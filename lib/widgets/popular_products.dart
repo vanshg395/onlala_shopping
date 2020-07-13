@@ -32,11 +32,12 @@ class PopularProducts extends StatelessWidget {
                 children: <Widget>[
                   ..._ppdata.map(
                     (ppdata) => PopularProductCard(
-                        ppdata['product_name'],
-                        ppdata['product_des'],
-                        ppdata['image'],
-                        ppdata['price'],
-                        ppdata["id"]),
+                      ppdata['product_name'],
+                      ppdata['product_des'],
+                      ppdata['image'],
+                      ppdata['price'],
+                      ppdata["id"],
+                    ),
                   ),
                 ],
               ),

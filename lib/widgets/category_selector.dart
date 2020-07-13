@@ -41,7 +41,7 @@ class CategorySelector extends StatelessWidget {
                             height: 60,
                             width: 60,
                             decoration: BoxDecoration(
-                              color: Colors.grey[300],
+                              color: Theme.of(context).primaryColor,
                               shape: BoxShape.circle,
                               // image: DecorationImage(
                               //     image: CachedNetworkImageProvider(imageUrl),
@@ -50,7 +50,7 @@ class CategorySelector extends StatelessWidget {
                             child: Icon(
                               Icons.dashboard,
                               size: 40,
-                              color: Theme.of(context).primaryColor,
+                              color: Colors.white,
                             ),
                           ),
                           SizedBox(
