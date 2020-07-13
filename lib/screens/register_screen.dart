@@ -71,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _submit2() async {
-    _buyerData['postal_state'] = widget.address.adminArea;
+    _buyerData['postal_state'] = widget.address.adminArea ?? 'NA';
     _buyerData['postal_city'] =
         widget.address.subAdminArea ?? widget.address.adminArea ?? 'NA';
     _buyerData['postal_landmark'] = widget.address.subLocality ?? '';
@@ -80,7 +80,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         widget.address.featureName ?? widget.address.addressLine;
     _buyerData['postal_code'] = widget.address.postalCode ?? 'NA';
     _buyerData["department"] = _departmentChoice;
-    _buyerData["administrativeArea"] = widget.address.locality;
+    _buyerData["administrativeArea"] = widget.address.locality ??
+        widget.address.adminArea ??
+        widget.address.thoroughfare ??
+        'NA';
     _buyerData["isoCountryCode"] = widget.address.countryCode;
 
     if (!_formKey.currentState.validate()) {
