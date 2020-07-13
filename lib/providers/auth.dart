@@ -173,7 +173,7 @@ class Auth with ChangeNotifier {
     final extractedUserData =
         json.decode(prefs.getString('userData')) as Map<String, Object>;
     _token = extractedUserData['token'];
-    notifyListeners();
+    // notifyListeners();
     return true;
   }
 

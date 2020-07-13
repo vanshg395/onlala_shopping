@@ -43,12 +43,11 @@ class MyApp extends StatelessWidget {
             future: auth.tryAutoLogin(),
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                // return Scaffold(
-                //   body: Center(
-                //     child: CircularProgressIndicator(),
-                //   ),
-                // );
-                return TabsScreen();
+                return Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               } else {
                 return TabsScreen();
               }

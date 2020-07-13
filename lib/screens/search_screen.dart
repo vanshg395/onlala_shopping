@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:onlala_shopping/widgets/search_widget.dart';
 import 'package:http/http.dart' as http;
 
+import '../providers/cart.dart';
 import './cart_screen.dart';
 import '../widgets/common_field.dart';
 import '../providers/auth.dart';
@@ -78,11 +79,18 @@ class _SearchScreenState extends State<SearchScreen> {
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(
+                showBadge: Provider.of<Cart>(context, listen: false)
+                            .numberOfCartItems ==
+                        0
+                    ? false
+                    : true,
                 animationType: BadgeAnimationType.scale,
                 animationDuration: Duration(milliseconds: 200),
                 child: Icon(Icons.shopping_cart),
                 badgeContent: Text(
-                  '2',
+                  Provider.of<Cart>(context, listen: false)
+                      .numberOfCartItems
+                      .toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,

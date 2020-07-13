@@ -91,6 +91,7 @@ class Cart with ChangeNotifier {
               productId: responseBody["cart_details"][i]["id"],
               quantity: responseBody["cart_details"][i]["quantity"]));
         }
+        print(_items);
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {
@@ -106,7 +107,7 @@ class CartItem {
   final String name;
   final String cartId;
   final String productId;
-  final BigInt quantity;
+  final int quantity;
   CartItem({this.name, this.productId, this.cartId, this.quantity});
 
   // ADD MORE ATTRIBUTES AS PER CARTITEM DETAILS, COZ IDK.

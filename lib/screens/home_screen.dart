@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import './cart_screen.dart';
 import '../providers/auth.dart';
+import '../providers/cart.dart';
 import '../widgets/category_selector.dart';
 import '../widgets/popular_products.dart';
 import '../widgets/suggested_products.dart';
@@ -131,11 +132,18 @@ class _HomeScreenState extends State<HomeScreen> {
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(
+                showBadge: Provider.of<Cart>(context, listen: false)
+                            .numberOfCartItems ==
+                        0
+                    ? false
+                    : true,
                 animationType: BadgeAnimationType.scale,
                 animationDuration: Duration(milliseconds: 200),
                 child: Icon(Icons.shopping_cart),
                 badgeContent: Text(
-                  '2',
+                  Provider.of<Cart>(context, listen: false)
+                      .numberOfCartItems
+                      .toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,

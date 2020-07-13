@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 import './home_screen.dart';
@@ -6,6 +7,8 @@ import './search_screen.dart';
 import './orders_screen.dart';
 import './chat_screen.dart';
 import './account_screen.dart';
+import '../providers/cart.dart';
+import '../providers/auth.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
+  bool _isLoading = false;
   int _selectedPageIndex = 0;
   PageController _pageController = PageController();
   List<Widget> _pages = [
@@ -22,6 +26,25 @@ class _TabsScreenState extends State<TabsScreen> {
     ChatScreen(),
     AccountScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    getCartDetails();
+  }
+
+  Future<void> getCartDetails() async {
+    if (Provider.of<Auth>(context, listen: false).isAuth) {
+      setState(() {
+        _isLoading = true;
+      });
+      await Provider.of<Cart>(context, listen: false)
+          .getItems(Provider.of<Auth>(context, listen: false).token);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

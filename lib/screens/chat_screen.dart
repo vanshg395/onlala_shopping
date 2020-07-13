@@ -5,6 +5,7 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 
 import '../providers/auth.dart';
+import '../providers/cart.dart';
 import '../widgets/common_button.dart';
 import './login_screen.dart';
 import './register_screen.dart';
@@ -26,11 +27,18 @@ class _ChatScreenState extends State<ChatScreen> {
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(
+                showBadge: Provider.of<Cart>(context, listen: false)
+                            .numberOfCartItems ==
+                        0
+                    ? false
+                    : true,
                 animationType: BadgeAnimationType.scale,
                 animationDuration: Duration(milliseconds: 200),
                 child: Icon(Icons.shopping_cart),
                 badgeContent: Text(
-                  '2',
+                  Provider.of<Cart>(context, listen: false)
+                      .numberOfCartItems
+                      .toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
