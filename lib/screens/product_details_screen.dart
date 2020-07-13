@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 import './bulk_inquiry_screen.dart';
 import '../widgets/image_slider.dart';
+import '../providers/wishlist.dart';
+import '../providers/auth.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   @override
@@ -256,8 +258,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         title: Text(widget.name),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.favorite_border),
-            onPressed: () {},
+            icon: Icon(
+              Provider.of<Wishlist>(context, listen: false)
+                          .items
+                          .where((element) => element.productId == widget.id)
+                          .length ==
+                      1
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+            ),
+            onPressed: () async {
+              if (Provider.of<Wishlist>(context, listen: false)
+                      .items
+                      .where((element) => element.productId == widget.id)
+                      .length ==
+                  1) {
+                await Provider.of<Wishlist>(context, listen: false).removeItem(
+                    Provider.of<Auth>(context, listen: false).token,
+                    widget.id,
+                    widget.name);
+                setState(() {});
+              } else {
+                await Provider.of<Wishlist>(context, listen: false).addItem(
+                    Provider.of<Auth>(context, listen: false).token,
+                    widget.id,
+                    widget.name);
+                setState(() {});
+              }
+            },
           ),
         ],
       ),

@@ -96,7 +96,7 @@ class Wishlist with ChangeNotifier {
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {
-        throw HttpException('Error');
+        // throw HttpException('Error');
       }
     } catch (e) {
       throw e;
