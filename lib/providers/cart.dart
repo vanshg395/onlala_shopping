@@ -14,6 +14,12 @@ class Cart with ChangeNotifier {
     return items.length;
   }
 
+  // Future<CartItem> getifExist(String id) {
+  //   if (_items.where((element) => element.productId == id).length > 0) {
+  //     return _items.where((element) => element.productId == id).toList();
+  //   }
+  // }
+
   Future<void> addItem(String jwtToken, String cartItem, BigInt quantity,
       String productName) async {
     try {
@@ -92,7 +98,6 @@ class Cart with ChangeNotifier {
               productId: responseBody["cart_details"][i]["id"],
               quantity: responseBody["cart_details"][i]["quantity"]));
         }
-        print(_items);
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {
