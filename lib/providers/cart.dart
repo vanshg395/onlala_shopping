@@ -19,7 +19,7 @@ class Cart with ChangeNotifier {
   Future<void> addItem(String jwtToken, String cartItem, BigInt quantity,
       String productName) async {
     try {
-      print('>>>>>>>>>>>>>>getCartItems');
+      print('>>>>>>>>>>>>>>addCartItems');
       final url = baseUrl + 'cart/cartlist/add/';
       final response = await http.post(url,
           headers: {
@@ -48,7 +48,7 @@ class Cart with ChangeNotifier {
   Future<void> removeItem(
       String jwtToken, String cartItem, String productName) async {
     try {
-      print('>>>>>>>>>>>>>>getCartItems');
+      print('>>>>>>>>>>>>>>removeCartItems');
       final url = baseUrl + 'cart/cartlist/delete/';
       final response = await http.post(url,
           headers: {
