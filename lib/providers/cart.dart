@@ -14,12 +14,6 @@ class Cart with ChangeNotifier {
     return items.length;
   }
 
-  // Future<CartItem> getifExist(String id) {
-  //   if (_items.where((element) => element.productId == id).length > 0) {
-  //     return _items.where((element) => element.productId == id).toList();
-  //   }
-  // }
-
   Future<void> addItem(String jwtToken, String cartItem, BigInt quantity,
       String productName) async {
     try {
