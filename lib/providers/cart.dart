@@ -7,6 +7,7 @@ import 'package:onlala_shopping/utils/http_exception.dart';
 class Cart with ChangeNotifier {
   List<CartItem> _items = [];
   String baseUrl = "https://onlala-api.herokuapp.com/";
+
   List<CartItem> get items {
     return _items;
   }
@@ -19,7 +20,6 @@ class Cart with ChangeNotifier {
     if (_items.where((element) => element.productId == id).length > 0) {
       return _items.where((element) => element.productId == id).toList()[0];
     }
-
     return CartItem(cartId: '', quantity: 0, productId: '');
   }
 
@@ -102,6 +102,7 @@ class Cart with ChangeNotifier {
               productId: responseBody["cart_details"][i]["id"],
               quantity: responseBody["cart_details"][i]["quantity"]));
         }
+        print(_items[0].name);
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {

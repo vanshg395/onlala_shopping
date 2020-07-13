@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:onlala_shopping/providers/auth.dart';
-import 'package:onlala_shopping/providers/cart.dart';
 import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +10,7 @@ import './bulk_inquiry_screen.dart';
 import '../widgets/image_slider.dart';
 import '../providers/wishlist.dart';
 import '../providers/auth.dart';
+import '../providers/cart.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   @override
@@ -29,7 +28,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isLoading = false;
   List<dynamic> _data = [];
   List<dynamic> _data1 = [];
-  // CartItem cart;
+  CartItem cart;
   bool _cartItemExists = false;
   int quantity = 1;
   @override
@@ -51,14 +50,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       if (response.statusCode == 200) {
         final resBody = json.decode(response.body);
 
-        // getifExist(String id)
-        // cart = Provider.of<Cart>(context, listen: false).getifExist(widget.id);
-        // if (cart.quantity > 0) {
-        setState(() {
-          _data = resBody['payload'];
-          // _cartItemExists = true;
-        });
-        // }
+        cart = Provider.of<Cart>(context, listen: false).getifExist(widget.id);
+        _data = resBody['payload'];
+        print(cart.quantity);
+        if (cart.quantity > 0) {
+          setState(() {
+            _cartItemExists = true;
+          });
+        }
       }
     } catch (e) {
       print(e);
@@ -79,7 +78,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _data1 = resBody['payload'];
         });
       }
-      // print(_data1);
     } catch (e) {
       print(e);
     }
@@ -94,11 +92,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
     _formKey.currentState.save();
     try {
+      Navigator.of(context).pop();
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        child: Dialog(
+          child: Container(
+            height: 100,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      );
       await Provider.of<Cart>(context, listen: false).addItem(
-          Provider.of<Auth>(context, listen: false).token,
-          widget.id,
-          quantity,
-          widget.name);
+        Provider.of<Auth>(context, listen: false).token,
+        widget.id,
+        quantity,
+        widget.name,
+      );
+      Navigator.of(context).pop();
       setState(() {
         _cartItemExists = true;
       });
@@ -157,14 +170,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     borderColor: Colors.grey,
                     borderRadius: 10,
                     placeholder: 'Quantity',
-                    // ignore: missing_return
+                    keyboardType: TextInputType.numberWithOptions(
+                      signed: false,
+                      decimal: false,
+                    ),
                     validator: (value) {
                       if (value == '') {
                         return 'This field is required';
                       }
                     },
                     onSaved: (value) {
-                      quantity = value;
+                      quantity = int.parse(value);
                     },
                   ),
                 ),
@@ -863,7 +879,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
       bottomNavigationBar: Container(
-        height: 80,
+        height: 60,
         child: Row(
           children: <Widget>[
             Expanded(
@@ -888,9 +904,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: GestureDetector(
                 child: Container(
                   margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
-                  color: Theme.of(context).primaryColor,
+                  color: !_cartItemExists
+                      ? Theme.of(context).primaryColor
+                      : Colors.green,
                   alignment: Alignment.center,
-                  child: _cartItemExists
+                  child: !_cartItemExists
                       ? Text(
                           'Add to Cart',
                           textAlign: TextAlign.center,
@@ -908,7 +926,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                         ),
                 ),
-                onTap: _cartItemExists ? _addToCart : {},
+                onTap: !_cartItemExists ? _addToCart : () {},
               ),
             ),
             Expanded(
