@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
 import './providers/cart.dart';
-import './screens/home_screen.dart';
 import './screens/tabs_screen.dart';
 
 void main() => runApp(MyApp());

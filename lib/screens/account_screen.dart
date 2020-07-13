@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
@@ -10,7 +8,6 @@ import './register_screen.dart';
 import './cart_screen.dart';
 import './edit_profile_screen.dart';
 import '../widgets/common_button.dart';
-import './auth_view.dart';
 import '../providers/auth.dart';
 
 class AccountScreen extends StatefulWidget {

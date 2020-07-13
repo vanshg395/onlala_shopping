@@ -1,11 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart';
 import 'package:onlala_shopping/widgets/category_products.dart';
-import 'package:onlala_shopping/widgets/search_widget.dart';
 import 'package:http/http.dart' as http;
-import '../widgets/common_field.dart';
 
 class SubCatProdPaginatedScreen extends StatefulWidget {
   final String subCatName;

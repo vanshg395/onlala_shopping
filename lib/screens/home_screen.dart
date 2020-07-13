@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import './cart_screen.dart';
 import '../providers/auth.dart';
-import '../widgets/image_slider.dart';
 import '../widgets/category_selector.dart';
 import '../widgets/popular_products.dart';
 import '../widgets/suggested_products.dart';
