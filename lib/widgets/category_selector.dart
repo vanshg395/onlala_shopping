@@ -30,6 +30,43 @@ class CategorySelector extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
+                  GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      width: 120,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              shape: BoxShape.circle,
+                              // image: DecorationImage(
+                              //     image: CachedNetworkImageProvider(imageUrl),
+                              //     fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'All Products',
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (ctx) => SubCategorySelectScreen(id, categoryName),
+                      //   ),
+                      // );
+                    },
+                  ),
                   ..._categoriesList.map(
                     (category) => CategorySelectorItem(
                       category['category_image'][0]["image"],
