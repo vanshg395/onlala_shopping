@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlala_shopping/utils/http_exception.dart';
@@ -14,13 +15,13 @@ class Cart with ChangeNotifier {
     return items.length;
   }
 
-  // Future<CartItem> getifExist(String id) {
-  //   if (_items.where((element) => element.productId == id).length > 0) {
-  //     return _items.where((element) => element.productId == id).toList();
-  //   }
-  // }
+  CartItem getifExist(String id) {
+    if (_items.where((element) => element.productId == id).length > 0) {
+      return _items.where((element) => element.productId == id).toList()[0];
+    }
+  }
 
-  Future<void> addItem(String jwtToken, String cartItem, BigInt quantity,
+  Future<void> addItem(String jwtToken, String cartItem, int quantity,
       String productName) async {
     try {
       print('>>>>>>>>>>>>>>addCartItems');
@@ -32,6 +33,7 @@ class Cart with ChangeNotifier {
           },
           body: json.encode({"cart_item": cartItem, "quantity": quantity}));
       print(response.statusCode);
+
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final responseBody = json.decode(response.body)["payload"];
         _items.add(CartItem(
