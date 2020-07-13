@@ -63,6 +63,7 @@ class PopularProductCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         width: 300,
+        height: 100,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),

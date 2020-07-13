@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/screens/category_screen.dart';
+import '../screens/all_products.dart';
 
 class CategorySelector extends StatelessWidget {
   final List<dynamic> _categoriesList;
@@ -40,11 +41,16 @@ class CategorySelector extends StatelessWidget {
                             height: 60,
                             width: 60,
                             decoration: BoxDecoration(
-                              color: Colors.grey,
+                              color: Colors.grey[300],
                               shape: BoxShape.circle,
                               // image: DecorationImage(
                               //     image: CachedNetworkImageProvider(imageUrl),
                               //     fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
+                            ),
+                            child: Icon(
+                              Icons.dashboard,
+                              size: 40,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                           SizedBox(
@@ -60,11 +66,11 @@ class CategorySelector extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (ctx) => SubCategorySelectScreen(id, categoryName),
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => AllProductsScreen(),
+                        ),
+                      );
                     },
                   ),
                   ..._categoriesList.map(
