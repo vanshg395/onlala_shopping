@@ -111,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'NA';
     _buyerData["isoCountryCode"] = widget.address.countryCode;
     _buyerData["company_email"] = _data["email"];
-    _buyerData["brought_from"] = _data["_sourcingChoice"];
+    _buyerData["brought_from"] = _sourcingChoice;
 
     if (!_formKey2.currentState.validate()) {
       return;
