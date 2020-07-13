@@ -61,6 +61,8 @@ class Cart with ChangeNotifier {
         _items.removeWhere((item) => item.cartId == cartItem);
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
+      } else if (response.statusCode == 404) {
+        throw HttpException('Looks like product already deleted from wishlist');
       } else {
         throw HttpException('Error');
       }
@@ -82,6 +84,7 @@ class Cart with ChangeNotifier {
       );
       print(response.statusCode);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
+        _items = [];
         final responseBody = json.decode(response.body)["payload"];
         for (var i = 0; i < responseBody["cart_details"].length; i++) {
           _items.add(CartItem(
