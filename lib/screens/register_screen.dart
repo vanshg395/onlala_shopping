@@ -104,6 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _buyerData["administrativeArea"] = widget.address.locality;
     _buyerData["isoCountryCode"] = widget.address.countryCode;
     _buyerData["company_email"] = _data["email"];
+    _buyerData["brought_from"] = _data["_sourcingChoice"];
 
     if (!_formKey.currentState.validate()) {
       return;
