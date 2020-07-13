@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:intl_phone_field/countries.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:onlala_shopping/providers/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:websafe_svg/websafe_svg.dart';
 
 import './login_screen.dart';
 import '../widgets/common_field.dart';
@@ -30,6 +33,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   var baseUrl = "https://onlala-api.herokuapp.com/";
+  bool _isPassVisible = false;
+  bool _isConPassVisible = false;
 
   Map<String, String> _data = {
     "email": "",
@@ -66,6 +71,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     getDepartments();
   }
 
+  @override
+  void dispose() {
+    _compController.dispose();
+    _firstnameController.dispose();
+    _lastnameController.dispose();
+    _mobileController.dispose();
+    _emailController.dispose();
+    _passController.dispose();
+    super.dispose();
+  }
+
   Future<void> getDepartments() async {
     try {
       final url = baseUrl + 'department/show/';
@@ -99,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _buyerData['postal_state'] = widget.address.adminArea ?? 'NA';
     _buyerData['postal_city'] =
         widget.address.subAdminArea ?? widget.address.adminArea ?? 'NA';
-    _buyerData['postal_landmark'] = widget.address.subLocality ?? '';
+    _buyerData['postal_landmark'] = widget.address.subLocality ?? 'NA';
     _buyerData['postal_country'] = widget.address.countryName;
     _buyerData['postal_address1'] =
         widget.address.featureName ?? widget.address.addressLine;
@@ -109,7 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         widget.address.adminArea ??
         widget.address.thoroughfare ??
         'NA';
-    _buyerData["isoCountryCode"] = widget.address.countryCode;
+    _buyerData["isoCountryCode"] = countries.firstWhere((element) =>
+        element['code'] == widget.address.countryCode)['dial_code'];
     _buyerData["company_email"] = _data["email"];
     _buyerData["brought_from"] = _sourcingChoice;
 
@@ -325,16 +342,77 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 24),
             child: CommonField(
-              isPassword: true,
+              isPassword: !_isPassVisible,
               bgColor: Colors.white,
               borderColor: Colors.grey,
               borderRadius: 10,
               placeholder: 'XXXXXXXX',
               controller: _passController,
-              // ignore: missing_return
+              suffixIcon: InkWell(
+                child: WebsafeSvg.asset(
+                  _isPassVisible
+                      ? 'assets/svg/visible.svg'
+                      : 'assets/svg/obscure.svg',
+                  height: 30,
+                  color: Colors.grey,
+                ),
+                onTap: () {
+                  setState(() {
+                    _isPassVisible = !_isPassVisible;
+                  });
+                },
+              ),
               validator: (value) {
                 if (value == '') {
                   return 'This field is required.';
+                }
+              },
+              onSaved: (value) {
+                _data['password'] = _passController.text;
+              },
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              'Confirm Password',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 24),
+            child: CommonField(
+              isPassword: !_isConPassVisible,
+              bgColor: Colors.white,
+              borderColor: Colors.grey,
+              borderRadius: 10,
+              placeholder: 'XXXXXXXX',
+              suffixIcon: InkWell(
+                child: WebsafeSvg.asset(
+                  _isConPassVisible
+                      ? 'assets/svg/visible.svg'
+                      : 'assets/svg/obscure.svg',
+                  height: 30,
+                  color: Colors.grey,
+                ),
+                onTap: () {
+                  setState(() {
+                    _isConPassVisible = !_isConPassVisible;
+                  });
+                },
+              ),
+              validator: (value) {
+                if (value == '') {
+                  return 'This field is required.';
+                }
+                if (value != _passController.text) {
+                  return 'Passwords do not match.';
                 }
               },
               onSaved: (value) {
@@ -412,20 +490,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 24),
-            child: CommonField(
-              bgColor: Colors.white,
-              borderColor: Colors.grey,
-              borderRadius: 10,
-              placeholder: 'XXXXXXXX',
-              controller: _mobileController,
-              // ignore: missing_return
+            child: IntlPhoneField(
+              decoration: InputDecoration(
+                // counterText: controller.text.length.toString(),
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.grey,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.grey,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.grey,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.grey,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.grey,
+                  ),
+                ),
+                errorStyle: TextStyle(color: Colors.red[200]),
+                alignLabelWithHint: true,
+                hintText: 'XXXXX-XXXXX',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w300,
+                ),
+                contentPadding: EdgeInsets.only(
+                  left: 30,
+                  top: 0,
+                ),
+              ),
+              initialCountryCode: widget.address.countryCode,
+              showDropdownIcon: false,
               validator: (value) {
                 if (value == '') {
                   return 'This field is required.';
                 }
               },
               onSaved: (value) {
-                _buyerData["mobile"] = _mobileController.text;
+                print(value.completeNumber);
+                _buyerData["mobile"] = value.completeNumber;
               },
             ),
           ),

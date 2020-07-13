@@ -24,36 +24,38 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
     getData();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future<void> getData() async {
     // setState(() {
     //   _isLoading = true;
     // });
     final url = 'https://onlala-api.herokuapp.com/product/showByPagination/';
-    print('$offset     $limit');
     try {
       final response = await http.post(
         url,
         headers: {
           HttpHeaders.contentTypeHeader: 'application/json',
         },
-        body: json.encode(
-          {
-            'offset': offset,
-            'limit': limit,
-          },
-        ),
+        body: json.encode({
+          'offset': offset,
+          'limit': limit,
+        }),
       );
       print(response.statusCode);
       List<dynamic> _newItems = [];
       if (response.statusCode == 200) {
-        final resBody = json.decode(response.body)['payload']['data'];
-        print(resBody);
-        _newItems = resBody;
-        if (_newItems.length > 0) {
-          limit += 10;
+        final resBody = json.decode(response.body);
+        _newItems = resBody['payload']['data'];
+        if (_newItems.length != 0) {
           offset += 10;
+          limit += 10;
           setState(() {
-            _displayedItems = _newItems;
+            _displayedItems += _newItems;
           });
         }
       }
@@ -75,45 +77,47 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
       body: Container(
         child: NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
-            // if (!_isLoading &&
-            //     scrollInfo.metrics.pixels ==
-            //         scrollInfo.metrics.maxScrollExtent) {
-            //   _getMoreData();
-            //   setState(() {
-            //     _isLoading = true;
-            //   });
-            // }
             if (!_isLoading &&
-                scrollInfo.metrics.pixels ==
-                    scrollInfo.metrics.maxScrollExtent) {
+                scrollInfo.metrics.pixels >
+                    scrollInfo.metrics.maxScrollExtent + 100) {
               print('hey');
               getData();
               setState(() {
                 _isLoading = true;
               });
+              _scrollController.animateTo(
+                scrollInfo.metrics.maxScrollExtent + 100,
+                duration: Duration(milliseconds: 100),
+                curve: Curves.linear,
+              );
             }
           },
           child: Column(
             children: <Widget>[
               Expanded(
-                child: ListView(
+                child: ListView.builder(
                   controller: _scrollController,
-                  children: _displayedItems
-                      .map(
-                        (e) => ProductCard(
-                          e['product_name'],
-                          e['product_description'],
-                          e['product_image'][0]['product_image'],
-                          '??',
-                          e['id'],
-                        ),
-                      )
-                      .toList(),
+                  itemBuilder: (ctx, i) => ProductCard(
+                    _displayedItems[i]['product_name'],
+                    _displayedItems[i]['product_description'],
+                    _displayedItems[i]['product_image'].length == 0
+                        ? ''
+                        : _displayedItems[i]['product_image'][0]
+                            ['product_image'],
+                    _displayedItems[i]['minimum_order_quantity'].toString(),
+                    _displayedItems[i]['id'],
+                  ),
+                  itemCount: _displayedItems.length,
                 ),
               ),
               if (_isLoading)
-                Center(
-                  child: CircularProgressIndicator(),
+                SafeArea(
+                  child: Container(
+                    margin: EdgeInsets.all(30),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
                 ),
             ],
           ),
@@ -127,11 +131,10 @@ class ProductCard extends StatelessWidget {
   final String productName;
   final String description;
   final String url;
-  final String price;
+  final String moq;
   final String id;
 
-  ProductCard(
-      this.productName, this.description, this.url, this.price, this.id);
+  ProductCard(this.productName, this.description, this.url, this.moq, this.id);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -185,11 +188,22 @@ class ProductCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.subtitle2.copyWith(),
                     ),
-                    Text(
-                      '€ $price',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                            fontWeight: FontWeight.bold,
+                    RichText(
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(),
+                        children: [
+                          TextSpan(
+                            text: 'Minimum Order: ',
                           ),
+                          TextSpan(
+                            text: '$moq',
+                            style:
+                                Theme.of(context).textTheme.subtitle2.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

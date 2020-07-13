@@ -57,7 +57,7 @@ class CategorySelector extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            'All Products',
+                            'All\nProducts',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

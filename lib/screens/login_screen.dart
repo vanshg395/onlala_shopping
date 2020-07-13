@@ -3,6 +3,7 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:onlala_shopping/providers/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:websafe_svg/websafe_svg.dart';
 
 import './register_screen.dart';
 import '../widgets/common_field.dart';
@@ -17,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> _formKey = GlobalKey();
   Map<String, String> _data = {'username': '', 'password': ''};
   bool _isLoading = false;
+  bool _isPassVisible = false;
 
   Future<void> _submit() async {
     FocusScope.of(context).unfocus();
@@ -183,12 +185,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 24),
                     child: CommonField(
-                      isPassword: true,
+                      isPassword: !_isPassVisible,
                       bgColor: Colors.white,
                       borderColor: Colors.grey,
                       borderRadius: 10,
                       placeholder: 'XXXXXXXX',
-                      // ignore: missing_return
+                      suffixIcon: InkWell(
+                        child: WebsafeSvg.asset(
+                          _isPassVisible
+                              ? 'assets/svg/visible.svg'
+                              : 'assets/svg/obscure.svg',
+                          height: 30,
+                          color: Colors.grey,
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _isPassVisible = !_isPassVisible;
+                          });
+                        },
+                      ),
                       validator: (value) {
                         if (value == '') {
                           return 'This field is required';
