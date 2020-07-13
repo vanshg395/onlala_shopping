@@ -19,6 +19,8 @@ class Cart with ChangeNotifier {
     if (_items.where((element) => element.productId == id).length > 0) {
       return _items.where((element) => element.productId == id).toList()[0];
     }
+
+    return CartItem(cartId: '', quantity: 0, productId: '');
   }
 
   Future<void> addItem(String jwtToken, String cartItem, int quantity,

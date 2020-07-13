@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlala_shopping/providers/auth.dart';
+import 'package:onlala_shopping/providers/cart.dart';
 import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
+import 'package:provider/provider.dart';
 
 import './bulk_inquiry_screen.dart';
 import '../widgets/image_slider.dart';
@@ -24,7 +27,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isLoading = false;
   List<dynamic> _data = [];
   List<dynamic> _data1 = [];
-
+  // CartItem cart;
+  bool _cartItemExists = false;
+  int quantity = 1;
   @override
   void initState() {
     super.initState();
@@ -43,9 +48,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       print(response.statusCode);
       if (response.statusCode == 200) {
         final resBody = json.decode(response.body);
+
+        // getifExist(String id)
+        // cart = Provider.of<Cart>(context, listen: false).getifExist(widget.id);
+        // if (cart.quantity > 0) {
         setState(() {
           _data = resBody['payload'];
+          // _cartItemExists = true;
         });
+        // }
       }
     } catch (e) {
       print(e);
@@ -80,6 +91,30 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       return;
     }
     _formKey.currentState.save();
+    try {
+      await Provider.of<Cart>(context, listen: false).addItem(
+          Provider.of<Auth>(context, listen: false).token,
+          widget.id,
+          quantity,
+          widget.name);
+      setState(() {
+        _cartItemExists = true;
+      });
+    } catch (e) {
+      await showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Error'),
+          content: Text('Something went wrong. Please try again later.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Future<void> _submitQuery() async {
@@ -126,7 +161,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         return 'This field is required';
                       }
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      quantity = value;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -825,16 +862,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
                   color: Theme.of(context).primaryColor,
                   alignment: Alignment.center,
-                  child: Text(
-                    'Add to Cart',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                  child: _cartItemExists
+                      ? Text(
+                          'Add to Cart',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                        )
+                      : Text(
+                          'Added to Cart',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                         ),
-                  ),
                 ),
-                onTap: _addToCart,
+                onTap: _cartItemExists ? _addToCart : {},
               ),
             ),
             Expanded(
