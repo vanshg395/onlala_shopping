@@ -8,6 +8,7 @@ import './register_screen.dart';
 import './cart_screen.dart';
 import './edit_profile_screen.dart';
 import '../widgets/common_button.dart';
+import '../providers/cart.dart';
 import '../providers/auth.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -518,6 +519,8 @@ class _AccountScreenState extends State<AccountScreen> {
                               }
                               await Provider.of<Auth>(context, listen: false)
                                   .logout();
+                              Provider.of<Cart>(context, listen: false)
+                                  .clearLocalCart();
                               setState(() {});
                             },
                           ),

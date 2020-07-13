@@ -5,6 +5,7 @@ import 'package:onlala_shopping/providers/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
+import '../providers/cart.dart';
 import './register_screen.dart';
 import '../widgets/common_field.dart';
 import '../widgets/common_button.dart';
@@ -34,10 +35,14 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
+      Provider.of<Cart>(context, listen: false)
+          .getItems(Provider.of<Auth>(context, listen: false).token);
       Navigator.of(context).pop(true);
     } catch (e) {
       print(e);
       if (e.toString() == 'Complete Profile') {
+        Provider.of<Cart>(context, listen: false)
+            .getItems(Provider.of<Auth>(context, listen: false).token);
         Navigator.of(context).pop(true);
         showDialog(
           context: context,

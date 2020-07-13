@@ -101,6 +101,10 @@ class Cart with ChangeNotifier {
       throw e;
     }
   }
+
+  void clearLocalCart() {
+    _items = [];
+  }
 }
 
 class CartItem {
