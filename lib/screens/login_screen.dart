@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:onlala_shopping/providers/auth.dart';
-import 'package:onlala_shopping/screens/tabs_screen.dart';
 import 'package:provider/provider.dart';
 
 import './register_screen.dart';
@@ -29,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
     try {
-      await Provider.of<Auth>(context, listen: false).login(_data, false);
+      await Provider.of<Auth>(context, listen: false).login(_data);
       setState(() {
         _isLoading = false;
       });
@@ -157,6 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderColor: Colors.grey,
                       borderRadius: 10,
                       placeholder: 'abc@xyz.com',
+                      // ignore: missing_return
                       validator: (value) {
                         if (value == '') {
                           return 'This field is required';
@@ -188,6 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderColor: Colors.grey,
                       borderRadius: 10,
                       placeholder: 'XXXXXXXX',
+                      // ignore: missing_return
                       validator: (value) {
                         if (value == '') {
                           return 'This field is required';

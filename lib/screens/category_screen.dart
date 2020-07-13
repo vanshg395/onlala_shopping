@@ -11,10 +11,10 @@ class SubCategorySelectScreen extends StatefulWidget {
   _SubCategorySelectScreenState createState() =>
       _SubCategorySelectScreenState();
 
-  final String cat_id;
+  final String catId;
   final String catName;
 
-  SubCategorySelectScreen(this.cat_id, this.catName);
+  SubCategorySelectScreen(this.catId, this.catName);
 }
 
 class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
@@ -37,7 +37,7 @@ class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
       final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
           body: json.encode({
-            'category_ids': [widget.cat_id]
+            'category_ids': [widget.catId]
           }));
       print(response.statusCode);
       if (response.statusCode == 200) {

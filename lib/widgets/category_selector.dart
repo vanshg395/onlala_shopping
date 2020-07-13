@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:onlala_shopping/screens/category_screen.dart';
 
 class CategorySelector extends StatelessWidget {
-  final List<dynamic> _categories_list;
+  final List<dynamic> _categoriesList;
 
-  CategorySelector(this._categories_list);
+  CategorySelector(this._categoriesList);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class CategorySelector extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  ..._categories_list.map(
+                  ..._categoriesList.map(
                     (category) => CategorySelectorItem(
                       category['category_image'][0]["image"],
                       category['name'],

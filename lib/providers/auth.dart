@@ -23,9 +23,58 @@ class Auth with ChangeNotifier {
     return _username;
   }
 
-  Future<void> signup() async {}
+  Future<void> register(Map<String, dynamic> registerData) async {
+    try {
+      print('>>>>>>>>>>>>>>register');
+      final url = baseUrl + 'user/create/';
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(registerData),
+      );
+      print(response.statusCode);
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+      } else if (response.statusCode == 400) {
+        throw HttpException('User exists');
+      } else {
+        throw HttpException('Error');
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
-  Future<void> login(Map<String, dynamic> loginData, [bool bool]) async {
+  Future<void> createManufacturer(Map<String, dynamic> buyerData) async {
+    try {
+      print('>>>>>>>>>>>>>>createManuf');
+      final url = baseUrl + 'business/manufacturer/create/';
+      print(_token);
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': _token,
+        },
+        body: json.encode(buyerData),
+      );
+      print(response.statusCode);
+      print(response.body);
+      if (response.statusCode == 201) {
+        _token = null;
+        notifyListeners();
+      } else if (response.statusCode == 400) {
+        throw HttpException('Repeated Phone');
+      } else if (response.statusCode == 500) {
+        throw HttpException('Server Overload');
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> login(Map<String, dynamic> loginData) async {
     try {
       print('>>>>>>>>>>>>>>login');
       final url = baseUrl + 'user/api/token/buyer/';
@@ -104,6 +153,19 @@ class Auth with ChangeNotifier {
     _token = extractedUserData['token'];
     notifyListeners();
     return true;
+  }
+
+  Future<void> deleteUser() async {
+    final url = baseUrl + 'user/delete/';
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': _token,
+        },
+      );
+      print(response.statusCode);
+    } catch (e) {}
   }
 
   Future<void> logout() async {
