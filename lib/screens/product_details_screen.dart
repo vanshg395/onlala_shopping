@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlala_shopping/widgets/common_button.dart';
+import 'package:onlala_shopping/widgets/common_field.dart';
 
 import './bulk_inquiry_screen.dart';
 import '../widgets/image_slider.dart';
@@ -18,6 +20,7 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  GlobalKey<FormState> _formKey = GlobalKey();
   bool _isLoading = false;
   List<dynamic> _data = [];
   List<dynamic> _data1 = [];
@@ -70,6 +73,74 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+  }
+
+  Future<void> _addToCart() async {
+    await showDialog(
+      context: context,
+      child: Dialog(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: Text(
+                    'Add to Cart',
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: CommonField(
+                    bgColor: Colors.white,
+                    borderColor: Colors.grey,
+                    borderRadius: 10,
+                    placeholder: 'Quantity',
+                    // ignore: missing_return
+                    validator: (value) {
+                      if (value == '') {
+                        return 'This field is required';
+                      }
+                    },
+                    onSaved: (value) {},
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Center(
+                  child: CommonButton(
+                    title: 'Add',
+                    onPressed: _submit,
+                    bgColor: Theme.of(context).primaryColor,
+                    borderColor: Theme.of(context).primaryColor,
+                    borderRadius: 10,
+                    fontSize: 18,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -697,9 +768,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                   ),
                 ),
-                onTap: () {
-                  print('ok');
-                },
+                onTap: _addToCart,
               ),
             ),
             Expanded(
