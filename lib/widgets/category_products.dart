@@ -39,7 +39,7 @@ class CategoryProductCard extends StatelessWidget {
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        width: 300,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -54,17 +54,18 @@ class CategoryProductCard extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-              width: 100,
+              width: 120,
               decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  ),
-                  image: DecorationImage(
-                      image: CachedNetworkImageProvider(url),
-                      fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
-                  ),
+                color: Colors.grey,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                ),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(url),
+                  fit: BoxFit.cover,
+                ), // ENTER IMAGE LINK FOR CATEGORY
+              ),
             ),
             Expanded(
               child: Container(

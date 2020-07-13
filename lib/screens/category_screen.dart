@@ -93,8 +93,6 @@ class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
                               ["sub_categories"],
                           image: subcat['sub_category_file'][0]["image"],
                           onTap: () {
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
                             // int count = 0;
                             // Navigator.popUntil(context, (route) {
                             //   return count++ == 2;

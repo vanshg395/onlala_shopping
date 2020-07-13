@@ -55,7 +55,7 @@ class CategorySelectorItem extends StatelessWidget {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-        width: 150,
+        width: 120,
         child: Column(
           children: <Widget>[
             Container(
