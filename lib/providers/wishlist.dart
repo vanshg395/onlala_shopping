@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Cart with ChangeNotifier {
-  List<CartItem> _items = [];
+class Wishlist with ChangeNotifier {
+  List<dynamic> _items;
 
-  List<CartItem> get items {
+  List<dynamic> get items {
     return _items;
   }
 
@@ -14,11 +14,4 @@ class Cart with ChangeNotifier {
   Future<void> addItem() async {}
   Future<void> removeItem() async {}
   Future<void> getItems() async {}
-}
-
-class CartItem {
-  final String name;
-  CartItem({this.name});
-
-  // ADD MORE ATTRIBUTES AS PER CARTITEM DETAILS, COZ IDK.
 }

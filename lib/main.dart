@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
 import './providers/cart.dart';
+import './providers/wishlist.dart';
 import './screens/tabs_screen.dart';
 
 void main() => runApp(MyApp());
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Cart(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Wishlist(),
         ),
       ],
       child: Consumer<Auth>(
