@@ -36,6 +36,7 @@ class CategoryProductCard extends StatelessWidget {
       this.productName, this.description, this.url, this.price, this.id);
   @override
   Widget build(BuildContext context) {
+    print(url);
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -55,6 +56,7 @@ class CategoryProductCard extends StatelessWidget {
           children: <Widget>[
             Container(
               width: 120,
+              height: 100,
               decoration: BoxDecoration(
                 color: Colors.grey,
                 borderRadius: BorderRadius.only(
@@ -62,7 +64,7 @@ class CategoryProductCard extends StatelessWidget {
                   bottomLeft: Radius.circular(10),
                 ),
                 image: DecorationImage(
-                  image: CachedNetworkImageProvider(url),
+                  image: NetworkImage(url),
                   fit: BoxFit.cover,
                 ), // ENTER IMAGE LINK FOR CATEGORY
               ),

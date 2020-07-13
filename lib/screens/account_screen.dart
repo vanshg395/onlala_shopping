@@ -484,6 +484,33 @@ class _AccountScreenState extends State<AccountScreen> {
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             onTap: () async {
+                              bool _isConfirmed = false;
+                              await showDialog(
+                                context: context,
+                                child: AlertDialog(
+                                  title: Text('Confirm?'),
+                                  content: Text(
+                                      'Are you sure, you want to log out?'),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('Yes'),
+                                      onPressed: () {
+                                        _isConfirmed = true;
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text('No'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (!_isConfirmed) {
+                                return;
+                              }
                               await Provider.of<Auth>(context, listen: false)
                                   .logout();
                               setState(() {});
