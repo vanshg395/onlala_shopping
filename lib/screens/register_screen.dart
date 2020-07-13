@@ -17,7 +17,37 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> _formKey = GlobalKey();
-  Map<String, String> _data = {};
+  final _compController = TextEditingController();
+  final _firstnameController = TextEditingController();
+  final _lastnameController = TextEditingController();
+  final _mobileController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+
+  Map<String, String> _data = {
+    "email": "",
+    "password": "",
+    "first_name": "",
+    "last_name": ""
+  };
+  Map<String, String> _buyerData = {
+    "postal_state": "",
+    "postal_city": "",
+    "postal_country": "",
+    "postal_code": "",
+    "postal_address1": "",
+    "postal_landmark": "",
+    "brought_from": "",
+    "company": "OnLAla",
+    "mobile": "7980674526",
+    "department": "Automobiles",
+    "administrativeArea": "Vaishali",
+    "isoCountryCode": "+231",
+    "postal_details": "76, Beni Banerjee Avenue",
+    "phone_verified": "true",
+    "first_term_acceptance": "true",
+    "second_term_acceptance": "true"
+  };
   bool _isLoading = false;
   int _currentPart = 1;
   String _departmentChoice;
@@ -28,17 +58,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
     _formKey.currentState.save();
-    _currentPart++;
-
+    setState(() {
+      _currentPart++;
+    });
+    print(_data);
     // SNED REQUEST HERE USIGN PROVIDER.
   }
 
   Future<void> _submit2() async {
+    _buyerData['postal_state'] = widget.address.adminArea;
+    _buyerData['postal_city'] = widget.address.locality;
+    _buyerData['postal_landmark'] = widget.address.subLocality;
+    _buyerData['postal_address1'] = widget.address.countryName;
+    _buyerData['postal_state'] = widget.address.addressLine;
+    _buyerData['postal_code'] = widget.address.postalCode;
+    _buyerData["department"] = _departmentChoice;
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-
+    print(_buyerData);
     // SNED REQUEST HERE USIGN PROVIDER.
   }
 
@@ -78,12 +117,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'John',
+            controller: _firstnameController,
             validator: (value) {
               if (value == '') {
                 return 'This field is required.';
               }
             },
-            onSaved: (value) {},
+            onSaved: (value) {
+              _data['first_name'] = _firstnameController.text;
+            },
           ),
         ),
         SizedBox(
@@ -106,12 +148,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'Doe',
+            controller: _lastnameController,
             validator: (value) {
               if (value == '') {
                 return 'This field is required.';
               }
             },
-            onSaved: (value) {},
+            onSaved: (value) {
+              _data['last_name'] = _lastnameController.text;
+            },
           ),
         ),
         SizedBox(
@@ -135,12 +180,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderRadius: 10,
             placeholder: 'abc@xyz.com',
             keyboardType: TextInputType.emailAddress,
+            controller: _emailController,
             validator: (value) {
               if (value == '') {
                 return 'This field is required.';
               }
             },
-            onSaved: (value) {},
+            onSaved: (value) {
+              _data['email'] = _emailController.text;
+            },
           ),
         ),
         SizedBox(
@@ -164,12 +212,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'XXXXXXXX',
+            controller: _passController,
             validator: (value) {
               if (value == '') {
                 return 'This field is required.';
               }
             },
-            onSaved: (value) {},
+            onSaved: (value) {
+              _data['password'] = _passController.text;
+            },
           ),
         ),
       ],
@@ -212,12 +263,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'ABC Inc.',
+            controller: _compController,
             validator: (value) {
               if (value == '') {
                 return 'This field is required.';
               }
             },
-            onSaved: (value) {},
+            onSaved: (value) {
+              _buyerData["company"] = _compController.text;
+            },
           ),
         ),
         SizedBox(
@@ -240,12 +294,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderColor: Colors.grey,
             borderRadius: 10,
             placeholder: 'XXXXXXXX',
+            controller: _mobileController,
             validator: (value) {
               if (value == '') {
                 return 'This field is required.';
               }
             },
-            onSaved: (value) {},
+            onSaved: (value) {
+              _buyerData["mobile"] = _mobileController.text;
+            },
           ),
         ),
         SizedBox(
