@@ -5,6 +5,7 @@ import 'package:badges/badges.dart';
 import 'package:onlala_shopping/widgets/banner.dart';
 import 'package:provider/provider.dart';
 
+import './cart_screen.dart';
 import '../providers/auth.dart';
 import '../widgets/image_slider.dart';
 import '../widgets/category_selector.dart';
@@ -142,7 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => CartScreen(),
+                  ),
+                );
+              },
             ),
         ],
         // bottom: BottomAppBar(child: ,),

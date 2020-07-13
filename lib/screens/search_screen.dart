@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:onlala_shopping/widgets/search_widget.dart';
 import 'package:http/http.dart' as http;
 
+import './cart_screen.dart';
 import '../widgets/common_field.dart';
 import '../providers/auth.dart';
 
@@ -88,7 +89,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => CartScreen(),
+                  ),
+                );
+              },
             ),
         ],
         bottom: PreferredSize(

@@ -7,7 +7,8 @@ import 'package:geocoder/geocoder.dart';
 
 import './login_screen.dart';
 import './register_screen.dart';
-import 'edit_profile_screen.dart';
+import './cart_screen.dart';
+import './edit_profile_screen.dart';
 import '../widgets/common_button.dart';
 import './auth_view.dart';
 import '../providers/auth.dart';
@@ -132,11 +133,11 @@ class _AccountScreenState extends State<AccountScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          GestureDetector(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Container(
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Container(
                                   height: 80,
                                   width: 80,
                                   decoration: BoxDecoration(
@@ -149,12 +150,19 @@ class _AccountScreenState extends State<AccountScreen> {
                                     size: 30,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text('Cart'),
-                              ],
-                            ),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => CartScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text('Cart'),
+                            ],
                           ),
                           GestureDetector(
                             child: Column(
