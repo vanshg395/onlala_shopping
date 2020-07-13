@@ -46,10 +46,10 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> createManufacturer(Map<String, dynamic> buyerData) async {
+  Future<void> createBuyer(Map<String, dynamic> buyerData) async {
     try {
-      print('>>>>>>>>>>>>>>createManuf');
-      final url = baseUrl + 'business/manufacturer/create/';
+      print('>>>>>>>>>>>>>>createBuyer');
+      final url = baseUrl + 'business/buyer/create/';
       print(_token);
       final response = await http.post(
         url,
@@ -140,6 +140,28 @@ class Auth with ChangeNotifier {
       }
     } catch (e) {
       throw e;
+    }
+  }
+
+  Future<void> regLogin(Map<String, dynamic> loginData) async {
+    try {
+      print('>>>>>>>>>>>>>>login');
+      final url = baseUrl + 'user/api/token/buyer/';
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(loginData),
+      );
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 202) {
+        final responseBody = json.decode(response.body);
+        _token = 'JWT ' + responseBody['access'];
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

@@ -103,6 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _buyerData['postal_code'] = widget.address.postalCode;
     _buyerData["administrativeArea"] = widget.address.locality;
     _buyerData["isoCountryCode"] = widget.address.countryCode;
+    _buyerData["company_email"] = _data["email"];
 
     if (!_formKey.currentState.validate()) {
       return;
@@ -115,10 +116,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
     try {
       await Provider.of<Auth>(context, listen: false).register(_data);
-      await Provider.of<Auth>(context, listen: false)
-          .login({'username': _data['email'], 'password': _data['password']});
-      await Provider.of<Auth>(context, listen: false)
-          .createManufacturer(_buyerData);
+      await Provider.of<Auth>(context, listen: false).regLogin(
+          {'username': _data['email'], 'password': _data['password']});
+      await Provider.of<Auth>(context, listen: false).createBuyer(_buyerData);
       setState(() {
         _isLoading = false;
       });
