@@ -39,12 +39,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "postal_address1": "",
     "postal_landmark": "",
     "brought_from": "",
-    "company": "OnLAla",
-    "mobile": "7980674526",
-    "department": "Automobiles",
-    "administrativeArea": "Vaishali",
-    "isoCountryCode": "+231",
-    "postal_details": "76, Beni Banerjee Avenue",
+    "company": "",
+    "mobile": "",
+    "department": "",
+    "administrativeArea": "",
+    "isoCountryCode": "",
     "phone_verified": "true",
     "first_term_acceptance": "true",
     "second_term_acceptance": "true"
@@ -63,17 +62,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _currentPart++;
     });
     print(_data);
-    // SNED REQUEST HERE USIGN PROVIDER.
+    print(widget.address.countryCode);
   }
 
   Future<void> _submit2() async {
     _buyerData['postal_state'] = widget.address.adminArea;
     _buyerData['postal_city'] = widget.address.locality;
     _buyerData['postal_landmark'] = widget.address.subLocality;
-    _buyerData['postal_address1'] = widget.address.countryName;
-    _buyerData['postal_state'] = widget.address.addressLine;
+    _buyerData['postal_country'] = widget.address.countryName;
+    _buyerData['postal_address1'] = widget.address.addressLine;
     _buyerData['postal_code'] = widget.address.postalCode;
     _buyerData["department"] = _departmentChoice;
+    _buyerData["administrativeArea"] = widget.address.locality;
+    _buyerData["isoCountryCode"] = widget.address.countryCode;
+
     if (!_formKey.currentState.validate()) {
       return;
     }
