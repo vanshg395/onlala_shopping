@@ -29,18 +29,14 @@ class _ChatScreenState extends State<ChatScreen> {
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(
-                showBadge: Provider.of<Wishlist>(context, listen: false)
-                            .numberOfwishItems ==
-                        0
+                showBadge: Provider.of<Wishlist>(context).numberOfwishItems == 0
                     ? false
                     : true,
                 animationType: BadgeAnimationType.scale,
                 animationDuration: Duration(milliseconds: 200),
                 child: Icon(Icons.favorite),
                 badgeContent: Text(
-                  Provider.of<Wishlist>(context, listen: false)
-                      .numberOfwishItems
-                      .toString(),
+                  Provider.of<Wishlist>(context).numberOfwishItems.toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -58,18 +54,14 @@ class _ChatScreenState extends State<ChatScreen> {
           if (Provider.of<Auth>(context).isAuth)
             IconButton(
               icon: Badge(
-                showBadge: Provider.of<Cart>(context, listen: false)
-                            .numberOfCartItems ==
-                        0
+                showBadge: Provider.of<Cart>(context).numberOfCartItems == 0
                     ? false
                     : true,
                 animationType: BadgeAnimationType.scale,
                 animationDuration: Duration(milliseconds: 200),
                 child: Icon(Icons.shopping_cart),
                 badgeContent: Text(
-                  Provider.of<Cart>(context, listen: false)
-                      .numberOfCartItems
-                      .toString(),
+                  Provider.of<Cart>(context).numberOfCartItems.toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,

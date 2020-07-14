@@ -47,6 +47,7 @@ class Cart with ChangeNotifier {
           ),
         );
         getItems(jwtToken);
+        notifyListeners();
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {
@@ -71,6 +72,7 @@ class Cart with ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         _items.removeWhere((item) => item.productId == cartItem);
+        notifyListeners();
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else if (response.statusCode == 404) {
