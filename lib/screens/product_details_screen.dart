@@ -31,6 +31,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   CartItem cart;
   bool _cartItemExists = false;
   int quantity = 1;
+  Map<String, String> _productEnquiry = {"message": "", "product": ""};
   @override
   void initState() {
     super.initState();
@@ -137,6 +138,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       return;
     }
     _formKey.currentState.save();
+    _productEnquiry["product"] = widget.id;
+    try {
+      final url = baseUrl + 'message/user/create/';
+      final response = await http.post(url,
+          headers: {
+            'Authorization': Provider.of<Auth>(context, listen: false).token,
+            'Content-Type': 'application/json'
+          },
+          body: json.encode(_productEnquiry));
+      print(response.statusCode);
+      if (response.statusCode == 201) {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _addToCart() async {
@@ -243,7 +260,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         return 'This field is required';
                       }
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      _productEnquiry["message"] = value;
+                    },
                   ),
                 ),
                 SizedBox(
