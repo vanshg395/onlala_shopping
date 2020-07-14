@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/screens/bulk_inquiry_status_screen.dart';
 import 'package:onlala_shopping/screens/orders_screen.dart';
@@ -14,6 +17,7 @@ import './edit_profile_screen.dart';
 import '../widgets/common_button.dart';
 import '../providers/cart.dart';
 import '../providers/auth.dart';
+import 'package:http/http.dart' as http;
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -21,6 +25,45 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  String baseUrl = "https://onlala-api.herokuapp.com/";
+  Map<String, String> _data = {};
+  String image = '';
+  @override
+  void initState() {
+    profile();
+    super.initState();
+  }
+
+  Future<void> profile() async {
+    final url = baseUrl + 'business/buyer/create/';
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': Provider.of<Auth>(context, listen: false).token,
+        },
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 202) {
+        final responseBody = json.decode(response.body);
+        print(responseBody["payload"]);
+        setState(() {
+          _data = {
+            "name": responseBody["payload"][0]["user"]["last_name"] +
+                " " +
+                responseBody["payload"][0]["user"]["first_name"],
+            "email": responseBody["payload"][0]["user"]["email"],
+            "mobile": responseBody["payload"][0]["mobile"],
+            "company": responseBody["payload"][0]["company"],
+            "image": responseBody["profile_picture"].length == 0
+                ? ''
+                : responseBody["profile_picture"][0]['profile_image']
+          };
+        });
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,16 +88,16 @@ class _AccountScreenState extends State<AccountScreen> {
                           decoration: BoxDecoration(
                             color: Colors.grey,
                             shape: BoxShape.circle,
-                            // image: DecorationImage(
-                            // image: CachedNetworkImageProvider(url)
-                            // fit: BoxFit.cover,
-                            // ),
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(_data['image']),
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.account_circle,
-                            color: Colors.white,
-                            size: 150,
-                          ),
+                          // child: Icon(
+                          //   Icons.account_circle,
+                          //   color: Colors.white,
+                          //   size: 150,
+                          // ),
                         ),
                       ),
                       SizedBox(
@@ -62,7 +105,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       Center(
                         child: Text(
-                          'John Doe',
+                          "${_data['name']}",
                           style: Theme.of(context)
                               .textTheme
                               .headline4
@@ -84,7 +127,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       Center(
                         child: Text(
-                          'johndoe@gmail.com',
+                          "${_data['email']}",
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1
@@ -96,7 +139,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       Center(
                         child: Text(
-                          '9999999999',
+                          "${_data['mobile']}",
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1
@@ -115,7 +158,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                             children: [
                               TextSpan(
-                                text: 'Company: ',
+                                text: "Company: ",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1
@@ -125,7 +168,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                               ),
                               TextSpan(
-                                text: 'Corevyan',
+                                text: "${_data['company']}",
                               ),
                             ],
                           ),
