@@ -180,6 +180,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     color: Colors.white,
                   ),
                   onPressed: () {
+                    FocusScope.of(context).unfocus();
                     _search(_searchController.text);
                   },
                 ),
@@ -191,11 +192,22 @@ class _SearchScreenState extends State<SearchScreen> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Container(
+              alignment:
+                  _data.length == 0 ? Alignment.center : Alignment.topCenter,
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: _data.length == 0
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
                   children: <Widget>[
                     _data.length == 0
-                        ? WebsafeSvg.asset('assets/svg/error.svg')
+                        ? Center(
+                            child: WebsafeSvg.asset(
+                              'assets/svg/error.svg',
+                              height: 200,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          )
                         : SearchProducts(_data),
                   ],
                 ),

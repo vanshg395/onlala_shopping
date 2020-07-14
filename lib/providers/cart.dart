@@ -98,14 +98,16 @@ class Cart with ChangeNotifier {
         _items = [];
         final responseBody = json.decode(response.body)["payload"];
         for (var i = 0; i < responseBody["cart_details"].length; i++) {
-          _items.add(CartItem(
+          _items.add(
+            CartItem(
               name: responseBody["cart_details"][i]["item_name"]
                   ["product_name"],
               cartId: responseBody["cart_details"][i]["cart_item"],
               productId: responseBody["cart_details"][i]["id"],
-              quantity: responseBody["cart_details"][i]["quantity"]));
+              quantity: responseBody["cart_details"][i]["quantity"],
+            ),
+          );
         }
-        print(_items[0].name);
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {
@@ -123,10 +125,20 @@ class Cart with ChangeNotifier {
 
 class CartItem {
   final String name;
+  final String description;
+  final String price;
   final String cartId;
   final String productId;
   final int quantity;
-  CartItem({this.name, this.productId, this.cartId, this.quantity});
+
+  CartItem({
+    this.name,
+    this.productId,
+    this.description,
+    this.price,
+    this.cartId,
+    this.quantity,
+  });
 
   // ADD MORE ATTRIBUTES AS PER CARTITEM DETAILS, COZ IDK.
 }

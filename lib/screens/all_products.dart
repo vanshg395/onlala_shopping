@@ -33,9 +33,9 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   }
 
   Future<void> getData() async {
-    // setState(() {
-    //   _isLoading = true;
-    // });
+    setState(() {
+      _isLoading = true;
+    });
     final url = 'https://onlala-api.herokuapp.com/product/showByPagination/';
     try {
       final response = await http.post(

@@ -296,9 +296,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 setState(() {});
               } else {
                 await Provider.of<Wishlist>(context, listen: false).addItem(
-                    Provider.of<Auth>(context, listen: false).token,
-                    widget.id,
-                    widget.name);
+                  Provider.of<Auth>(context, listen: false).token,
+                  widget.id,
+                  widget.name,
+                  _data[0]["product"]["product_description"],
+                  _data[0]["bulkorder_details"]["bulk_order_price"].toString(),
+                );
                 setState(() {});
               }
             },

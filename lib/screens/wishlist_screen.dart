@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/providers/wishlist.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/wishlist.dart';
 
 class WishlistScreen extends StatelessWidget {
   @override
@@ -12,9 +16,16 @@ class WishlistScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              WishlistCard(),
-              WishlistCard(),
-              WishlistCard(),
+              ...Provider.of<Wishlist>(context, listen: false)
+                  .items
+                  .map(
+                    (e) => WishlistCard(
+                      e.name,
+                      e.description,
+                      e.price,
+                    ),
+                  )
+                  .toList(),
               SizedBox(
                 height: 20,
               ),
@@ -27,6 +38,12 @@ class WishlistScreen extends StatelessWidget {
 }
 
 class WishlistCard extends StatelessWidget {
+  final String name;
+  final String description;
+  final String price;
+
+  WishlistCard(this.name, this.description, this.price);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -68,19 +85,19 @@ class WishlistCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'productName',
+                      name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.subtitle1.copyWith(),
                     ),
                     Text(
-                      'description',
+                      description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.subtitle2.copyWith(),
                     ),
                     Text(
-                      '€ \$100',
+                      '€ $price',
                       style: Theme.of(context).textTheme.subtitle2.copyWith(
                             fontWeight: FontWeight.bold,
                           ),

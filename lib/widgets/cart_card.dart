@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CartCard extends StatelessWidget {
+  final String name;
+  final String description;
+  final String price;
+  final String quantity;
+
+  CartCard(
+    this.name,
+    this.description,
+    this.price,
+    this.quantity,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,19 +54,19 @@ class CartCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'productName',
+                    name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle1.copyWith(),
                   ),
                   Text(
-                    'description',
+                    description ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle2.copyWith(),
                   ),
                   Text(
-                    '€ 100',
+                    '€ $price',
                     style: Theme.of(context).textTheme.subtitle2.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -67,7 +79,7 @@ class CartCard extends StatelessWidget {
                           text: 'Quantity: ',
                         ),
                         TextSpan(
-                          text: '5',
+                          text: quantity,
                           style: Theme.of(context).textTheme.subtitle2.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),

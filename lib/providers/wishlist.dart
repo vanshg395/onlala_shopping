@@ -16,7 +16,12 @@ class Wishlist with ChangeNotifier {
   }
 
   Future<void> addItem(
-      String jwtToken, String wishItem, String productName) async {
+    String jwtToken,
+    String wishItem,
+    String productName,
+    String desc,
+    String price,
+  ) async {
     try {
       print('>>>>>>>>>>>>>>addwishItems');
       final url = baseUrl + 'cart/wishlist/add/';
@@ -29,9 +34,17 @@ class Wishlist with ChangeNotifier {
             "items_list": [wishItem]
           }));
       print(response.statusCode);
+      print(price);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         // final responseBody = json.decode(response.body)["payload"];
-        _items.add(WishItem(name: productName, productId: wishItem));
+        _items.add(
+          WishItem(
+            name: productName,
+            productId: wishItem,
+            description: desc,
+            price: price,
+          ),
+        );
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {
@@ -86,11 +99,20 @@ class Wishlist with ChangeNotifier {
         for (var i = 0;
             i < responseBody["wishlist"][0]["wished_item"].length;
             i++) {
+          // print(responseBody["wishlist"][0]["wished_item"][i]);
           _items.add(
             WishItem(
-                name: responseBody["wishlist"][0]["wished_item"][i]
-                    ["product_name"],
-                productId: responseBody["wishlist"][0]["wished_item"][i]["id"]),
+              name: responseBody["wishlist"][0]["wished_item"][i]
+                  ["product_name"],
+              description: responseBody["wishlist"][0]["wished_item"][i]
+                  ["product_description"],
+              price: responseBody["wishlist"][0]["wished_item"][i]["price"],
+              productId: responseBody["wishlist"][0]["wished_item"][i]["id"],
+              // url: responseBody[0]["product"]["pictures"].length == 0
+              //     ? ''
+              //     : responseBody[0]["product"]["pictures"][0]
+              //         ['product_image'],
+            ),
           );
         }
       } else if (response.statusCode == 401) {
@@ -110,8 +132,16 @@ class Wishlist with ChangeNotifier {
 
 class WishItem {
   final String name;
+  final String description;
+  final String price;
   final String productId;
-  WishItem({this.name, this.productId});
+
+  WishItem({
+    this.name,
+    this.description,
+    this.price,
+    this.productId,
+  });
 
   // ADD MORE ATTRIBUTES AS PER CARTITEM DETAILS, COZ IDK.
 }
