@@ -92,8 +92,8 @@ class Wishlist with ChangeNotifier {
           'Authorization': jwtToken
         },
       );
-      print(response.statusCode);
-      if (response.statusCode >= 200 && response.statusCode <= 299) {
+      print(response.statusCode.toString() + "> Wishlist");
+      if (response.statusCode == 200) {
         final responseBody = json.decode(response.body)["payload"];
         _items = [];
         for (var i = 0;
@@ -117,8 +117,10 @@ class Wishlist with ChangeNotifier {
         }
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
+      } else if (response.statusCode == 204) {
+        print("No elements");
       } else {
-        // throw HttpException('Error');
+        throw HttpException('Error');
       }
     } catch (e) {
       throw e;

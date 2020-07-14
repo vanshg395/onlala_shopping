@@ -54,12 +54,15 @@ class _TabsScreenState extends State<TabsScreen> {
       setState(() {
         _requestCount++;
       });
-
-      await Provider.of<Cart>(context, listen: false)
-          .getItems(Provider.of<Auth>(context, listen: false).token);
-      setState(() {
-        _requestCount--;
-      });
+      try {
+        await Provider.of<Cart>(context, listen: false)
+            .getItems(Provider.of<Auth>(context, listen: false).token);
+        setState(() {
+          _requestCount--;
+        });
+      } catch (e) {
+        print(e);
+      }
     }
   }
 

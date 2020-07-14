@@ -34,7 +34,7 @@ class Cart with ChangeNotifier {
             'Authorization': jwtToken
           },
           body: json.encode({"cart_item": cartItem, "quantity": quantity}));
-      print(response.statusCode);
+      print(response.statusCode.toString() + ">>cart");
 
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final responseBody = json.decode(response.body)["payload"];
@@ -93,7 +93,8 @@ class Cart with ChangeNotifier {
           'Authorization': jwtToken
         },
       );
-      print(response.statusCode);
+      print(response.statusCode.toString() + ">>cart");
+      print(response.body);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         _items = [];
         final responseBody = json.decode(response.body)["payload"];
@@ -110,6 +111,8 @@ class Cart with ChangeNotifier {
         }
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
+      } else if (response.statusCode == 404) {
+        print("No cart list");
       } else {
         throw HttpException('Error');
       }
