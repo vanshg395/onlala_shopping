@@ -292,39 +292,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       appBar: AppBar(
         title: Text(widget.name),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Provider.of<Wishlist>(context, listen: false)
-                          .items
-                          .where((element) => element.productId == widget.id)
-                          .length ==
-                      1
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-            ),
-            onPressed: () async {
-              if (Provider.of<Wishlist>(context, listen: false)
-                      .items
-                      .where((element) => element.productId == widget.id)
-                      .length ==
-                  1) {
-                await Provider.of<Wishlist>(context, listen: false).removeItem(
+          if (Provider.of<Auth>(context, listen: false).isAuth)
+            IconButton(
+              icon: Icon(
+                Provider.of<Wishlist>(context, listen: false)
+                            .items
+                            .where((element) => element.productId == widget.id)
+                            .length ==
+                        1
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+              ),
+              onPressed: () async {
+                if (Provider.of<Wishlist>(context, listen: false)
+                        .items
+                        .where((element) => element.productId == widget.id)
+                        .length ==
+                    1) {
+                  await Provider.of<Wishlist>(context, listen: false)
+                      .removeItem(
+                          Provider.of<Auth>(context, listen: false).token,
+                          widget.id,
+                          widget.name);
+                  setState(() {});
+                } else {
+                  await Provider.of<Wishlist>(context, listen: false).addItem(
                     Provider.of<Auth>(context, listen: false).token,
                     widget.id,
-                    widget.name);
-                setState(() {});
-              } else {
-                await Provider.of<Wishlist>(context, listen: false).addItem(
-                  Provider.of<Auth>(context, listen: false).token,
-                  widget.id,
-                  widget.name,
-                  _data[0]["product"]["product_description"],
-                  _data[0]["bulkorder_details"]["bulk_order_price"].toString(),
-                );
-                setState(() {});
-              }
-            },
-          ),
+                    widget.name,
+                    _data[0]["product"]["product_description"],
+                    _data[0]["bulkorder_details"]["bulk_order_price"]
+                        .toString(),
+                  );
+                  setState(() {});
+                }
+              },
+            ),
         ],
       ),
       body: _isLoading
@@ -900,89 +903,98 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ),
             ),
-      bottomNavigationBar: Container(
-        height: 60,
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 2, 0),
-                  color: Theme.of(context).primaryColor,
-                  alignment: Alignment.center,
-                  child: Text(
-                    'General Inquiry',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                  ),
-                ),
-                onTap: _raiseGeneralInquiry,
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
-                  color: !_cartItemExists
-                      ? Theme.of(context).primaryColor
-                      : Colors.green,
-                  alignment: Alignment.center,
-                  child: !_cartItemExists
-                      ? Text(
-                          'Add to Cart',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                        )
-                      : Text(
-                          'Added to Cart',
+      bottomNavigationBar: !Provider.of<Auth>(context, listen: false).isAuth
+          ? null
+          : Container(
+              height: 60,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: GestureDetector(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 5, 2, 0),
+                        color: Theme.of(context).primaryColor,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'General Inquiry',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyText1.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                         ),
-                ),
-                onTap: !_cartItemExists ? _addToCart : () {},
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(2, 5, 0, 0),
-                  color: Theme.of(context).primaryColor,
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Bulk Inquiry',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => BulkInquiryScreen(
-                        _data[0]["product"]["product_name"],
-                        _data[0]["product"]["product_description"],
-                        _data[0]["product"]["bulk_order_price"],
-                        widget.url,
                       ),
+                      onTap: _raiseGeneralInquiry,
                     ),
-                  );
-                },
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
+                        color: !_cartItemExists
+                            ? Theme.of(context).primaryColor
+                            : Colors.green,
+                        alignment: Alignment.center,
+                        child: !_cartItemExists
+                            ? Text(
+                                'Add to Cart',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                              )
+                            : Text(
+                                'Added to Cart',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                              ),
+                      ),
+                      onTap: !_cartItemExists ? _addToCart : () {},
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(2, 5, 0, 0),
+                        color: Theme.of(context).primaryColor,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Bulk Inquiry',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => BulkInquiryScreen(
+                              _data[0]["product"]["product_name"],
+                              widget.id,
+                              _data[0]["product"]["product_description"],
+                              _data[0]["product"]["bulk_order_price"],
+                              widget.url,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

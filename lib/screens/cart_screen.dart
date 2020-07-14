@@ -4,7 +4,16 @@ import 'package:provider/provider.dart';
 import '../widgets/cart_card.dart';
 import '../providers/cart.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  void refresh() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +32,8 @@ class CartScreen extends StatelessWidget {
               ...Provider.of<Cart>(context, listen: false)
                   .items
                   .map(
-                    (e) => CartCard(
-                      e.name,
-                      e.description,
-                      e.price,
-                      e.quantity.toString(),
-                    ),
+                    (e) => CartCard(e.name, e.description, e.price,
+                        e.quantity.toString(), e.productId, refresh),
                   )
                   .toList(),
               //

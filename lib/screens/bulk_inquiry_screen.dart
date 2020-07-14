@@ -15,11 +15,13 @@ class BulkInquiryScreen extends StatefulWidget {
   _BulkInquiryScreenState createState() => _BulkInquiryScreenState();
 
   final String productName;
+  final String id;
   final String description;
   final String price;
   final String url;
 
-  BulkInquiryScreen(this.productName, this.description, this.price, this.url);
+  BulkInquiryScreen(
+      this.productName, this.id, this.description, this.price, this.url);
 }
 
 class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
@@ -30,10 +32,11 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
   bool _callOurExec = false;
   bool _reportsQCStand = false;
   bool _isLoading = false;
-  int _quantity = 1;
   var baseUrl = "https://onlala-api.herokuapp.com/";
+  Map<String, dynamic> _data = {};
 
   Future<void> _submit() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -41,26 +44,38 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
     setState(() {
       _isLoading = true;
     });
+    _data['product'] = widget.id;
     try {
       final url = baseUrl + 'query/add/';
-      final response = await http.post(url,
-          headers: {
-            'Authorization': Provider.of<Auth>(context, listen: false).token,
-            'Content-Type': 'application/json'
-          },
-          body: json.encode({
-            "type_of_user": _userTypeChoice,
-            "technical_specifications": "This product is delicate",
-            "payment_terms": "Cash",
-            "additional_message": "jbfnslkjgnlk",
-            "product": "b18e0f88-7d4a-440a-898c-b9b822739e6f",
-            "quantity": "78",
-            "terms_of_delivery": "Factory",
-            "call_our_excutive": "0",
-            "reports_qc_stand": "0"
-          }));
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': Provider.of<Auth>(context, listen: false).token,
+          'Content-Type': 'application/json'
+        },
+        body: json.encode(_data),
+      );
       print(response.statusCode);
-      if (response.statusCode == 200 || response.statusCode == 202) {}
+      print(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.of(context).pop();
+      } else {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text('Error'),
+            content: Text('Something went wrong. Please try again later.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      }
     } catch (e) {
       print(e);
     }
@@ -201,6 +216,14 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         top: 10,
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'This field is required.';
+                      }
+                    },
+                    onSaved: (value) {
+                      _data['type_of_user'] = value;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -227,8 +250,13 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                       signed: false,
                       decimal: true,
                     ),
+                    validator: (value) {
+                      if (value == '') {
+                        return 'This field is required.';
+                      }
+                    },
                     onSaved: (value) {
-                      _quantity = value;
+                      _data['quantity'] = value;
                     },
                   ),
                 ),
@@ -255,8 +283,13 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     topPadding: 30,
                     placeholder: 'Some Specifications',
                     keyboardType: TextInputType.multiline,
+                    validator: (value) {
+                      if (value == '') {
+                        return 'This field is required.';
+                      }
+                    },
                     onSaved: (value) {
-                      // _tech
+                      _data['technical_specifications'] = value;
                     },
                   ),
                 ),
@@ -369,6 +402,14 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         top: 10,
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'This field is required.';
+                      }
+                    },
+                    onSaved: (value) {
+                      _data['terms_of_delivery'] = value;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -487,6 +528,14 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         top: 10,
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'This field is required.';
+                      }
+                    },
+                    onSaved: (value) {
+                      _data['payment_terms'] = value;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -512,6 +561,14 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     topPadding: 30,
                     placeholder: 'Some Message',
                     keyboardType: TextInputType.multiline,
+                    validator: (value) {
+                      if (value == '') {
+                        return 'This field is required.';
+                      }
+                    },
+                    onSaved: (value) {
+                      _data['additional_message'] = value;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -526,6 +583,7 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         onChanged: (value) {
                           setState(() {
                             _callOurExec = value;
+                            _data['call_our_excutive'] = value;
                           });
                         },
                       ),
@@ -545,6 +603,8 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         onChanged: (value) {
                           setState(() {
                             _reportsQCStand = value;
+
+                            _data['reports_qc_stands'] = value;
                           });
                         },
                       ),
@@ -569,13 +629,16 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                   height: 30,
                 ),
                 Center(
-                  child: CommonButton(
-                    title: 'Submit',
-                    onPressed: _submit,
-                    borderRadius: 10,
-                    bgColor: Theme.of(context).primaryColor,
-                    borderColor: Theme.of(context).primaryColor,
-                  ),
+                  child: _isLoading
+                      ? CircularProgressIndicator()
+                      : CommonButton(
+                          title: 'Submit',
+                          onPressed: _submit,
+                          borderRadius: 10,
+                          fontSize: 18,
+                          bgColor: Theme.of(context).primaryColor,
+                          borderColor: Theme.of(context).primaryColor,
+                        ),
                 ),
                 SizedBox(
                   height: 30,
