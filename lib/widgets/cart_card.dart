@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/providers/auth.dart';
+import 'package:onlala_shopping/providers/cart.dart';
+import 'package:provider/provider.dart';
 
-class CartCard extends StatelessWidget {
+class CartCard extends StatefulWidget {
   final String name;
   final String description;
   final String price;
   final String quantity;
+  final String id;
+  final Function refresh;
 
   CartCard(
     this.name,
     this.description,
     this.price,
     this.quantity,
+    this.id,
+    this.refresh,
   );
+
+  @override
+  _CartCardState createState() => _CartCardState();
+}
+
+class _CartCardState extends State<CartCard> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +68,19 @@ class CartCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    name,
+                    widget.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle1.copyWith(),
                   ),
                   Text(
-                    description ?? '',
+                    widget.description ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle2.copyWith(),
                   ),
                   Text(
-                    '€ $price',
+                    '€ ${widget.price}',
                     style: Theme.of(context).textTheme.subtitle2.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -79,7 +93,7 @@ class CartCard extends StatelessWidget {
                           text: 'Quantity: ',
                         ),
                         TextSpan(
-                          text: quantity,
+                          text: widget.quantity,
                           style: Theme.of(context).textTheme.subtitle2.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -97,9 +111,24 @@ class CartCard extends StatelessWidget {
               icon: Icon(
                 Icons.delete,
                 size: 36,
-                color: Colors.red,
+                color: _isLoading ? Colors.grey : Colors.red,
               ),
-              onPressed: () {},
+              onPressed: _isLoading
+                  ? () {}
+                  : () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await Provider.of<Cart>(context, listen: false)
+                          .removeItem(
+                              Provider.of<Auth>(context, listen: false).token,
+                              widget.id,
+                              widget.name);
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      widget.refresh();
+                    },
             ),
           ),
         ],
