@@ -46,6 +46,7 @@ class Cart with ChangeNotifier {
             quantity: responseBody["quantity"],
           ),
         );
+        getItems(jwtToken);
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else {
@@ -141,6 +142,7 @@ class Cart with ChangeNotifier {
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
       } else if (response.statusCode == 404) {
+        print(response.body);
         print("No cart list");
       } else {
         throw HttpException('Error');

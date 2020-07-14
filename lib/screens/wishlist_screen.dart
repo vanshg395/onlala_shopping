@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/providers/auth.dart';
 import 'package:onlala_shopping/providers/wishlist.dart';
+import 'package:onlala_shopping/screens/product_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/wishlist.dart';
@@ -88,19 +89,6 @@ class _WishlistCardState extends State<WishlistCard> {
         ),
         child: Row(
           children: <Widget>[
-            Container(
-              width: 120,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-                // image: DecorationImage(
-                //     image: CachedNetworkImageProvider(url),
-                //     fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
-              ),
-            ),
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(10),
@@ -119,12 +107,6 @@ class _WishlistCardState extends State<WishlistCard> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.subtitle2.copyWith(),
-                    ),
-                    Text(
-                      '€ ${widget.price}',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
                     ),
                   ],
                 ),
@@ -160,11 +142,11 @@ class _WishlistCardState extends State<WishlistCard> {
         ),
       ),
       onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (ctx) => ProductDetailsScreen(id, productName, url),
-        //   ),
-        // );
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => ProductDetailsScreen(widget.id, widget.name, ''),
+          ),
+        );
       },
     );
   }

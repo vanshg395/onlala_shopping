@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/providers/auth.dart';
 import 'package:onlala_shopping/providers/cart.dart';
@@ -10,6 +11,7 @@ class CartCard extends StatefulWidget {
   final String quantity;
   final String id;
   final Function refresh;
+  final String image;
 
   CartCard(
     this.name,
@@ -18,6 +20,7 @@ class CartCard extends StatefulWidget {
     this.quantity,
     this.id,
     this.refresh,
+    this.image,
   );
 
   @override
@@ -54,10 +57,10 @@ class _CartCardState extends State<CartCard> {
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
               ),
-              // image: DecorationImage(
-              //   image: CachedNetworkImageProvider(url),
-              //   fit: BoxFit.cover,
-              // ), // ENTER IMAGE LINK FOR CATEGORY
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(widget.image),
+                fit: BoxFit.cover,
+              ), // ENTER IMAGE LINK FOR CATEGORY
             ),
           ),
           Expanded(

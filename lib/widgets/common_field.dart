@@ -23,6 +23,7 @@ class CommonField extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final Function onFieldSubmitted;
+  final String initialValue;
 
   CommonField({
     @required this.placeholder,
@@ -47,6 +48,7 @@ class CommonField extends StatelessWidget {
     this.controller,
     this.focusNode,
     this.onFieldSubmitted,
+    this.initialValue,
   });
 
   @override
@@ -55,6 +57,7 @@ class CommonField extends StatelessWidget {
       width: width,
       child: TextFormField(
         readOnly: readOnly,
+        initialValue: initialValue,
         obscureText: isPassword,
         maxLength: maxLength,
         textAlign: textAlign,

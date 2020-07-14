@@ -100,17 +100,22 @@ class _AccountScreenState extends State<AccountScreen> {
                                 decoration: BoxDecoration(
                                   color: Colors.grey,
                                   shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: CachedNetworkImageProvider(
-                                        _data['image']),
-                                    fit: BoxFit.cover,
-                                  ),
+                                  image: _data['image'] == ''
+                                      ? null
+                                      : DecorationImage(
+                                          image: CachedNetworkImageProvider(
+                                            _data['image'],
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
-                                // child: Icon(
-                                //   Icons.account_circle,
-                                //   color: Colors.white,
-                                //   size: 150,
-                                // ),
+                                child: _data['image'] == ''
+                                    ? Icon(
+                                        Icons.account_circle,
+                                        color: Colors.white,
+                                        size: 150,
+                                      )
+                                    : null,
                               ),
                             ),
                             SizedBox(

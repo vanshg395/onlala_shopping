@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/screens/place_order_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/cart_card.dart';
@@ -32,8 +33,15 @@ class _CartScreenState extends State<CartScreen> {
               ...Provider.of<Cart>(context, listen: false)
                   .items
                   .map(
-                    (e) => CartCard(e.name, e.description, e.price,
-                        e.quantity.toString(), e.productId, refresh),
+                    (e) => CartCard(
+                      e.name,
+                      e.description,
+                      e.price,
+                      e.quantity.toString(),
+                      e.productId,
+                      refresh,
+                      e.image,
+                    ),
                   )
                   .toList(),
               //
@@ -44,6 +52,30 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
       ),
+      bottomNavigationBar:
+          Provider.of<Cart>(context, listen: false).numberOfCartItems > 0
+              ? GestureDetector(
+                  child: Container(
+                    height: 70,
+                    color: Theme.of(context).primaryColor,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Place Order',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          .copyWith(color: Colors.white),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => PlaceOrderScreen(),
+                      ),
+                    );
+                  },
+                )
+              : null,
     );
   }
 }
