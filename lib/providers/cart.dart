@@ -93,20 +93,43 @@ class Cart with ChangeNotifier {
           'Authorization': jwtToken
         },
       );
+      print({'Content-Type': 'application/json', 'Authorization': jwtToken});
+      print(url);
       print(response.statusCode.toString() + ">>cart");
       print(response.body);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         _items = [];
         final responseBody = json.decode(response.body)["payload"];
         for (var i = 0; i < responseBody["cart_details"].length; i++) {
+          String productImage = '';
+          String productBulkPrice = '';
+          String productDescription = '';
+          for (var j = 0; j < responseBody["additional_details"].length; i++) {
+            // print(responseBody["additional_details"][j]["product"]["id"]);
+            if (responseBody["cart_details"][i]["id"] ==
+                responseBody["additional_details"][j]["product"]["id"]) {
+              if (responseBody["additional_details"][j]["product_image"]
+                      .length >
+                  0) {
+                productImage = responseBody["additional_details"][j]
+                    ["product_image"][0]["product_image"];
+              }
+              productBulkPrice = responseBody["additional_details"][j]
+                  ["bulkorder_details"]["bulk_order_price"];
+              productDescription = responseBody["additional_details"][j]
+                  ["product"]["product_description"];
+            }
+          }
           _items.add(
             CartItem(
-              name: responseBody["cart_details"][i]["item_name"]
-                  ["product_name"],
-              cartId: responseBody["cart_details"][i]["cart_item"],
-              productId: responseBody["cart_details"][i]["id"],
-              quantity: responseBody["cart_details"][i]["quantity"],
-            ),
+                name: responseBody["cart_details"][i]["item_name"]
+                    ["product_name"],
+                cartId: responseBody["cart_details"][i]["cart_item"],
+                productId: responseBody["cart_details"][i]["id"],
+                quantity: responseBody["cart_details"][i]["quantity"],
+                image: productImage,
+                description: productDescription,
+                price: productBulkPrice),
           );
         }
       } else if (response.statusCode == 401) {
@@ -129,6 +152,7 @@ class Cart with ChangeNotifier {
 class CartItem {
   final String name;
   final String description;
+  final String image;
   final String price;
   final String cartId;
   final String productId;
@@ -141,6 +165,7 @@ class CartItem {
     this.price,
     this.cartId,
     this.quantity,
+    this.image,
   });
 
   // ADD MORE ATTRIBUTES AS PER CARTITEM DETAILS, COZ IDK.
