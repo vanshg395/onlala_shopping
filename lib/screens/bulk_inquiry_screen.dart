@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:onlala_shopping/providers/auth.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/common_field.dart';
 import '../widgets/common_dropdown.dart';
 import '../widgets/common_button.dart';
+import 'package:http/http.dart' as http;
 
 class BulkInquiryScreen extends StatefulWidget {
   @override
@@ -24,13 +29,44 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
   String _paymentTermsChoice;
   bool _callOurExec = false;
   bool _reportsQCStand = false;
+  bool _isLoading = false;
+  int _quantity = 1;
+  var baseUrl = "https://onlala-api.herokuapp.com/";
 
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-    // SEND REUEST HERE
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final url = baseUrl + 'query/add/';
+      final response = await http.post(url,
+          headers: {
+            'Authorization': Provider.of<Auth>(context, listen: false).token,
+            'Content-Type': 'application/json'
+          },
+          body: json.encode({
+            "type_of_user": _userTypeChoice,
+            "technical_specifications": "This product is delicate",
+            "payment_terms": "Cash",
+            "additional_message": "jbfnslkjgnlk",
+            "product": "b18e0f88-7d4a-440a-898c-b9b822739e6f",
+            "quantity": "78",
+            "terms_of_delivery": "Factory",
+            "call_our_excutive": "0",
+            "reports_qc_stand": "0"
+          }));
+      print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 202) {}
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -81,17 +117,31 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     items: [
                       DropdownMenuItem(
                         child: Text(
-                          'Item 1',
+                          'Importer',
                           style: TextStyle(fontSize: 18),
                         ),
-                        value: '1',
+                        value: 'Importer',
                       ),
                       DropdownMenuItem(
                         child: Text(
-                          'Item 2',
+                          'Wholesaler',
                           style: TextStyle(fontSize: 18),
                         ),
-                        value: '2',
+                        value: 'Wholeseller',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'Distributor',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'Distributor',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'Own Brand',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'Own Brand',
                       ),
                     ],
                     iconSize: 40,
@@ -177,6 +227,9 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                       signed: false,
                       decimal: true,
                     ),
+                    onSaved: (value) {
+                      _quantity = value;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -202,6 +255,9 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     topPadding: 30,
                     placeholder: 'Some Specifications',
                     keyboardType: TextInputType.multiline,
+                    onSaved: (value) {
+                      // _tech
+                    },
                   ),
                 ),
                 SizedBox(
@@ -229,17 +285,149 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     items: [
                       DropdownMenuItem(
                         child: Text(
-                          'Item 1',
+                          'EX-FACTORY',
                           style: TextStyle(fontSize: 18),
                         ),
-                        value: '1',
+                        value: 'EX-FACTORY',
                       ),
                       DropdownMenuItem(
                         child: Text(
-                          'Item 2',
+                          'FOB',
                           style: TextStyle(fontSize: 18),
                         ),
-                        value: '2',
+                        value: 'FOB',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'CNF',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'CNF',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'OTHER',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'OTHER',
+                      ),
+                    ],
+                    iconSize: 40,
+                    decoration: InputDecoration(
+                      // counterText: controller.text.length.toString(),
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      errorStyle: TextStyle(color: Colors.red[200]),
+                      alignLabelWithHint: true,
+                      hintText: '',
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      // suffixIcon: Padding(
+                      //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
+                      //   child: Icon(Icons.arrow_drop_down),
+                      // ),
+                      suffixStyle: TextStyle(fontSize: 16),
+                      contentPadding: EdgeInsets.only(
+                        left: 30,
+                        top: 10,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    'Payment Terms',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 24),
+                  child: MultilineDropdownButtonFormField(
+                    value: _paymentTermsChoice,
+                    onChanged: (value) {
+                      setState(() {
+                        _paymentTermsChoice = value;
+                      });
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        child: Text(
+                          'LC at Site',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'LC at Site',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'LC 30 days',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'LC 30 days',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'LC 90 days',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'LC 90 days',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'LC 120 days',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'LC 120 days',
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'TT',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        value: 'TT',
                       ),
                     ],
                     iconSize: 40,
