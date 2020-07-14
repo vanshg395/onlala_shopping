@@ -104,7 +104,7 @@ class Cart with ChangeNotifier {
           String productImage = '';
           String productBulkPrice = '';
           String productDescription = '';
-          for (var j = 0; j < responseBody["additional_details"].length; i++) {
+          for (var j = 0; j < responseBody["additional_details"].length; j++) {
             // print(responseBody["additional_details"][j]["product"]["id"]);
             if (responseBody["cart_details"][i]["id"] ==
                 responseBody["additional_details"][j]["product"]["id"]) {
