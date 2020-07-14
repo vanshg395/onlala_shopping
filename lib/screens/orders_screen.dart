@@ -87,7 +87,23 @@ class _OrdersScreenState extends State<OrdersScreen> {
         ],
       ),
       body: Provider.of<Auth>(context, listen: false).isAuth
-          ? Container()
+          ? Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    OrderCard(),
+                    OrderCard(),
+                    OrderCard(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ),
+            )
           : Container(
               width: double.infinity,
               child: Column(
@@ -184,6 +200,127 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 ],
               ),
             ),
+    );
+  }
+}
+
+class OrderCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 6,
+            spreadRadius: 2,
+            color: Colors.black.withOpacity(0.1),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Order placed at: ',
+                ),
+                TextSpan(
+                  text: 'Importer',
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Technical Specifications: ',
+                ),
+                TextSpan(
+                  text: 'Do nostrud nulla ut anim eu amet.',
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Payment Terms: ',
+                ),
+                TextSpan(
+                  text: 'Do nostrud nulla ut anim eu amet.',
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Additional Message: ',
+                ),
+                TextSpan(
+                  text: 'Do nostrud nulla ut anim eu amet.',
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Status: ',
+                ),
+                TextSpan(
+                  text: 'Order Created',
+                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        color: Theme.of(context).primaryColor.withOpacity(0.7),
+                      ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

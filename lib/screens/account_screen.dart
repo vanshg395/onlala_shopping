@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/screens/bulk_inquiry_status_screen.dart';
+import 'package:onlala_shopping/screens/orders_screen.dart';
 import 'package:onlala_shopping/screens/tnc_screen.dart';
 import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +70,17 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 5,
+                        height: 10,
+                      ),
+                      Center(
+                        child: Container(
+                          height: 1,
+                          width: 100,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Center(
                         child: Text(
@@ -127,6 +138,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         thickness: 2,
                         indent: 30,
                         endIndent: 30,
+                        color: Theme.of(context).primaryColor,
                       ),
                       SizedBox(
                         height: 10,
@@ -188,6 +200,13 @@ class _AccountScreenState extends State<AccountScreen> {
                                 Text('My Orders'),
                               ],
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => OrdersScreen(),
+                                ),
+                              );
+                            },
                           ),
                           GestureDetector(
                             child: Column(

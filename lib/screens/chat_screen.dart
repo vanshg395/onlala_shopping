@@ -87,7 +87,17 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: Provider.of<Auth>(context, listen: false).isAuth
-          ? Container()
+          ? Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    ChatCard(),
+                    ChatCard(),
+                    ChatCard(),
+                  ],
+                ),
+              ),
+            )
           : Container(
               width: double.infinity,
               child: Column(
@@ -184,6 +194,69 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
             ),
+    );
+  }
+}
+
+class ChatCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 6,
+            spreadRadius: 2,
+            color: Colors.black.withOpacity(0.1),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Query made at: ',
+                ),
+                TextSpan(
+                  text: 'Importer',
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Message: ',
+                ),
+                TextSpan(
+                  text:
+                      'Minim non duis ex voluptate eiusmod qui. Quis consequat ut anim velit aliquip commodo nostrud. Duis laboris elit nisi dolor ex consequat aute sunt ad quis occaecat in sunt cupidatat. Adipisicing culpa proident mollit ad. Voluptate excepteur ipsum nostrud eu nisi nisi. Ad exercitation reprehenderit ipsum esse nisi id nostrud quis qui eiusmod.',
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
