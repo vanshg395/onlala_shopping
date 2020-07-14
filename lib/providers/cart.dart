@@ -93,10 +93,10 @@ class Cart with ChangeNotifier {
           'Authorization': jwtToken
         },
       );
-      print({'Content-Type': 'application/json', 'Authorization': jwtToken});
-      print(url);
+      // print({'Content-Type': 'application/json', 'Authorization': jwtToken});
+      // print(url);
       print(response.statusCode.toString() + ">>cart");
-      print(response.body);
+      // print(response.body);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         _items = [];
         final responseBody = json.decode(response.body)["payload"];
@@ -106,7 +106,10 @@ class Cart with ChangeNotifier {
           String productDescription = '';
           for (var j = 0; j < responseBody["additional_details"].length; j++) {
             // print(responseBody["additional_details"][j]["product"]["id"]);
-            if (responseBody["cart_details"][i]["id"] ==
+            print(responseBody["cart_details"][i]["cart_item"]);
+            print(responseBody["additional_details"][j]["product"]["id"]);
+
+            if (responseBody["cart_details"][i]["cart_item"] ==
                 responseBody["additional_details"][j]["product"]["id"]) {
               if (responseBody["additional_details"][j]["product_image"]
                       .length >
@@ -116,6 +119,9 @@ class Cart with ChangeNotifier {
               }
               productBulkPrice = responseBody["additional_details"][j]
                   ["bulkorder_details"]["bulk_order_price"];
+              print(responseBody["additional_details"][j]["bulkorder_details"]
+                  ["bulk_order_price"]);
+              print(productBulkPrice);
               productDescription = responseBody["additional_details"][j]
                   ["product"]["product_description"];
             }
