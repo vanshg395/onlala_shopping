@@ -87,6 +87,7 @@ class Cart with ChangeNotifier {
   }
 
   Future<void> getItems(String jwtToken) async {
+    _items = [];
     try {
       print('>>>>>>>>>>>>>>getCartItems');
       final url = baseUrl + 'cart/cartlist/add/';
@@ -102,7 +103,6 @@ class Cart with ChangeNotifier {
       print(response.statusCode.toString() + ">>cart");
       print(response.body);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        _items = [];
         final responseBody = json.decode(response.body)["payload"];
         for (var i = 0; i < responseBody["cart_details"].length; i++) {
           String productImage = '';
@@ -151,6 +151,7 @@ class Cart with ChangeNotifier {
       } else {
         throw HttpException('Error');
       }
+      notifyListeners();
     } catch (e) {
       throw e;
     }

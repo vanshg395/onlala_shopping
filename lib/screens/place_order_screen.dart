@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/providers/auth.dart';
+import 'package:onlala_shopping/providers/cart.dart';
 import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_dropdown.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
@@ -40,6 +41,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
     setState(() {
       _isLoading = true;
     });
+    print(_data);
     try {
       final response = await http.post(
         url,
@@ -52,6 +54,12 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       );
       print(response.statusCode);
       print(response.body);
+      if (response.statusCode == 201) {
+        Provider.of<Cart>(context, listen: false)
+            .getItems(Provider.of<Auth>(context, listen: false).token);
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       await showDialog(
         context: context,
