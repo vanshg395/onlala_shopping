@@ -134,7 +134,7 @@ class Cart with ChangeNotifier {
             CartItem(
               name: responseBody["cart_details"][i]["item_name"]
                   ["product_name"],
-              cartId: responseBody["cart_details"][i]["id"],
+              cartId: responseBody["cart_details"][i]["cart"],
               productId: responseBody["cart_details"][i]["id"],
               quantity: responseBody["cart_details"][i]["quantity"],
               image: productImage,
