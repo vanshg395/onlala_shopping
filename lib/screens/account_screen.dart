@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/screens/address_screen.dart';
 import 'package:onlala_shopping/screens/bulk_inquiry_status_screen.dart';
 import 'package:onlala_shopping/screens/orders_screen.dart';
 import 'package:onlala_shopping/screens/tnc_screen.dart';
@@ -9,6 +10,8 @@ import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import './login_screen.dart';
 import './register_screen.dart';
@@ -348,12 +351,18 @@ class _AccountScreenState extends State<AccountScreen> {
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
                                   onTap: () {
-                                    Navigator.of(context).push(
+                                    Navigator.of(context)
+                                        .push(
                                       MaterialPageRoute(
                                         builder: (ctx) =>
                                             EditProfileScreen(_profileData),
                                       ),
-                                    );
+                                    )
+                                        .then((value) {
+                                      if (value != null) {
+                                        profile();
+                                      }
+                                    });
                                   },
                                 ),
                               ),
@@ -443,6 +452,13 @@ class _AccountScreenState extends State<AccountScreen> {
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (ctx) => AddressScreen(),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -484,7 +500,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
                                   onTap: () async {
-                                    //https://play.google.com/store/apps/details?id=com.onlala.supplier
+                                    await Share.share(
+                                      'https://play.google.com/store/apps/details?id=com.onlala.shopping',
+                                      subject: 'Invite Friends',
+                                    );
                                   },
                                 ),
                               ),
@@ -526,6 +545,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
+                                  onTap: () async {
+                                    const url =
+                                        'mailto:feedback@onlala.com?subject=%20=%20';
+                                    if (await canLaunch(url)) {
+                                      await launch(url);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                                  },
                                 ),
                               ),
                             ),
@@ -676,6 +704,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   .then((value) {
                                 if (value != null) {
                                   setState(() {});
+                                  profile();
                                 }
                               });
                             },

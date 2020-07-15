@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
@@ -7,6 +8,7 @@ import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:onlala_shopping/widgets/banner.dart';
 import 'package:onlala_shopping/widgets/country_selector.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './cart_screen.dart';
 import '../providers/auth.dart';
@@ -25,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> _data = [];
   List<dynamic> _data1 = [];
   List<dynamic> _data2 = [];
+  List<dynamic> _data3 = [];
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
 
@@ -36,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getData();
     getDataforCategories();
     getDataforPP();
+    getSuggestedProducts();
   }
 
   Future<void> getData() async {
@@ -120,6 +124,39 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
+    setState(() {
+      _requestCount--;
+    });
+  }
+
+  Future<void> getSuggestedProducts() async {
+    setState(() {
+      _requestCount++;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> _depts;
+    if (prefs.containsKey('secondAttempt')) {
+      _depts = json.decode(prefs.getString('secondAttempt'));
+    }
+    print(_depts);
+    try {
+      final url = baseUrl + 'categories/homePage/products/';
+      final response = await http.post(
+        url,
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: json.encode(_depts),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final resBody = json.decode(response.body);
+        setState(() {
+          _data3 = resBody["results"];
+        });
+        print(_data3);
+      }
+    } catch (e) {}
     setState(() {
       _requestCount--;
     });
@@ -218,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         color: Theme.of(context).primaryColor.withOpacity(0.2),
                       ),
-                      SuggestedProducts(),
+                      SuggestedProducts(_data3),
                     ],
                   ),
                 ),

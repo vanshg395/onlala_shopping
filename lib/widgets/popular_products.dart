@@ -31,12 +31,12 @@ class PopularProducts extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
                   ..._ppdata.map(
-                    (ppdata) => PopularProductCard(
-                      ppdata['product_name'],
-                      ppdata['product_des'],
-                      ppdata['image'],
-                      ppdata['price'],
-                      ppdata["id"],
+                    (prod) => PopularProductCard(
+                      prod['product_name'],
+                      prod['product_des'],
+                      prod['image'],
+                      prod['price'],
+                      prod["id"],
                     ),
                   ),
                 ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:onlala_shopping/screens/department_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './providers/auth.dart';
 import './providers/cart.dart';
@@ -49,7 +51,32 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               } else {
-                return TabsScreen();
+                // return TabsScreen();
+                return FutureBuilder(
+                  future: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    if (prefs.containsKey('secondAttempt')) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  }(),
+                  builder: (ctx, snapshot2) {
+                    if (snapshot2.connectionState == ConnectionState.waiting) {
+                      return Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else {
+                      if (snapshot2.data) {
+                        return TabsScreen();
+                      } else {
+                        return DepartmentSelectScreen();
+                      }
+                    }
+                  },
+                );
               }
             },
           ),

@@ -167,6 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           .then((value) {
                         if (value != null) {
                           setState(() {});
+                          getChats();
                         }
                       });
                     },

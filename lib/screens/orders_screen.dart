@@ -145,6 +145,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   order['call_our_executive'],
                                   order['reports_qc_stand'],
                                   order['timestamp'],
+                                  order['status'],
                                 ),
                               )
                               .toList(),
@@ -173,6 +174,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           .then((value) {
                         if (value != null) {
                           setState(() {});
+                          getOrders();
                         }
                       });
                     },
@@ -263,6 +265,7 @@ class OrderCard extends StatelessWidget {
   final bool coe;
   final bool rqcStand;
   final String dateTime;
+  final int status;
 
   OrderCard(
     this.techSpec,
@@ -272,6 +275,7 @@ class OrderCard extends StatelessWidget {
     this.coe,
     this.rqcStand,
     this.dateTime,
+    this.status,
   );
 
   @override
@@ -403,7 +407,9 @@ class OrderCard extends StatelessWidget {
                   text: 'Status: ',
                 ),
                 TextSpan(
-                  text: 'Order Created',
+                  text: status == 0
+                      ? 'Order Approval Pending'
+                      : status == 1 ? 'Order Approved' : 'Order Completed',
                   style: Theme.of(context).textTheme.bodyText1.copyWith(
                         color: Theme.of(context).primaryColor.withOpacity(0.7),
                       ),

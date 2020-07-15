@@ -6,6 +6,7 @@ class ProfileField extends StatefulWidget {
   final Function validator;
   final Function onSaved;
   final bool enabled;
+  final TextInputType keyboardType;
 
   ProfileField({
     @required this.label,
@@ -13,6 +14,7 @@ class ProfileField extends StatefulWidget {
     this.validator,
     this.onSaved,
     this.enabled,
+    this.keyboardType,
   });
 
   @override
@@ -37,6 +39,7 @@ class _ProfileFieldState extends State<ProfileField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: widget.keyboardType,
       controller: controller,
       enabled: widget.enabled,
       decoration: InputDecoration(
