@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
+import 'package:intl/intl.dart';
 import 'package:onlala_shopping/providers/wishlist.dart';
 import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:http/http.dart' as http;
 
 import '../providers/auth.dart';
 import '../providers/cart.dart';
@@ -19,6 +24,45 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  bool _isLoading = false;
+  List<dynamic> _chats = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getChats();
+  }
+
+  Future<void> getChats() async {
+    if (!Provider.of<Auth>(context, listen: false).isAuth) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    final url = 'https://onlala-api.herokuapp.com/query/user/general/';
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader:
+              Provider.of<Auth>(context, listen: false).token,
+        },
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final resBody = json.decode(response.body);
+        setState(() {
+          _chats = resBody['results'];
+        });
+        print(_chats);
+      }
+    } catch (e) {}
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,17 +123,32 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: Provider.of<Auth>(context, listen: false).isAuth
-          ? Container(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    ChatCard(),
-                    ChatCard(),
-                    ChatCard(),
-                  ],
-                ),
-              ),
-            )
+          ? _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ..._chats
+                            .map(
+                              (chat) => ChatCard(
+                                chat['created'],
+                                chat['message'],
+                              ),
+                            )
+                            .toList(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
           : Container(
               width: double.infinity,
               child: Column(
@@ -191,6 +250,11 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class ChatCard extends StatelessWidget {
+  final String dateTime;
+  final String message;
+
+  ChatCard(this.dateTime, this.message);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -221,7 +285,11 @@ class ChatCard extends StatelessWidget {
                   text: 'Query made at: ',
                 ),
                 TextSpan(
-                  text: 'Importer',
+                  text:
+                      DateFormat('MMM dd, y').format(DateTime.parse(dateTime)) +
+                          ' | ' +
+                          TimeOfDay.fromDateTime(DateTime.parse(dateTime))
+                              .format(context),
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -240,8 +308,7 @@ class ChatCard extends StatelessWidget {
                   text: 'Message: ',
                 ),
                 TextSpan(
-                  text:
-                      'Minim non duis ex voluptate eiusmod qui. Quis consequat ut anim velit aliquip commodo nostrud. Duis laboris elit nisi dolor ex consequat aute sunt ad quis occaecat in sunt cupidatat. Adipisicing culpa proident mollit ad. Voluptate excepteur ipsum nostrud eu nisi nisi. Ad exercitation reprehenderit ipsum esse nisi id nostrud quis qui eiusmod.',
+                  text: message,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],

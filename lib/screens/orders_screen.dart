@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
+import 'package:intl/intl.dart';
 import 'package:onlala_shopping/providers/wishlist.dart';
 import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:http/http.dart' as http;
 
 import '../providers/cart.dart';
 import '../providers/auth.dart';
@@ -19,6 +24,45 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+  List<dynamic> _orders = [];
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getOrders();
+  }
+
+  Future<void> getOrders() async {
+    if (!Provider.of<Auth>(context, listen: false).isAuth) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    final url = 'https://onlala-api.herokuapp.com/order/';
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader:
+              Provider.of<Auth>(context, listen: false).token,
+        },
+      );
+      print(response.statusCode);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final resBody = json.decode(response.body);
+        setState(() {
+          _orders = resBody['results'];
+        });
+      }
+    } catch (e) {}
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,23 +123,38 @@ class _OrdersScreenState extends State<OrdersScreen> {
         ],
       ),
       body: Provider.of<Auth>(context, listen: false).isAuth
-          ? Container(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
+          ? _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20,
+                        ),
+                        if (_orders.length > 0)
+                          ..._orders
+                              .map(
+                                (order) => OrderCard(
+                                  order['technical_specification'],
+                                  order['terms_of_delivery'],
+                                  order['payment_terms'],
+                                  order['additional_message'],
+                                  order['call_our_executive'],
+                                  order['reports_qc_stand'],
+                                  order['timestamp'],
+                                ),
+                              )
+                              .toList(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                    OrderCard(),
-                    OrderCard(),
-                    OrderCard(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ),
-            )
+                  ),
+                )
           : Container(
               width: double.infinity,
               child: Column(
@@ -197,6 +256,24 @@ class _OrdersScreenState extends State<OrdersScreen> {
 }
 
 class OrderCard extends StatelessWidget {
+  final String techSpec;
+  final String tod;
+  final String paymentTerms;
+  final String msg;
+  final bool coe;
+  final bool rqcStand;
+  final String dateTime;
+
+  OrderCard(
+    this.techSpec,
+    this.tod,
+    this.paymentTerms,
+    this.msg,
+    this.coe,
+    this.rqcStand,
+    this.dateTime,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -227,7 +304,11 @@ class OrderCard extends StatelessWidget {
                   text: 'Order placed at: ',
                 ),
                 TextSpan(
-                  text: 'Importer',
+                  text:
+                      DateFormat('MMM dd, y').format(DateTime.parse(dateTime)) +
+                          ' | ' +
+                          TimeOfDay.fromDateTime(DateTime.parse(dateTime))
+                              .format(context),
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -246,7 +327,26 @@ class OrderCard extends StatelessWidget {
                   text: 'Technical Specifications: ',
                 ),
                 TextSpan(
-                  text: 'Do nostrud nulla ut anim eu amet.',
+                  text: techSpec,
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Terms of Delivery: ',
+                ),
+                TextSpan(
+                  text: tod,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -265,7 +365,7 @@ class OrderCard extends StatelessWidget {
                   text: 'Payment Terms: ',
                 ),
                 TextSpan(
-                  text: 'Do nostrud nulla ut anim eu amet.',
+                  text: paymentTerms,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -284,7 +384,7 @@ class OrderCard extends StatelessWidget {
                   text: 'Additional Message: ',
                 ),
                 TextSpan(
-                  text: 'Do nostrud nulla ut anim eu amet.',
+                  text: msg,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -310,6 +410,46 @@ class OrderCard extends StatelessWidget {
                 )
               ],
             ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                'Call Our Executive: ',
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Expanded(
+                child: SizedBox(),
+              ),
+              Icon(
+                coe ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                'Reports QC Stand: ',
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Expanded(
+                child: SizedBox(),
+              ),
+              Icon(
+                coe ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
+              ),
+            ],
           ),
         ],
       ),

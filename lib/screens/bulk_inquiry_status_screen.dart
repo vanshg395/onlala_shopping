@@ -1,6 +1,56 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
 
-class BulkInquiryStatusScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
+
+class BulkInquiryStatusScreen extends StatefulWidget {
+  @override
+  _BulkInquiryStatusScreenState createState() =>
+      _BulkInquiryStatusScreenState();
+}
+
+class _BulkInquiryStatusScreenState extends State<BulkInquiryStatusScreen> {
+  List<dynamic> _queries = [];
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final url = 'https://onlala-api.herokuapp.com/query/add/';
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader:
+              Provider.of<Auth>(context, listen: false).token,
+        },
+      );
+      print(response.statusCode);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final resBody = json.decode(response.body);
+        setState(() {
+          _queries = resBody['payload'];
+        });
+      }
+    } catch (e) {}
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -8,24 +58,78 @@ class BulkInquiryStatusScreen extends StatelessWidget {
         title: Text('Bulk Inquiry Status'),
         centerTitle: true,
       ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              BulkInquiryStatusCard(),
-              BulkInquiryStatusCard(),
-              SizedBox(
-                height: 20,
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ..._queries
+                        .map(
+                          (query) => BulkInquiryStatusCard(
+                            query['created'],
+                            query['quantity'].toString(),
+                            query['terms_of_delivery'],
+                            query['type_of_user'],
+                            query['technical_specifications'],
+                            query['payment_terms'],
+                            query['additional_message'],
+                            query['call_our_excutive'],
+                            query['reports_qc_stand'],
+                            query['admin_approval'],
+                            query['seller_approval'],
+                            query['admin_review'],
+                            query['manufacturer_review'],
+                          ),
+                        )
+                        .toList(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
 
 class BulkInquiryStatusCard extends StatelessWidget {
+  final String timestamp;
+  final String tou;
+  final String quantity;
+  final String tod;
+  final String techSpec;
+  final String paymentTerms;
+  final String msg;
+  final bool coe;
+  final bool rqcs;
+  final bool aa;
+  final bool sa;
+  final bool ar;
+  final bool mr;
+
+  BulkInquiryStatusCard(
+    this.timestamp,
+    this.quantity,
+    this.tod,
+    this.tou,
+    this.techSpec,
+    this.paymentTerms,
+    this.msg,
+    this.coe,
+    this.rqcs,
+    this.aa,
+    this.sa,
+    this.ar,
+    this.mr,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,10 +157,52 @@ class BulkInquiryStatusCard extends StatelessWidget {
                   ),
               children: [
                 TextSpan(
+                  text: 'Created on: ',
+                ),
+                TextSpan(
+                  text: DateFormat('MMM dd, y')
+                          .format(DateTime.parse(timestamp)) +
+                      ' | ' +
+                      TimeOfDay.fromDateTime(DateTime.parse(timestamp))
+                          .format(context),
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
                   text: 'Type of User: ',
                 ),
                 TextSpan(
-                  text: 'Importer',
+                  text: tou,
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Quantity: ',
+                ),
+                TextSpan(
+                  text: quantity,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -75,8 +221,26 @@ class BulkInquiryStatusCard extends StatelessWidget {
                   text: 'Technical Specification: ',
                 ),
                 TextSpan(
-                  text:
-                      'Eu magna tempor ea culpa eu anim minim eiusmod exercitation est qui do tempor.',
+                  text: techSpec,
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(
+                  text: 'Terms of Delivery: ',
+                ),
+                TextSpan(
+                  text: tod,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -95,7 +259,7 @@ class BulkInquiryStatusCard extends StatelessWidget {
                   text: 'Payment Terms: ',
                 ),
                 TextSpan(
-                  text: 'LC at site',
+                  text: paymentTerms,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -114,7 +278,7 @@ class BulkInquiryStatusCard extends StatelessWidget {
                   text: 'Additional Message: ',
                 ),
                 TextSpan(
-                  text: 'Aliquip minim enim qui labore dolore fugiat sunt.',
+                  text: msg,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -133,8 +297,8 @@ class BulkInquiryStatusCard extends StatelessWidget {
                     ),
               ),
               Icon(
-                Icons.clear,
-                color: Colors.red,
+                coe ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
               ),
             ],
           ),
@@ -151,8 +315,8 @@ class BulkInquiryStatusCard extends StatelessWidget {
                     ),
               ),
               Icon(
-                Icons.clear,
-                color: Colors.red,
+                rqcs ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
               ),
             ],
           ),
@@ -169,8 +333,8 @@ class BulkInquiryStatusCard extends StatelessWidget {
                     ),
               ),
               Icon(
-                Icons.clear,
-                color: Colors.red,
+                aa ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
               ),
             ],
           ),
@@ -187,8 +351,8 @@ class BulkInquiryStatusCard extends StatelessWidget {
                     ),
               ),
               Icon(
-                Icons.clear,
-                color: Colors.red,
+                sa ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
               ),
             ],
           ),
@@ -205,8 +369,8 @@ class BulkInquiryStatusCard extends StatelessWidget {
                     ),
               ),
               Icon(
-                Icons.clear,
-                color: Colors.red,
+                ar ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
               ),
             ],
           ),
@@ -223,8 +387,8 @@ class BulkInquiryStatusCard extends StatelessWidget {
                     ),
               ),
               Icon(
-                Icons.clear,
-                color: Colors.red,
+                mr ? Icons.done : Icons.clear,
+                color: coe ? Colors.green : Colors.red,
               ),
             ],
           ),

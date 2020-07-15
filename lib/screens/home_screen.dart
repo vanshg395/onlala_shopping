@@ -5,6 +5,7 @@ import 'package:badges/badges.dart';
 import 'package:onlala_shopping/providers/wishlist.dart';
 import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:onlala_shopping/widgets/banner.dart';
+import 'package:onlala_shopping/widgets/country_selector.dart';
 import 'package:provider/provider.dart';
 
 import './cart_screen.dart';
@@ -206,6 +207,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Theme.of(context).primaryColor.withOpacity(0.2),
                       ),
                       PopularProducts(_data2),
+                      Container(
+                        height: 10,
+                        width: double.infinity,
+                        color: Theme.of(context).primaryColor.withOpacity(0.2),
+                      ),
+                      CountrySelector(),
                       Container(
                         height: 10,
                         width: double.infinity,

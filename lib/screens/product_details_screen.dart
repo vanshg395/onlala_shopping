@@ -225,60 +225,72 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Future<void> _raiseGeneralInquiry() async {
     await showDialog(
       context: context,
-      child: Dialog(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  child: Text(
-                    'General Inquiry',
-                    style: Theme.of(context).textTheme.subtitle1,
+      child: StatefulBuilder(
+        builder: (ctx, setState) => Dialog(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16),
-                  child: CommonField(
-                    bgColor: Colors.white,
-                    borderColor: Colors.grey,
-                    borderRadius: 10,
-                    placeholder: 'Enter your Message',
-                    maxLines: 5,
-                    topPadding: 20,
-                    validator: (value) {
-                      if (value == '') {
-                        return 'This field is required';
-                      }
-                    },
-                    onSaved: (value) {
-                      _productEnquiry["message"] = value;
-                    },
+                  Container(
+                    child: Text(
+                      'General Inquiry',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Center(
-                  child: CommonButton(
-                    title: 'Submit',
-                    onPressed: _submitQuery,
-                    bgColor: Theme.of(context).primaryColor,
-                    borderColor: Theme.of(context).primaryColor,
-                    borderRadius: 10,
-                    fontSize: 18,
+                  SizedBox(
+                    height: 20,
                   ),
-                )
-              ],
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    child: CommonField(
+                      bgColor: Colors.white,
+                      borderColor: Colors.grey,
+                      borderRadius: 10,
+                      placeholder: 'Enter your Message',
+                      maxLines: 5,
+                      topPadding: 20,
+                      validator: (value) {
+                        if (value == '') {
+                          return 'This field is required';
+                        }
+                      },
+                      onSaved: (value) {
+                        _productEnquiry["message"] = value;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Center(
+                    child: _isLoading
+                        ? CircularProgressIndicator()
+                        : CommonButton(
+                            title: 'Submit',
+                            onPressed: () async {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await _submitQuery();
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            },
+                            bgColor: Theme.of(context).primaryColor,
+                            borderColor: Theme.of(context).primaryColor,
+                            borderRadius: 10,
+                            fontSize: 18,
+                          ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
