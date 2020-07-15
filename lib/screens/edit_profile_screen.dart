@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/common_button.dart';
@@ -6,6 +7,10 @@ import '../widgets/profile_field.dart';
 class EditProfileScreen extends StatefulWidget {
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
+
+  Map<String, dynamic> data;
+
+  EditProfileScreen(this.data);
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
@@ -31,10 +36,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   decoration: BoxDecoration(
                     color: Colors.grey,
                     shape: BoxShape.circle,
-                    // image: DecorationImage(
-                    // image: CachedNetworkImageProvider(url)
-                    // fit: BoxFit.cover,
-                    // ),
+                    image: widget.data['profile_picture'].length == 0
+                        ? null
+                        : DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              widget.data['profile_picture'][0]
+                                  ['profile_image'],
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   child: Icon(
                     Icons.account_circle,
@@ -66,7 +76,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 child: ProfileField(
                   label: 'First Name',
-                  initialData: '',
+                  initialData: widget.data['payload'][0]['user']['first_name'],
                 ),
               ),
               SizedBox(
@@ -79,7 +89,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 child: ProfileField(
                   label: 'Last Name',
-                  initialData: '',
+                  initialData: widget.data['payload'][0]['user']['last_name'],
                 ),
               ),
               SizedBox(
@@ -92,7 +102,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 child: ProfileField(
                   label: 'Email',
-                  initialData: '',
+                  initialData: widget.data['payload'][0]['user']['email'],
                   enabled: false,
                 ),
               ),
@@ -105,21 +115,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   horizontal: 24,
                 ),
                 child: ProfileField(
-                  label: 'Password',
-                  initialData: '',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 60,
-                margin: EdgeInsets.symmetric(
-                  horizontal: 24,
-                ),
-                child: ProfileField(
                   label: 'Phone Number',
-                  initialData: '',
+                  initialData: widget.data['payload'][0]['mobile'],
                 ),
               ),
               SizedBox(
@@ -132,7 +129,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 child: ProfileField(
                   label: 'Company Name',
-                  initialData: '',
+                  initialData: widget.data['payload'][0]['company'],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 60,
+                margin: EdgeInsets.symmetric(
+                  horizontal: 24,
+                ),
+                child: ProfileField(
+                  label: 'Department Name',
+                  initialData: widget.data['payload'][0]['department'],
                 ),
               ),
               SizedBox(

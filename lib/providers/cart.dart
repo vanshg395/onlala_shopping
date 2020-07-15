@@ -46,6 +46,7 @@ class Cart with ChangeNotifier {
             quantity: responseBody["quantity"],
           ),
         );
+        print(responseBody["id"]);
         getItems(jwtToken);
         notifyListeners();
       } else if (response.statusCode == 401) {

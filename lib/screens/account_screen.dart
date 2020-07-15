@@ -29,6 +29,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Map<String, String> _data = {};
   String image = '';
   bool _isLoading = false;
+  Map<String, dynamic> _profileData = {};
 
   @override
   void initState() {
@@ -52,7 +53,7 @@ class _AccountScreenState extends State<AccountScreen> {
       print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 202) {
         final responseBody = json.decode(response.body);
-        print(responseBody["payload"]);
+        print(responseBody);
         setState(() {
           _data = {
             "name": responseBody["payload"][0]["user"]["first_name"] +
@@ -66,6 +67,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 : responseBody["profile_picture"][0]['profile_image']
           };
         });
+        _profileData = responseBody;
       }
     } catch (e) {}
     setState(() {
@@ -348,7 +350,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (ctx) => EditProfileScreen(),
+                                        builder: (ctx) =>
+                                            EditProfileScreen(_profileData),
                                       ),
                                     );
                                   },
@@ -480,6 +483,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
+                                  onTap: () async {
+                                    //https://play.google.com/store/apps/details?id=com.onlala.supplier
+                                  },
                                 ),
                               ),
                             ),

@@ -70,7 +70,10 @@ class _CartScreenState extends State<CartScreen> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (ctx) => PlaceOrderScreen(),
+                        builder: (ctx) => PlaceOrderScreen(
+                            Provider.of<Cart>(context, listen: false)
+                                .items[0]
+                                .cartId),
                       ),
                     );
                   },

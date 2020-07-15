@@ -1,27 +1,70 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:onlala_shopping/providers/auth.dart';
 import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_dropdown.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class PlaceOrderScreen extends StatefulWidget {
   @override
   _PlaceOrderScreenState createState() => _PlaceOrderScreenState();
+
+  final String cartId;
+
+  PlaceOrderScreen(this.cartId);
 }
 
 class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   bool _callOurExec = false;
+  bool _rqcs = false;
   String _deliveryTermsChoice;
   bool _isLoading = false;
   GlobalKey<FormState> _formKey = GlobalKey();
-  Map<String, dynamic> _data = {};
+  Map<String, dynamic> _data = {
+    'call_our_excutive': false,
+    'reports_qc_stand': false,
+  };
   String _paymentTermsChoice;
 
   Future<void> _submit() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-    // CODE HERE
+    final url = 'https://onlala-api.herokuapp.com/order/';
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader:
+              Provider.of<Auth>(context, listen: false).token,
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: json.encode(_data),
+      );
+      print(response.statusCode);
+      print(response.body);
+    } catch (e) {
+      await showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text('Error'),
+            content: Text('Something went wrong. Please try again later.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
+    }
   }
 
   @override
@@ -44,7 +87,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
-                    'Technical Specifications (if any)',
+                    'Technical Specifications',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -60,8 +103,14 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     topPadding: 30,
                     maxLines: 5,
                     placeholder: 'Some Specifications',
+                    validator: (value) {
+                      if (value == '') {
+                        return 'This field is required.';
+                      }
+                    },
                     onSaved: (value) {
-                      // _data['quantity'] = value;
+                      _data['technical_specification'] = value;
+                      _data['cartlist'] = widget.cartId;
                     },
                   ),
                 ),
@@ -180,7 +229,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                       }
                     },
                     onSaved: (value) {
-                      // _data['terms_of_delivery'] = value;
+                      _data['terms_of_delivery'] = value;
                     },
                   ),
                 ),
@@ -333,7 +382,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     maxLines: 5,
                     placeholder: 'Some Specifications',
                     onSaved: (value) {
-                      // _data['quantity'] = value;
+                      _data['additional_message'] = value;
                     },
                   ),
                 ),
@@ -349,12 +398,32 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         onChanged: (value) {
                           setState(() {
                             _callOurExec = value;
-                            // _data['call_our_excutive'] = value;
+                            _data['call_our_excutive'] = value;
                           });
                         },
                       ),
                       Text(
                         'Call our Executive',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: <Widget>[
+                      Checkbox(
+                        value: _rqcs,
+                        onChanged: (value) {
+                          setState(() {
+                            _rqcs = value;
+                            _data['reports_qc_stand'] = value;
+                          });
+                        },
+                      ),
+                      Text(
+                        'Reports QC Stand',
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ],
