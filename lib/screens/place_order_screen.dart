@@ -37,6 +37,9 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
     }
     _formKey.currentState.save();
     final url = 'https://onlala-api.herokuapp.com/order/';
+    setState(() {
+      _isLoading = true;
+    });
     try {
       final response = await http.post(
         url,
@@ -51,20 +54,24 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       print(response.body);
     } catch (e) {
       await showDialog(
-          context: context,
-          child: AlertDialog(
-            title: Text('Error'),
-            content: Text('Something went wrong. Please try again later.'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          ));
+        context: context,
+        child: AlertDialog(
+          title: Text('Error'),
+          content: Text('Something went wrong. Please try again later.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
+      );
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
