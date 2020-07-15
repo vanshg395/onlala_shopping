@@ -41,11 +41,11 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> profile() async {
+    if (!Provider.of<Auth>(context, listen: false).isAuth) return;
+    final url = baseUrl + 'business/buyer/create/';
     setState(() {
       _isLoading = true;
     });
-    if (!Provider.of<Auth>(context, listen: false).isAuth) return;
-    final url = baseUrl + 'business/buyer/create/';
     try {
       final response = await http.get(
         url,

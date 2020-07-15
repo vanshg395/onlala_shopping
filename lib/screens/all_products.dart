@@ -99,6 +99,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
               Expanded(
                 child: ListView.builder(
                   controller: _scrollController,
+                  physics: BouncingScrollPhysics(),
                   itemBuilder: (ctx, i) => ProductCard(
                     _displayedItems[i]['product_name'],
                     _displayedItems[i]['product_description'],
