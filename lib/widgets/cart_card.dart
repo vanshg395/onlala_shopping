@@ -60,7 +60,7 @@ class _CartCardState extends State<CartCard> {
               image: DecorationImage(
                 image: CachedNetworkImageProvider(widget.image),
                 fit: BoxFit.cover,
-              ), // ENTER IMAGE LINK FOR CATEGORY
+              ),
             ),
           ),
           Expanded(

@@ -43,9 +43,6 @@ class CategorySelector extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
                               shape: BoxShape.circle,
-                              // image: DecorationImage(
-                              //     image: CachedNetworkImageProvider(imageUrl),
-                              //     fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
                             ),
                             child: Icon(
                               Icons.dashboard,
@@ -109,8 +106,7 @@ class CategorySelectorItem extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                       image: CachedNetworkImageProvider(imageUrl),
-                      fit: BoxFit.cover) // ENTER IMAGE LINK FOR CATEGORY
-                  ),
+                      fit: BoxFit.cover)),
             ),
             SizedBox(
               height: 10,

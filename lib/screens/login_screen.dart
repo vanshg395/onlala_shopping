@@ -168,7 +168,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderColor: Colors.grey,
                       borderRadius: 10,
                       placeholder: 'abc@xyz.com',
-                      // ignore: missing_return
                       validator: (value) {
                         if (value == '') {
                           return 'This field is required';

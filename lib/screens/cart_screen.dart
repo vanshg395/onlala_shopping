@@ -29,7 +29,6 @@ class _CartScreenState extends State<CartScreen> {
               SizedBox(
                 height: 10,
               ),
-              //
               ...Provider.of<Cart>(context, listen: false)
                   .items
                   .map(
@@ -44,7 +43,6 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   )
                   .toList(),
-              //
               SizedBox(
                 height: 20,
               ),

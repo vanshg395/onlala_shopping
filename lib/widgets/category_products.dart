@@ -65,7 +65,7 @@ class CategoryProductCard extends StatelessWidget {
                 image: DecorationImage(
                   image: NetworkImage(url),
                   fit: BoxFit.cover,
-                ), // ENTER IMAGE LINK FOR CATEGORY
+                ),
               ),
             ),
             Expanded(

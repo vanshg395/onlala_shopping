@@ -174,7 +174,7 @@ class ProductCard extends StatelessWidget {
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(url),
                   fit: BoxFit.cover,
-                ), // ENTER IMAGE LINK FOR CATEGORY
+                ),
               ),
             ),
             Expanded(

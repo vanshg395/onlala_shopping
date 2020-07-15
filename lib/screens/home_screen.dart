@@ -31,8 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
 
-  // categories/show/categories/
-
   @override
   void initState() {
     super.initState();
@@ -55,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _data = resBody['payload'];
         });
-        // print(_data);
       }
     } catch (e) {
       print(e);
@@ -78,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _data1 = resBody["categories"];
         });
-        // print(_data1);
       }
     } catch (e) {
       print(e);
@@ -107,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
           var price = resBody[i]["sample_details"]["sample_cost"].toString();
-          // sample_details
+
           _data2.add({
             "image": image,
             "product_name": resBody[i]["product"]["product_name"].toString(),
@@ -119,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _data2 = _data2;
         });
-        // print(_data2);
       }
     } catch (e) {
       print(e);
@@ -220,7 +215,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
         ],
-        // bottom: BottomAppBar(child: ,),
       ),
       body: _requestCount != 0
           ? Center(

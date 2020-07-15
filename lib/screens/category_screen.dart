@@ -45,7 +45,6 @@ class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
         setState(() {
           subCats = resBody['payload'];
         });
-        // print(subCats);
       }
     } catch (e) {
       print(e);
@@ -63,11 +62,6 @@ class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
         centerTitle: true,
         title: Text(
           'Select Sub-Category',
-          // style: Theme.of(context).primaryTextTheme.subtitle.copyWith(
-          //       color: Colors.white,
-          //       letterSpacing: 2,
-          //       fontWeight: FontWeight.w500,
-          //     ),
         ),
       ),
       body: _isLoading
@@ -93,10 +87,6 @@ class _SubCategorySelectScreenState extends State<SubCategorySelectScreen> {
                               ["sub_categories"],
                           image: subcat['sub_category_file'][0]["image"],
                           onTap: () {
-                            // int count = 0;
-                            // Navigator.popUntil(context, (route) {
-                            //   return count++ == 2;
-                            // });
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (ctx) => SubCatProdPaginatedScreen(

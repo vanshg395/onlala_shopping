@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Use this widget in place of [DropdownButtonFormField] until support
-/// for [isExapanded] and [isDense] is added. See:
-/// <https://github.com/flutter/flutter/issues/9211>
-/// A convenience widget that wraps a [DropdownButton] in a [FormField].
 class MultilineDropdownButtonFormField<T> extends FormField<T> {
-  /// Creates a [DropdownButton] widget wrapped in an [InputDecorator] and
-  /// [FormField].
-  ///
-  /// The [DropdownButton] [items] parameters must not be null.
   MultilineDropdownButtonFormField({
     Key key,
     T value,
@@ -56,7 +48,6 @@ class MultilineDropdownButtonFormField<T> extends FormField<T> {
               );
             });
 
-  /// Called when the user selects an item.
   final ValueChanged<T> onChanged;
   @override
   FormFieldState<T> createState() =>

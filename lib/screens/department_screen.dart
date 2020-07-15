@@ -40,7 +40,6 @@ class _DepartmentSelectScreenState extends State<DepartmentSelectScreen> {
         setState(() {
           depts = resBody['departments'];
         });
-        // print(subCats);
       }
     } catch (e) {
       print(e);
@@ -85,11 +84,6 @@ class _DepartmentSelectScreenState extends State<DepartmentSelectScreen> {
         centerTitle: true,
         title: Text(
           'Choose Preferred Departments',
-          // style: Theme.of(context).primaryTextTheme.subtitle.copyWith(
-          //       color: Colors.white,
-          //       letterSpacing: 2,
-          //       fontWeight: FontWeight.w500,
-          //     ),
         ),
       ),
       body: _isLoading
@@ -148,7 +142,6 @@ class DepartmentCard extends StatelessWidget {
   final String image;
   final String name;
   final bool isSelected;
-  // final String id;
 
   DepartmentCard(this.image, this.name, this.isSelected);
 

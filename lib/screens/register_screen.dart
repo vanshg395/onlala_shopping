@@ -208,7 +208,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       _isLoading = false;
     });
-    // SNED REQUEST HERE USIGN PROVIDER.
   }
 
   Widget buildPartOne() {
@@ -250,7 +249,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               borderRadius: 10,
               placeholder: 'John',
               controller: _firstnameController,
-              // ignore: missing_return
               validator: (value) {
                 if (value == '') {
                   return 'This field is required.';
@@ -282,7 +280,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               borderRadius: 10,
               placeholder: 'Doe',
               controller: _lastnameController,
-              // ignore: missing_return
               validator: (value) {
                 if (value == '') {
                   return 'This field is required.';
@@ -315,7 +312,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               placeholder: 'abc@xyz.com',
               keyboardType: TextInputType.emailAddress,
               controller: _emailController,
-              // ignore: missing_return
               validator: (value) {
                 if (value == '') {
                   return 'This field is required.';
@@ -464,7 +460,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               borderRadius: 10,
               placeholder: 'ABC Inc.',
               controller: _compController,
-              // ignore: missing_return
               validator: (value) {
                 if (value == '') {
                   return 'This field is required.';
@@ -492,7 +487,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             margin: EdgeInsets.symmetric(horizontal: 24),
             child: IntlPhoneField(
               decoration: InputDecoration(
-                // counterText: controller.text.length.toString(),
                 fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
@@ -608,7 +602,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _buyerData['department'] = value;
               },
               decoration: InputDecoration(
-                // counterText: controller.text.length.toString(),
                 fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
@@ -653,10 +646,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   color: Colors.grey,
                   fontWeight: FontWeight.w300,
                 ),
-                // suffixIcon: Padding(
-                //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
-                //   child: Icon(Icons.arrow_drop_down),
-                // ),
                 suffixStyle: TextStyle(fontSize: 16),
                 contentPadding: EdgeInsets.only(
                   left: 30,
@@ -740,7 +729,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
               iconSize: 40,
               decoration: InputDecoration(
-                // counterText: controller.text.length.toString(),
                 fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
@@ -785,17 +773,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   color: Colors.grey,
                   fontWeight: FontWeight.w300,
                 ),
-                // suffixIcon: Padding(
-                //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
-                //   child: Icon(Icons.arrow_drop_down),
-                // ),
                 suffixStyle: TextStyle(fontSize: 16),
                 contentPadding: EdgeInsets.only(
                   left: 30,
                   top: 10,
                 ),
               ),
-              // ignore: missing_return
               validator: (value) {
                 if (value == '') {
                   return 'This field is required.';

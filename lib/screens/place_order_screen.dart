@@ -183,7 +183,6 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     ],
                     iconSize: 40,
                     decoration: InputDecoration(
-                      // counterText: controller.text.length.toString(),
                       fillColor: Colors.white,
                       filled: true,
                       border: OutlineInputBorder(
@@ -228,10 +227,6 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
                       ),
-                      // suffixIcon: Padding(
-                      //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
-                      //   child: Icon(Icons.arrow_drop_down),
-                      // ),
                       suffixStyle: TextStyle(fontSize: 16),
                       contentPadding: EdgeInsets.only(
                         left: 30,
@@ -309,7 +304,6 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     ],
                     iconSize: 40,
                     decoration: InputDecoration(
-                      // counterText: controller.text.length.toString(),
                       fillColor: Colors.white,
                       filled: true,
                       border: OutlineInputBorder(
@@ -354,10 +348,6 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
                       ),
-                      // suffixIcon: Padding(
-                      //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
-                      //   child: Icon(Icons.arrow_drop_down),
-                      // ),
                       suffixStyle: TextStyle(fontSize: 16),
                       contentPadding: EdgeInsets.only(
                         left: 30,

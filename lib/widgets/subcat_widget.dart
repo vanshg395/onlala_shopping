@@ -1,4 +1,3 @@
-  
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +25,6 @@ class SubcategoryDetailCard extends StatelessWidget {
         ),
         child: LayoutBuilder(
           builder: (ctx, constraints) => Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(top: 3, left: 3, right: 3),
@@ -34,9 +32,7 @@ class SubcategoryDetailCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   color: Theme.of(context).canvasColor,
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                        image
-                    ),
+                    image: CachedNetworkImageProvider(image),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -50,9 +46,10 @@ class SubcategoryDetailCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,
                     maxLines: 3,
-                    style: Theme.of(context).primaryTextTheme.subtitle.copyWith(
-                      color: Colors.black,
-                      fontSize: 12),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .subtitle
+                        .copyWith(color: Colors.black, fontSize: 12),
                   ),
                 ),
               )

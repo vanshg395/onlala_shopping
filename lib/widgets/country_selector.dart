@@ -63,7 +63,7 @@ class CountrySelectorItem extends StatelessWidget {
                 image: DecorationImage(
                   image: AssetImage(imageUrl),
                   fit: BoxFit.cover,
-                ), // ENTER IMAGE LINK FOR CATEGORY
+                ),
               ),
             ),
             SizedBox(

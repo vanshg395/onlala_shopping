@@ -26,10 +26,7 @@ class _SubCatProdPaginatedScreenState extends State<SubCatProdPaginatedScreen> {
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
 
-  // categories/show/categories/
-
   Future<void> _products() async {
-    // https://onlala-api.herokuapp.com/product/search/?search=
     setState(() {
       _isLoading = true;
     });
@@ -46,7 +43,7 @@ class _SubCatProdPaginatedScreenState extends State<SubCatProdPaginatedScreen> {
       if (response.statusCode == 200) {
         _data = [];
         final resBody = json.decode(response.body);
-        // print(resBody[0]);
+
         for (var i = 0; i < resBody.length; i++) {
           var image = '';
           for (var j = 0; j < resBody[i]["product"]["pictures"].length; j++) {
@@ -58,7 +55,7 @@ class _SubCatProdPaginatedScreenState extends State<SubCatProdPaginatedScreen> {
           }
           print(image);
           var price = resBody[i]["sample_details"]["sample_cost"].toString();
-          // sample_details
+
           _data.add({
             "image": image,
             "product_name": resBody[i]["product"]["product_name"].toString(),
@@ -67,7 +64,6 @@ class _SubCatProdPaginatedScreenState extends State<SubCatProdPaginatedScreen> {
             "id": resBody[i]["product"]["id"]
           });
         }
-        // print(_data);
       } else if (response.statusCode == 406) {
         setState(() {
           _isEmpty = true;

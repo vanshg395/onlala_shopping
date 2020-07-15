@@ -36,7 +36,6 @@ class Wishlist with ChangeNotifier {
       print(response.statusCode);
       print(price);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        // final responseBody = json.decode(response.body)["payload"];
         _items.add(
           WishItem(
             name: productName,
@@ -101,7 +100,6 @@ class Wishlist with ChangeNotifier {
         for (var i = 0;
             i < responseBody["wishlist"][0]["wished_item"].length;
             i++) {
-          // print(responseBody["wishlist"][0]["wished_item"][i]);
           _items.add(
             WishItem(
               name: responseBody["wishlist"][0]["wished_item"][i]
@@ -110,10 +108,6 @@ class Wishlist with ChangeNotifier {
                   ["product_description"],
               price: responseBody["wishlist"][0]["wished_item"][i]["price"],
               productId: responseBody["wishlist"][0]["wished_item"][i]["id"],
-              // url: responseBody[0]["product"]["pictures"].length == 0
-              //     ? ''
-              //     : responseBody[0]["product"]["pictures"][0]
-              //         ['product_image'],
             ),
           );
         }
@@ -146,6 +140,4 @@ class WishItem {
     this.price,
     this.productId,
   });
-
-  // ADD MORE ATTRIBUTES AS PER CARTITEM DETAILS, COZ IDK.
 }

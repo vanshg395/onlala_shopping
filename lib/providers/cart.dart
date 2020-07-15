@@ -98,8 +98,7 @@ class Cart with ChangeNotifier {
           'Authorization': jwtToken
         },
       );
-      // print({'Content-Type': 'application/json', 'Authorization': jwtToken});
-      // print(url);
+
       print(response.statusCode.toString() + ">>cart");
       print(response.body);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
@@ -109,7 +108,6 @@ class Cart with ChangeNotifier {
           String productBulkPrice = '';
           String productDescription = '';
           for (var j = 0; j < responseBody["additional_details"].length; j++) {
-            // print(responseBody["additional_details"][j]["product"]["id"]);
             print(responseBody["cart_details"][i]["cart_item"]);
             print(responseBody["additional_details"][j]["product"]["id"]);
 
@@ -180,6 +178,4 @@ class CartItem {
     this.quantity,
     this.image,
   });
-
-  // ADD MORE ATTRIBUTES AS PER CARTITEM DETAILS, COZ IDK.
 }

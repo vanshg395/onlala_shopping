@@ -84,7 +84,7 @@ class SuggestedProductCard extends StatelessWidget {
                 image: DecorationImage(
                   image: NetworkImage(image),
                   fit: BoxFit.cover,
-                ), // ENTER IMAGE LINK FOR CATEGORY
+                ),
               ),
             ),
             Expanded(

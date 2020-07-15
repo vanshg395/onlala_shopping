@@ -51,7 +51,6 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               } else {
-                // return TabsScreen();
                 return FutureBuilder(
                   future: () async {
                     final prefs = await SharedPreferences.getInstance();
@@ -80,7 +79,6 @@ class MyApp extends StatelessWidget {
               }
             },
           ),
-          // home: TabsScreen(),
         ),
       ),
     );

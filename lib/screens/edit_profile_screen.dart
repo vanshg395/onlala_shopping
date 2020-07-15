@@ -80,8 +80,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
     try {
       final filePath = await FilePicker.getFilePath(
-        type: FileType.image,
-        // allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg'],
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg'],
       );
       if (filePath == null) {
         setState(() {
@@ -239,19 +239,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                       ),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
-                      // Center(
-                      //   child: CommonButton(
-                      //     title: 'Change Image',
-                      //     onPressed: () {},
-                      //     fontSize: 18,
-                      //     borderRadius: 10,
-                      //     bgColor: Theme.of(context).primaryColor,
-                      //     borderColor: Theme.of(context).primaryColor,
-                      //   ),
-                      // ),
                       SizedBox(
                         height: 30,
                       ),

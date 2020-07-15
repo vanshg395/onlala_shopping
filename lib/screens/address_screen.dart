@@ -91,7 +91,6 @@ class _AddressScreenState extends State<AddressScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    // AddressCard(),
                     if (_addresses.length == 0)
                       Center(
                         child: WebsafeSvg.asset('assets/svg/error.svg',

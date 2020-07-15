@@ -27,11 +27,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
 
-  // categories/show/categories/
-
   Future<void> _search(String searchKey) async {
     print("searhc");
-    // https://onlala-api.herokuapp.com/product/search/?search=
+
     setState(() {
       _isLoading = true;
     });
@@ -42,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
       if (response.statusCode == 200) {
         _data = [];
         final resBody = json.decode(response.body)["payload"];
-        // print(resBody);
+
         for (var i = 0; i < resBody.length; i++) {
           var image = '';
           for (var j = 0; j < resBody[i]["product_image"].length; j++) {
@@ -53,7 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
             }
           }
           var price = resBody[i]["sample_details"]["sample_cost"].toString();
-          // sample_details
+
           _data.add({
             "image": image,
             "product_name": resBody[i]["product"]["product_name"].toString(),
@@ -157,12 +155,6 @@ class _SearchScreenState extends State<SearchScreen> {
                           }
                         },
                       ),
-                      // onChanged: () {
-                      //   print(_searchController.text);
-                      //   if (_searchController.text.length > 3) {
-                      //     _search(_searchController.text);
-                      //   }
-                      // },
                     ),
                   ),
                 ),

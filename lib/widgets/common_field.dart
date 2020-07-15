@@ -64,7 +64,6 @@ class CommonField extends StatelessWidget {
         onTap: onPressed,
         controller: controller,
         decoration: InputDecoration(
-          // counterText: controller.text.length.toString(),
           fillColor: bgColor,
           filled: true,
           border: OutlineInputBorder(

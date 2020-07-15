@@ -161,7 +161,6 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     ],
                     iconSize: 40,
                     decoration: InputDecoration(
-                      // counterText: controller.text.length.toString(),
                       fillColor: Colors.white,
                       filled: true,
                       border: OutlineInputBorder(
@@ -206,10 +205,6 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
                       ),
-                      // suffixIcon: Padding(
-                      //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
-                      //   child: Icon(Icons.arrow_drop_down),
-                      // ),
                       suffixStyle: TextStyle(fontSize: 16),
                       contentPadding: EdgeInsets.only(
                         left: 30,
@@ -347,7 +342,6 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     ],
                     iconSize: 40,
                     decoration: InputDecoration(
-                      // counterText: controller.text.length.toString(),
                       fillColor: Colors.white,
                       filled: true,
                       border: OutlineInputBorder(
@@ -392,10 +386,6 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
                       ),
-                      // suffixIcon: Padding(
-                      //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
-                      //   child: Icon(Icons.arrow_drop_down),
-                      // ),
                       suffixStyle: TextStyle(fontSize: 16),
                       contentPadding: EdgeInsets.only(
                         left: 30,
@@ -473,7 +463,6 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                     ],
                     iconSize: 40,
                     decoration: InputDecoration(
-                      // counterText: controller.text.length.toString(),
                       fillColor: Colors.white,
                       filled: true,
                       border: OutlineInputBorder(
@@ -518,10 +507,6 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
                       ),
-                      // suffixIcon: Padding(
-                      //   padding: const EdgeInsetsDirectional.only(end: 15, start: 10),
-                      //   child: Icon(Icons.arrow_drop_down),
-                      // ),
                       suffixStyle: TextStyle(fontSize: 16),
                       contentPadding: EdgeInsets.only(
                         left: 30,
@@ -694,8 +679,7 @@ class PopularProductCard extends StatelessWidget {
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(url),
                     fit: BoxFit.cover,
-                  ) // ENTER IMAGE LINK FOR CATEGORY
-                  ),
+                  )),
             ),
             Expanded(
               child: Container(
