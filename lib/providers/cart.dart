@@ -41,7 +41,7 @@ class Cart with ChangeNotifier {
         _items.add(
           CartItem(
             name: productName,
-            cartId: responseBody["cart_item"],
+            cartId: responseBody["id"],
             productId: responseBody["id"],
             quantity: responseBody["quantity"],
           ),
@@ -100,7 +100,7 @@ class Cart with ChangeNotifier {
       // print({'Content-Type': 'application/json', 'Authorization': jwtToken});
       // print(url);
       print(response.statusCode.toString() + ">>cart");
-      // print(response.body);
+      print(response.body);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         _items = [];
         final responseBody = json.decode(response.body)["payload"];
@@ -132,14 +132,15 @@ class Cart with ChangeNotifier {
           }
           _items.add(
             CartItem(
-                name: responseBody["cart_details"][i]["item_name"]
-                    ["product_name"],
-                cartId: responseBody["cart_details"][i]["cart_item"],
-                productId: responseBody["cart_details"][i]["id"],
-                quantity: responseBody["cart_details"][i]["quantity"],
-                image: productImage,
-                description: productDescription,
-                price: productBulkPrice),
+              name: responseBody["cart_details"][i]["item_name"]
+                  ["product_name"],
+              cartId: responseBody["cart_details"][i]["id"],
+              productId: responseBody["cart_details"][i]["id"],
+              quantity: responseBody["cart_details"][i]["quantity"],
+              image: productImage,
+              description: productDescription,
+              price: productBulkPrice,
+            ),
           );
         }
       } else if (response.statusCode == 401) {
