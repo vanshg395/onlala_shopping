@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:onlala_shopping/screens/department_screen.dart';
+import 'package:onlala_shopping/screens/intro_screen.dart';
+import 'package:onlala_shopping/screens/tabs_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './providers/auth.dart';
 import './providers/cart.dart';
 import './providers/wishlist.dart';
-import './screens/tabs_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
                       if (snapshot2.data) {
                         return TabsScreen();
                       } else {
-                        return DepartmentSelectScreen();
+                        return IntroScreen();
                       }
                     }
                   },
