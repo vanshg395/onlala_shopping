@@ -54,11 +54,15 @@ class _CartScreenState extends State<CartScreen> {
           Provider.of<Cart>(context, listen: false).numberOfCartItems > 0
               ? GestureDetector(
                   child: Container(
+                    margin: EdgeInsets.all(10),
                     height: 70,
-                    color: Theme.of(context).primaryColor,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     alignment: Alignment.center,
                     child: Text(
-                      'Place Order',
+                      'Place Sample Order',
                       style: Theme.of(context)
                           .textTheme
                           .subtitle1

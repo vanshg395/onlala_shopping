@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:intl/intl.dart';
 import 'package:onlala_shopping/providers/wishlist.dart';
+import 'package:onlala_shopping/screens/order_details_screen.dart';
 import 'package:onlala_shopping/screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
@@ -138,6 +139,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           ..._orders
                               .map(
                                 (order) => OrderCard(
+                                  order['id'],
                                   order['technical_specification'],
                                   order['terms_of_delivery'],
                                   order['payment_terms'],
@@ -279,8 +281,10 @@ class OrderCard extends StatelessWidget {
   final bool rqcStand;
   final String dateTime;
   final int status;
+  final String id;
 
   OrderCard(
+    this.id,
     this.techSpec,
     this.tod,
     this.paymentTerms,
@@ -293,185 +297,195 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 6,
-            spreadRadius: 2,
-            color: Colors.black.withOpacity(0.1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-              children: [
-                TextSpan(
-                  text: 'Order placed at: ',
-                ),
-                TextSpan(
-                  text:
-                      DateFormat('MMM dd, y').format(DateTime.parse(dateTime)) +
-                          ' | ' +
-                          TimeOfDay.fromDateTime(DateTime.parse(dateTime))
-                              .format(context),
-                  style: Theme.of(context).textTheme.bodyText1,
-                )
-              ],
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 6,
+              spreadRadius: 2,
+              color: Colors.black.withOpacity(0.1),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontWeight: FontWeight.bold,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                children: [
+                  TextSpan(
+                    text: 'Order placed at: ',
                   ),
-              children: [
-                TextSpan(
-                  text: 'Technical Specifications: ',
-                ),
-                TextSpan(
-                  text: techSpec,
-                  style: Theme.of(context).textTheme.bodyText1,
-                )
-              ],
+                  TextSpan(
+                    text: DateFormat('MMM dd, y')
+                            .format(DateTime.parse(dateTime)) +
+                        ' | ' +
+                        TimeOfDay.fromDateTime(DateTime.parse(dateTime))
+                            .format(context),
+                    style: Theme.of(context).textTheme.bodyText1,
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-              children: [
-                TextSpan(
-                  text: 'Terms of Delivery: ',
-                ),
-                TextSpan(
-                  text: tod,
-                  style: Theme.of(context).textTheme.bodyText1,
-                )
-              ],
+            SizedBox(
+              height: 10,
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontWeight: FontWeight.bold,
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                children: [
+                  TextSpan(
+                    text: 'Technical Specifications: ',
                   ),
-              children: [
-                TextSpan(
-                  text: 'Payment Terms: ',
-                ),
-                TextSpan(
-                  text: paymentTerms,
-                  style: Theme.of(context).textTheme.bodyText1,
-                )
-              ],
+                  TextSpan(
+                    text: techSpec,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-              children: [
-                TextSpan(
-                  text: 'Additional Message: ',
-                ),
-                TextSpan(
-                  text: msg,
-                  style: Theme.of(context).textTheme.bodyText1,
-                )
-              ],
+            SizedBox(
+              height: 10,
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontWeight: FontWeight.bold,
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                children: [
+                  TextSpan(
+                    text: 'Terms of Delivery: ',
                   ),
-              children: [
-                TextSpan(
-                  text: 'Status: ',
-                ),
-                TextSpan(
-                  text: status == 0
-                      ? 'Order Approval Pending'
-                      : status == 1 ? 'Order Approved' : 'Order Completed',
+                  TextSpan(
+                    text: tod,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                children: [
+                  TextSpan(
+                    text: 'Payment Terms: ',
+                  ),
+                  TextSpan(
+                    text: paymentTerms,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                children: [
+                  TextSpan(
+                    text: 'Additional Message: ',
+                  ),
+                  TextSpan(
+                    text: msg,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                children: [
+                  TextSpan(
+                    text: 'Status: ',
+                  ),
+                  TextSpan(
+                    text: status == 0
+                        ? 'Order Approval Pending'
+                        : status == 1 ? 'Order Approved' : 'Order Completed',
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.7),
+                        ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Call Our Executive: ',
                   style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        color: Theme.of(context).primaryColor.withOpacity(0.7),
+                        fontWeight: FontWeight.bold,
                       ),
-                )
+                ),
+                Expanded(
+                  child: SizedBox(),
+                ),
+                Icon(
+                  coe ? Icons.done : Icons.clear,
+                  color: coe ? Colors.green : Colors.red,
+                ),
               ],
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                'Call Our Executive: ',
-                style: Theme.of(context).textTheme.bodyText1.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              Expanded(
-                child: SizedBox(),
-              ),
-              Icon(
-                coe ? Icons.done : Icons.clear,
-                color: coe ? Colors.green : Colors.red,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                'Reports QC Stand: ',
-                style: Theme.of(context).textTheme.bodyText1.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              Expanded(
-                child: SizedBox(),
-              ),
-              Icon(
-                coe ? Icons.done : Icons.clear,
-                color: coe ? Colors.green : Colors.red,
-              ),
-            ],
-          ),
-        ],
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Reports QC Stand: ',
+                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                Expanded(
+                  child: SizedBox(),
+                ),
+                Icon(
+                  coe ? Icons.done : Icons.clear,
+                  color: coe ? Colors.green : Colors.red,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => OrderDetailsScreen(id),
+          ),
+        );
+      },
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:onlala_shopping/widgets/video_preview.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImageSlider extends StatefulWidget {
   final List<dynamic> images;
@@ -40,12 +41,22 @@ class _ImageSliderState extends State<ImageSlider> {
                   .map(
                     (pic) => Container(
                       width: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              CachedNetworkImageProvider(pic['product_image']),
-                          fit: BoxFit.cover,
+                      color: Colors.white,
+                      // decoration: BoxDecoration(
+                      //   image: DecorationImage(
+                      //     image:
+                      //         CachedNetworkImageProvider(pic['product_image']),
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
+                      child: PhotoView(
+                        backgroundDecoration: BoxDecoration(
+                          color: Color(0x00000000),
                         ),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.contained,
+                        imageProvider:
+                            CachedNetworkImageProvider(pic['product_image']),
                       ),
                     ),
                   )

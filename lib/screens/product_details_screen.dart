@@ -9,6 +9,7 @@ import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
 import 'package:onlala_shopping/widgets/related_products.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import './bulk_inquiry_screen.dart';
 import '../widgets/image_slider.dart';
@@ -513,56 +514,71 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ],
                         ),
-                        child: Column(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              _data[0]["product"]["product_name"],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  .copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              '\€ ${_data[0]["sample_details"]["sample_cost"].toString()}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  .copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1
-                                    .copyWith(),
-                                children: [
-                                  TextSpan(
-                                    text: 'Minimum Order: ',
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        '${_data[0]["product"]["minimum_order_quantity"].toString()} ${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}',
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  _data[0]["product"]["product_name"],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      .copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  '\€ ${_data[0]["sample_details"]["sample_cost"].toString()}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      .copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                RichText(
+                                  text: TextSpan(
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        .copyWith(),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Minimum Order: ',
+                                      ),
+                                      TextSpan(
+                                        text:
+                                            '${_data[0]["product"]["minimum_order_quantity"].toString()} ${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.share),
+                              onPressed: () async {
+                                await Share.share(
+                                  'https://onlala.com/product.html?id=${widget.id}',
+                                  subject: 'Share Product',
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -1064,8 +1080,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Expanded(
                     child: GestureDetector(
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 5, 2, 0),
-                        color: Theme.of(context).primaryColor,
+                        margin: EdgeInsets.fromLTRB(10, 0, 2, 10),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         alignment: Alignment.center,
                         child: Text(
                           'General Inquiry',
@@ -1082,10 +1101,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Expanded(
                     child: GestureDetector(
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
-                        color: !_cartItemExists
-                            ? Theme.of(context).primaryColor
-                            : Colors.green,
+                        margin: EdgeInsets.fromLTRB(2, 0, 2, 10),
+                        decoration: BoxDecoration(
+                          color: !_cartItemExists
+                              ? Theme.of(context).primaryColor
+                              : Colors.green,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         alignment: Alignment.center,
                         child: !_cartItemExists
                             ? Text(
@@ -1117,8 +1139,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Expanded(
                     child: GestureDetector(
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(2, 5, 0, 0),
-                        color: Theme.of(context).primaryColor,
+                        margin: EdgeInsets.fromLTRB(2, 0, 10, 10),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         alignment: Alignment.center,
                         child: Text(
                           'Bulk Inquiry',

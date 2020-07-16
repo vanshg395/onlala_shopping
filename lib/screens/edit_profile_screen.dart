@@ -28,6 +28,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Map<String, String> _data = {};
   bool _isLoading = false;
   bool _isLoading2 = false;
+  bool _isLoading3 = false;
   List<dynamic> _certificates = [];
   List<bool> _isLoadings = [false, false, false, false];
   FlutterToast flutterToast;
@@ -64,6 +65,106 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     } catch (e) {}
     setState(() {
       _isLoading2 = false;
+    });
+  }
+
+  Future<void> uploadImage() async {
+    try {
+      String filePath;
+      final url = 'https://onlala-api.herokuapp.com/user/profile/change/buyer/';
+      filePath = await FilePicker.getFilePath(
+        type: FileType.image,
+      );
+      if (filePath == null) {
+        return;
+      }
+      File croppedFile = await ImageCropper.cropImage(
+        sourcePath: filePath,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+        ],
+        cropStyle: CropStyle.circle,
+        androidUiSettings: AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Theme.of(context).primaryColor,
+          activeControlsWidgetColor: Theme.of(context).primaryColor,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+          showCancelConfirmationDialog: true,
+        ),
+      );
+      filePath = croppedFile.path;
+      final multipartRequest =
+          new http.MultipartRequest('POST', Uri.parse(url));
+      multipartRequest.headers.addAll(
+        {
+          'Authorization': Provider.of<Auth>(context, listen: false).token,
+        },
+      );
+      final multipartFile = await http.MultipartFile.fromPath(
+        'picture',
+        filePath,
+      );
+      final length = multipartFile.length;
+      if (length > 5242880) {
+        await showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text('File is Too Large'),
+            content:
+                Text('Maximum File Size is 5MB. Please choose a smaller file.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+        Navigator.of(context).pop();
+        return;
+      }
+      setState(() {
+        _isLoading3 = true;
+      });
+      multipartRequest.files.add(multipartFile);
+      final response = await multipartRequest.send();
+      print(response.statusCode);
+      if (response.statusCode == 202) {
+        Widget toast = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[300],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text("Profile Image Updated"),
+            ],
+          ),
+        );
+
+        flutterToast.showToast(
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
+        Navigator.of(context).pop(true);
+      }
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      _isLoading3 = false;
     });
   }
 
@@ -127,6 +228,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         filePath = await FilePicker.getFilePath(
           type: FileType.image,
         );
+        if (filePath == null) {
+          return;
+        }
         File croppedFile = await ImageCropper.cropImage(
           sourcePath: filePath,
           aspectRatioPresets: [
@@ -151,6 +255,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           type: FileType.custom,
           allowedExtensions: ['pdf'],
         );
+      }
+      if (filePath == null) {
+        return;
       }
       bool _isConfirmed = false;
       await showDialog(
@@ -395,6 +502,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   size: 150,
                                 ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Center(
+                        child: _isLoading3
+                            ? CircularProgressIndicator()
+                            : CommonButton(
+                                title: 'Change Image',
+                                onPressed: uploadImage,
+                                bgColor: Theme.of(context).primaryColor,
+                                borderColor: Theme.of(context).primaryColor,
+                                fontSize: 16,
+                                height: 50,
+                                width: 200,
+                                borderRadius: 10,
+                              ),
                       ),
                       SizedBox(
                         height: 30,

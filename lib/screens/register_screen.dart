@@ -151,8 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         child: AlertDialog(
           title: Text('Success'),
-          content: Text(
-              'You have been registered successfully. Please verify your email to login.'),
+          content: Text('You have been registered successfully.'),
           actions: <Widget>[
             FlatButton(
               child: Text('OK'),
