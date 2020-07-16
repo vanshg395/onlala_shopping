@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onlala_shopping/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -32,8 +33,15 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
   bool _callOurExec = false;
   bool _reportsQCStand = false;
   bool _isLoading = false;
+  FlutterToast flutterToast;
   var baseUrl = "https://onlala-api.herokuapp.com/";
   Map<String, dynamic> _data = {};
+
+  @override
+  void initState() {
+    super.initState();
+    flutterToast = FlutterToast(context);
+  }
 
   Future<void> _submit() async {
     FocusScope.of(context).unfocus();
@@ -59,6 +67,29 @@ class _BulkInquiryScreenState extends State<BulkInquiryScreen> {
       print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         Navigator.of(context).pop();
+        Widget toast = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[300],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text("Inquiry Sent"),
+            ],
+          ),
+        );
+
+        flutterToast.showToast(
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
       } else {
         showDialog(
           context: context,

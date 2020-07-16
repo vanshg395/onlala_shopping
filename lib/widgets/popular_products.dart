@@ -9,7 +9,7 @@ class PopularProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 180,
       width: double.infinity,
       padding: EdgeInsets.only(bottom: 10),
       child: Column(
@@ -19,7 +19,7 @@ class PopularProducts extends StatelessWidget {
             padding: EdgeInsets.all(15),
             child: Text(
               'Popular Products',
-              style: Theme.of(context).textTheme.headline6.copyWith(
+              style: Theme.of(context).textTheme.subtitle1.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -81,14 +81,14 @@ class PopularProductCard extends StatelessWidget {
             Container(
               width: 100,
               decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  ),
-                  image: DecorationImage(
-                      image: CachedNetworkImageProvider(url),
-                      fit: BoxFit.cover)),
+                color: Colors.grey,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                ),
+                image: DecorationImage(
+                    image: CachedNetworkImageProvider(url), fit: BoxFit.cover),
+              ),
             ),
             Expanded(
               child: Container(
@@ -101,17 +101,17 @@ class PopularProductCard extends StatelessWidget {
                       productName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(),
                     ),
                     Text(
                       description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(),
                     ),
                     Text(
                       '€ $price',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                     ),

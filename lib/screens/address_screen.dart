@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:onlala_shopping/providers/wishlist.dart';
 import 'package:onlala_shopping/screens/add_address_screen.dart';
@@ -12,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart' as http;
-import 'package:websafe_svg/websafe_svg.dart';
 
 import '../providers/auth.dart';
 import '../providers/cart.dart';
@@ -91,11 +91,6 @@ class _AddressScreenState extends State<AddressScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    if (_addresses.length == 0)
-                      Center(
-                        child: WebsafeSvg.asset('assets/svg/error.svg',
-                            height: 200),
-                      ),
                     ..._addresses
                         .map(
                           (address) => AddressCard(
@@ -179,6 +174,13 @@ class AddressCard extends StatefulWidget {
 
 class _AddressCardState extends State<AddressCard> {
   bool _isLoading = false;
+  FlutterToast flutterToast;
+
+  @override
+  void initState() {
+    super.initState();
+    flutterToast = FlutterToast(context);
+  }
 
   Future<void> deleteAddress(String id) async {
     setState(() {
@@ -201,6 +203,29 @@ class _AddressCardState extends State<AddressCard> {
       print(response.statusCode);
       if (response.statusCode == 204) {
         widget.refresh();
+        Widget toast = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[300],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text("Address Deleted"),
+            ],
+          ),
+        );
+
+        flutterToast.showToast(
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
       }
     } catch (e) {}
     setState(() {

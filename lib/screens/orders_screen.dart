@@ -161,9 +161,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Icon(
+                    Icons.account_box,
+                    size: 100,
+                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
                   CommonButton(
                     bgColor: Theme.of(context).primaryColor,
                     borderColor: Theme.of(context).primaryColor,
+                    height: 50,
+                    width: 200,
+                    fontSize: 16,
                     onPressed: () {
                       Navigator.of(context)
                           .push(
@@ -185,9 +196,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     height: 30,
                   ),
                   CommonButton(
-                    bgColor: Theme.of(context).primaryColor.withOpacity(0.3),
-                    borderColor:
-                        Theme.of(context).primaryColor.withOpacity(0.2),
+                    bgColor: Theme.of(context).primaryColor,
+                    borderColor: Theme.of(context).primaryColor,
+                    height: 50,
+                    width: 200,
+                    fontSize: 16,
                     onPressed: () async {
                       Location location = new Location();
 

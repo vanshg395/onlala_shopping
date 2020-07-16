@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 import './product_details_screen.dart';
 
@@ -16,6 +17,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   List<dynamic> _displayedItems = [];
   ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+  FlutterToast flutterToast;
 
   int offset = 0;
   int limit = 9;
@@ -24,6 +26,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   void initState() {
     super.initState();
     getData();
+    flutterToast = FlutterToast(context);
   }
 
   @override
@@ -59,6 +62,31 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
           setState(() {
             _displayedItems += _newItems;
           });
+        } else {
+          Widget toast = Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+              color: Colors.grey[300],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.error),
+                SizedBox(
+                  width: 12.0,
+                ),
+                Text("No More Products"),
+              ],
+            ),
+          );
+
+          flutterToast.showToast(
+            child: toast,
+            gravity: ToastGravity.BOTTOM,
+            toastDuration: Duration(seconds: 2),
+          );
         }
       }
     } catch (e) {
@@ -183,17 +211,17 @@ class ProductCard extends StatelessWidget {
                       productName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(),
                     ),
                     Text(
                       description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(),
                     ),
                     RichText(
                       text: TextSpan(
-                        style: Theme.of(context).textTheme.subtitle2.copyWith(),
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(),
                         children: [
                           TextSpan(
                             text: 'Minimum Order: ',
@@ -201,7 +229,7 @@ class ProductCard extends StatelessWidget {
                           TextSpan(
                             text: '$moq',
                             style:
-                                Theme.of(context).textTheme.subtitle2.copyWith(
+                                Theme.of(context).textTheme.bodyText1.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),

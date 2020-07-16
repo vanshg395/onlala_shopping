@@ -129,9 +129,9 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: Size.fromHeight(60),
           child: Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -184,15 +184,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ? MainAxisAlignment.center
                       : MainAxisAlignment.start,
                   children: <Widget>[
-                    _data.length == 0
-                        ? Center(
-                            child: WebsafeSvg.asset(
-                              'assets/svg/error.svg',
-                              height: 200,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          )
-                        : SearchProducts(_data),
+                    SearchProducts(_data),
                   ],
                 ),
               ),

@@ -6,7 +6,7 @@ class CountrySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 160,
+      height: 140,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -15,7 +15,7 @@ class CountrySelector extends StatelessWidget {
             padding: EdgeInsets.all(15),
             child: Text(
               'Country-wise Products',
-              style: Theme.of(context).textTheme.headline6.copyWith(
+              style: Theme.of(context).textTheme.subtitle1.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -29,8 +29,8 @@ class CountrySelector extends StatelessWidget {
                   CountrySelectorItem('assets/img/india.png', 'India'),
                   CountrySelectorItem(
                       'assets/img/bangladesh.png', 'Bangladesh'),
-                  CountrySelectorItem('assets/img/iran.png', 'Iran'),
                   CountrySelectorItem('assets/img/nigeria.png', 'Nigeria'),
+                  CountrySelectorItem('assets/img/iran.png', 'Iran'),
                 ],
               ),
             ),
@@ -51,27 +51,36 @@ class CountrySelectorItem extends StatelessWidget {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-        width: 120,
+        width: 110,
         child: Column(
           children: <Widget>[
             Container(
-              height: 60,
-              width: 60,
+              height: 40,
+              width: 40,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Theme.of(context).primaryColor,
                 shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage(imageUrl),
-                  fit: BoxFit.cover,
-                ),
+                image: countryName == 'Iran'
+                    ? null
+                    : DecorationImage(
+                        image: AssetImage(imageUrl),
+                        fit: BoxFit.cover,
+                      ),
               ),
+              child: countryName == 'Iran'
+                  ? Icon(
+                      Icons.map,
+                      color: Colors.white,
+                    )
+                  : null,
             ),
             SizedBox(
               height: 10,
             ),
             Text(
-              countryName,
+              countryName == 'Iran' ? 'Others' : countryName,
               textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

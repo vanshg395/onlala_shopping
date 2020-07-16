@@ -131,7 +131,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 "${_data['name']}",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline4
+                                    .headline5
                                     .copyWith(
                                         color: Theme.of(context).primaryColor),
                               ),
@@ -223,8 +223,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                   children: <Widget>[
                                     GestureDetector(
                                       child: Container(
-                                        height: 80,
-                                        width: 80,
+                                        height: 60,
+                                        width: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.pink,
                                           shape: BoxShape.circle,
@@ -232,7 +232,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         child: Icon(
                                           Icons.shopping_cart,
                                           color: Colors.white,
-                                          size: 30,
+                                          size: 20,
                                         ),
                                       ),
                                       onTap: () {
@@ -254,8 +254,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Container(
-                                        height: 80,
-                                        width: 80,
+                                        height: 60,
+                                        width: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.green,
                                           shape: BoxShape.circle,
@@ -263,7 +263,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         child: Icon(
                                           Icons.credit_card,
                                           color: Colors.white,
-                                          size: 35,
+                                          size: 25,
                                         ),
                                       ),
                                       SizedBox(
@@ -285,8 +285,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Container(
-                                        height: 80,
-                                        width: 80,
+                                        height: 60,
+                                        width: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.blue,
                                           shape: BoxShape.circle,
@@ -294,7 +294,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         child: Icon(
                                           Icons.favorite,
                                           color: Colors.white,
-                                          size: 30,
+                                          size: 20,
                                         ),
                                       ),
                                       SizedBox(
@@ -314,7 +314,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 30,
                             ),
                             GestureDetector(
                               child: Container(
@@ -691,9 +691,21 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          Icon(
+                            Icons.account_box,
+                            size: 100,
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.2),
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
                           CommonButton(
                             bgColor: Theme.of(context).primaryColor,
                             borderColor: Theme.of(context).primaryColor,
+                            height: 50,
+                            width: 200,
+                            fontSize: 16,
                             onPressed: () {
                               Navigator.of(context)
                                   .push(
@@ -715,10 +727,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             height: 30,
                           ),
                           CommonButton(
-                            bgColor:
-                                Theme.of(context).primaryColor.withOpacity(0.3),
-                            borderColor:
-                                Theme.of(context).primaryColor.withOpacity(0.2),
+                            height: 50,
+                            width: 200,
+                            fontSize: 16,
+                            bgColor: Theme.of(context).primaryColor,
+                            borderColor: Theme.of(context).primaryColor,
                             onPressed: () async {
                               Location location = new Location();
 

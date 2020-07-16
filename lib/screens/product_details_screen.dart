@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlala_shopping/screens/cart_screen.dart';
 import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
+import 'package:onlala_shopping/widgets/related_products.dart';
 import 'package:provider/provider.dart';
 
 import './bulk_inquiry_screen.dart';
@@ -31,11 +35,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   CartItem cart;
   bool _cartItemExists = false;
   int quantity = 1;
+  FlutterToast flutterToast;
   Map<String, String> _productEnquiry = {"message": "", "product": ""};
   @override
   void initState() {
     super.initState();
     getData();
+    flutterToast = FlutterToast(context);
   }
 
   var baseUrl = "https://onlala-api.herokuapp.com/";
@@ -69,9 +75,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Future<void> getRelatedproducts() async {
     try {
       final url = baseUrl + 'product/related/show/';
-      final response = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({"product_id": widget.id}));
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(
+          {"product_id": widget.id},
+        ),
+      );
+      print('--------------');
+      print(url);
+      print(widget.id);
+      print('--------------');
       print(response.statusCode);
       if (response.statusCode == 200) {
         final resBody = json.decode(response.body);
@@ -116,7 +130,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       setState(() {
         _cartItemExists = true;
       });
+      Widget toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.grey[300],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text("Item added to Cart"),
+          ],
+        ),
+      );
+
+      flutterToast.showToast(
+        child: toast,
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: Duration(seconds: 2),
+      );
     } catch (e) {
+      print(e);
       await showDialog(
         context: context,
         child: AlertDialog(
@@ -150,6 +188,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       print(response.statusCode);
       if (response.statusCode == 201) {
         Navigator.of(context).pop();
+        Widget toast = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[300],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text("Inquiry Sent"),
+            ],
+          ),
+        );
+
+        flutterToast.showToast(
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
       }
     } catch (e) {
       print(e);
@@ -303,6 +364,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
+        centerTitle: true,
         actions: <Widget>[
           if (Provider.of<Auth>(context, listen: false).isAuth)
             IconButton(
@@ -327,6 +389,30 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           widget.id,
                           widget.name);
                   setState(() {});
+                  Widget toast = Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: Colors.grey[300],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check),
+                        SizedBox(
+                          width: 12.0,
+                        ),
+                        Text("Removed from Wishlist"),
+                      ],
+                    ),
+                  );
+
+                  flutterToast.showToast(
+                    child: toast,
+                    gravity: ToastGravity.BOTTOM,
+                    toastDuration: Duration(seconds: 2),
+                  );
                 } else {
                   await Provider.of<Wishlist>(context, listen: false).addItem(
                     Provider.of<Auth>(context, listen: false).token,
@@ -337,7 +423,56 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         .toString(),
                   );
                   setState(() {});
+                  Widget toast = Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: Colors.grey[300],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check),
+                        SizedBox(
+                          width: 12.0,
+                        ),
+                        Text("Added to Wishlist"),
+                      ],
+                    ),
+                  );
+
+                  flutterToast.showToast(
+                    child: toast,
+                    gravity: ToastGravity.BOTTOM,
+                    toastDuration: Duration(seconds: 2),
+                  );
                 }
+              },
+            ),
+          if (Provider.of<Auth>(context, listen: false).isAuth)
+            IconButton(
+              icon: Badge(
+                showBadge: Provider.of<Cart>(context).numberOfCartItems == 0
+                    ? false
+                    : true,
+                animationType: BadgeAnimationType.scale,
+                animationDuration: Duration(milliseconds: 200),
+                child: Icon(Icons.shopping_cart),
+                badgeContent: Text(
+                  Provider.of<Cart>(context).numberOfCartItems.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => CartScreen(),
+                  ),
+                );
               },
             ),
         ],
@@ -391,10 +526,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
                             Text(
-                              '\€ ${_data[0]["bulkorder_details"]["bulk_order_price"]} ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
+                              '\€ ${_data[0]["sample_details"]["sample_cost"].toString()}',
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
@@ -404,7 +539,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
                             RichText(
                               text: TextSpan(
@@ -479,7 +614,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '€ ${_data[0]["sample_details"]["sample_cost"].toString()} ',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -498,7 +633,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["sample_details"]["sample_from_time_range"]} - ${_data[0]["sample_details"]["sample_to_time_range"]} Days',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -517,7 +652,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["sample_details"]["hs_code"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -536,7 +671,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["sample_details"]["sample_dimension_length"]} X ${_data[0]["sample_details"]["sample_dimension_breadth"]} X ${_data[0]["sample_details"]["sample_dimension_height"]} ${_data[0]["sample_details"]["sample_dimension_unit"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -555,7 +690,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["sample_details"]["sample_weight"]} ${_data[0]["sample_details"]["sample_weight_unit"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -574,7 +709,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["sample_details"]["sample_policy"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                           ],
@@ -690,7 +825,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["bulkorder_details"]["bulk_order_price"]}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]} ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -709,7 +844,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["bulkorder_details"]["bulk_order_from_time_range"]} to ${_data[0]["bulkorder_details"]["bulk_order_to_time_range"]} Days',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -728,7 +863,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["product"]["quantity_per_carton"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -747,7 +882,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["carton_details"]["carton_dimension_length"]} x ${_data[0]["carton_details"]["carton_dimension_breadth"]} x ${_data[0]["carton_details"]["carton_dimension_height"]} ${_data[0]["carton_details"]["carton_dimension_unit"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -766,7 +901,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["carton_details"]["carton_weight"]} ${_data[0]["carton_details"]["carton_weight_unit"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                           ],
@@ -819,7 +954,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["product"]["payment_method"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -838,7 +973,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: double.infinity,
                               child: Text(
                                 '${_data[0]["bulkorder_details"]["bulk_order_port"]}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                             SizedBox(
@@ -859,7 +994,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 _data[0]["product"]["tech_transfer_investment"]
                                     ? 'Yes'
                                     : 'No',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                           ],
@@ -901,12 +1036,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 20,
                             ),
                             Text(
-                              'Excluding Shipping and Custom charges (Shipping and Custom charges will be calculated on checkout)',
+                              'Sample Prices are excluding Shipping and Custom charges. (Shipping and Custom Charges will be calculated on checkout.',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ],
                         ),
                       ),
+                      if (_data1.length > 0)
+                        SizedBox(
+                          height: 30,
+                        ),
+                      if (_data1.length > 0) RelatedProducts(_data1),
                       SizedBox(
                         height: 30,
                       ),

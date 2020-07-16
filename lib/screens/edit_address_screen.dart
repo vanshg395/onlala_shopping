@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
 import 'package:http/http.dart' as http;
@@ -38,6 +39,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
     'postal_address2': '',
     'postal_address3': '',
   };
+  FlutterToast flutterToast;
+
+  @override
+  void initState() {
+    super.initState();
+    flutterToast = FlutterToast(context);
+  }
 
   Future<void> _submit() async {
     _data['postal_id'] = widget.id;
@@ -64,6 +72,29 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
       print(response.statusCode);
       print(response.body);
       if (response.statusCode == 202) {
+        Widget toast = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[300],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text("Address Edited"),
+            ],
+          ),
+        );
+
+        flutterToast.showToast(
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
         Navigator.of(context).pop(true);
       }
     } catch (e) {}

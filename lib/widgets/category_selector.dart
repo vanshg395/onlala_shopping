@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/screens/category_screen.dart';
+import 'package:onlala_shopping/screens/department_screen.dart';
 import '../screens/all_products.dart';
 
 class CategorySelector extends StatelessWidget {
@@ -11,7 +12,7 @@ class CategorySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 170,
+      height: 150,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,7 +21,7 @@ class CategorySelector extends StatelessWidget {
             padding: EdgeInsets.all(15),
             child: Text(
               'Category',
-              style: Theme.of(context).textTheme.headline6.copyWith(
+              style: Theme.of(context).textTheme.subtitle1.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -34,19 +35,58 @@ class CategorySelector extends StatelessWidget {
                   GestureDetector(
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      width: 120,
+                      width: 100,
                       child: Column(
                         children: <Widget>[
                           Container(
-                            height: 60,
-                            width: 60,
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.developer_board,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Choose Departments',
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (ctx) => DepartmentSelectScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      width: 100,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: 40,
+                            width: 40,
                             decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Icons.dashboard,
-                              size: 40,
+                              size: 20,
                               color: Colors.white,
                             ),
                           ),
@@ -95,18 +135,19 @@ class CategorySelectorItem extends StatelessWidget {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-        width: 120,
+        width: 100,
         child: Column(
           children: <Widget>[
             Container(
-              height: 60,
-              width: 60,
+              height: 40,
+              width: 40,
               decoration: BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: CachedNetworkImageProvider(imageUrl),
-                      fit: BoxFit.cover)),
+                color: Colors.grey,
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: CachedNetworkImageProvider(imageUrl),
+                    fit: BoxFit.cover),
+              ),
             ),
             SizedBox(
               height: 10,
@@ -114,6 +155,7 @@ class CategorySelectorItem extends StatelessWidget {
             Text(
               categoryName,
               textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

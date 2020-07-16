@@ -120,7 +120,8 @@ class Cart with ChangeNotifier {
                     ["product_image"][0]["product_image"];
               }
               productBulkPrice = responseBody["additional_details"][j]
-                  ["bulkorder_details"]["bulk_order_price"];
+                      ["sample_details"]["sample_cost"]
+                  .toString();
               print(responseBody["additional_details"][j]["bulkorder_details"]
                   ["bulk_order_price"]);
               print(productBulkPrice);

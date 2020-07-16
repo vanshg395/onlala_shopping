@@ -50,7 +50,7 @@ class _CartCardState extends State<CartCard> {
       child: Row(
         children: <Widget>[
           Container(
-            width: 120,
+            width: 100,
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.only(
@@ -74,30 +74,32 @@ class _CartCardState extends State<CartCard> {
                     widget.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   Text(
                     widget.description ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(),
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(),
                   ),
                   Text(
                     '€ ${widget.price}',
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   RichText(
                     text: TextSpan(
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.bodyText1,
                       children: [
                         TextSpan(
                           text: 'Quantity: ',
                         ),
                         TextSpan(
                           text: widget.quantity,
-                          style: Theme.of(context).textTheme.subtitle2.copyWith(
+                          style: Theme.of(context).textTheme.bodyText1.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                         ),

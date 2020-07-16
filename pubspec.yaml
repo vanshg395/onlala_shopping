@@ -31,7 +31,6 @@ dependencies:
   provider: ^4.3.1
   http: ^0.12.1
   intl:
-  dots_indicator: ^1.1.0
   badges: ^1.1.1
   titled_navigation_bar: ^4.1.0
   cached_network_image: ^2.2.0+1
@@ -43,6 +42,9 @@ dependencies:
   url_launcher: ^5.5.0
   share: ^0.6.4+3
   file_picker: ^1.12.0
+  image_cropper: ^1.2.3
+  dots_indicator: ^1.2.0
+  fluttertoast: ^6.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

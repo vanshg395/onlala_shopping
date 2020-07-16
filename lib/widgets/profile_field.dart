@@ -43,21 +43,22 @@ class _ProfileFieldState extends State<ProfileField> {
       controller: controller,
       enabled: widget.enabled,
       decoration: InputDecoration(
-        labelText: widget.label,
-        labelStyle: TextStyle(fontSize: 20),
-        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-        disabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-        errorBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-        focusedErrorBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-      ),
-      style: TextStyle(fontSize: 20),
+          labelText: widget.label,
+          labelStyle: Theme.of(context).textTheme.bodyText1,
+          border:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          disabledBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          enabledBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          errorBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          focusedErrorBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 15)),
+      style: Theme.of(context).textTheme.bodyText1,
       validator: widget.validator,
       onSaved: widget.onSaved,
     );

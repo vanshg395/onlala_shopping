@@ -18,7 +18,7 @@ class SuggestedProducts extends StatelessWidget {
             padding: EdgeInsets.all(15),
             child: Text(
               'Products you may like',
-              style: Theme.of(context).textTheme.headline6.copyWith(
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -58,7 +58,7 @@ class SuggestedProductCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         width: double.infinity,
-        height: 120,
+        height: 100,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -74,7 +74,7 @@ class SuggestedProductCard extends StatelessWidget {
           children: <Widget>[
             Container(
               width: 140,
-              height: 120,
+              height: 100,
               decoration: BoxDecoration(
                 color: Colors.grey,
                 borderRadius: BorderRadius.only(
@@ -98,17 +98,17 @@ class SuggestedProductCard extends StatelessWidget {
                       name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(),
                     ),
                     Text(
                       description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(),
                     ),
                     Text(
                       '€  $price',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                     ),

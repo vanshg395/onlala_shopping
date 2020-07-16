@@ -97,10 +97,10 @@ class _DepartmentSelectScreenState extends State<DepartmentSelectScreen> {
           : Container(
               child: GridView.count(
                 shrinkWrap: true,
-                crossAxisCount: 2,
-                childAspectRatio: 1,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
+                crossAxisCount: 3,
+                childAspectRatio: 0.9,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 20,
                 padding: EdgeInsets.all(15),
                 children: depts
                     .map(
@@ -152,13 +152,13 @@ class DepartmentCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            height: 100,
-            width: 100,
+            height: 60,
+            width: 60,
             decoration: BoxDecoration(
               border: isSelected
                   ? Border.all(
                       color: Theme.of(context).primaryColor,
-                      width: 4,
+                      width: 3,
                     )
                   : null,
               shape: BoxShape.circle,
@@ -171,11 +171,16 @@ class DepartmentCard extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
-          Text(
-            name,
-            textAlign: TextAlign.center,
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                name,
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ],
       ),

@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_cropper/image_cropper.dart';
 import 'package:onlala_shopping/providers/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,11 +30,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _isLoading2 = false;
   List<dynamic> _certificates = [];
   List<bool> _isLoadings = [false, false, false, false];
+  FlutterToast flutterToast;
 
   @override
   void initState() {
     super.initState();
     getDocuments();
+    flutterToast = FlutterToast(context);
   }
 
   Future<void> getDocuments() async {
@@ -64,24 +68,129 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> uploadDoc(int i, String fileType) async {
-    setState(() {
-      _isLoadings[i] = true;
-    });
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      child: AlertDialog(
-        title: Text('Uploading Certificate'),
-        content: Container(
-          height: 100,
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      ),
-    );
     try {
-      final filePath = await FilePicker.getFilePath(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg'],
+      String _docTypeChoice = '';
+
+      await showModalBottomSheet(
+        context: context,
+        builder: (ctx) => Container(
+          height: 100,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _docTypeChoice = 'Image';
+                    Navigator.of(context).pop();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(Icons.image),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Image'),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _docTypeChoice = 'Pdf';
+                    Navigator.of(context).pop();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(Icons.picture_as_pdf),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Document'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      String filePath;
+      if (_docTypeChoice == '') {
+        return;
+      } else if (_docTypeChoice == 'Image') {
+        filePath = await FilePicker.getFilePath(
+          type: FileType.image,
+        );
+        File croppedFile = await ImageCropper.cropImage(
+          sourcePath: filePath,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+          ],
+          androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Theme.of(context).primaryColor,
+            activeControlsWidgetColor: Theme.of(context).primaryColor,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+            showCancelConfirmationDialog: true,
+          ),
+        );
+        filePath = croppedFile.path;
+      } else if (_docTypeChoice == 'Pdf') {
+        filePath = await FilePicker.getFilePath(
+          type: FileType.custom,
+          allowedExtensions: ['pdf'],
+        );
+      }
+      bool _isConfirmed = false;
+      await showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Confirm?'),
+          content: Text('Are you sure, you want to upload this document?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _isConfirmed = true;
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+      if (!_isConfirmed) {
+        return;
+      }
+      setState(() {
+        _isLoadings[i] = true;
+      });
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        child: AlertDialog(
+          title: Text('Uploading Certificate'),
+          content: Container(
+            height: 100,
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ),
       );
       if (filePath == null) {
         setState(() {
@@ -134,6 +243,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       print(response.statusCode);
       print(await response.stream.bytesToString());
       if (response.statusCode == 201) {
+        Widget toast = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[300],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text("Document Uploaded"),
+            ],
+          ),
+        );
+
+        flutterToast.showToast(
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
         getDocuments();
       }
     } catch (e) {
@@ -184,6 +316,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       );
       print(response.statusCode);
       if (response.statusCode == 202) {
+        Widget toast = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[300],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text("Profile Updated"),
+            ],
+          ),
+        );
+
+        flutterToast.showToast(
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
         Navigator.of(context).pop(true);
       }
     } catch (e) {
@@ -232,11 +387,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     fit: BoxFit.cover,
                                   ),
                           ),
-                          child: Icon(
-                            Icons.account_circle,
-                            color: Colors.white,
-                            size: 150,
-                          ),
+                          child: widget.data['profile_picture'].length != 0
+                              ? null
+                              : Icon(
+                                  Icons.account_circle,
+                                  color: Colors.white,
+                                  size: 150,
+                                ),
                         ),
                       ),
                       SizedBox(
@@ -372,7 +529,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 title: 'Update',
                                 onPressed: updateProfile,
                                 borderRadius: 10,
-                                fontSize: 18,
+                                width: 200,
+                                fontSize: 16,
                                 bgColor: Theme.of(context).primaryColor,
                                 borderColor: Theme.of(context).primaryColor,
                               ),

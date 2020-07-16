@@ -228,6 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
               bottom: false,
               child: Container(
                 child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Column(
                     children: <Widget>[
                       BannerWidget(_data),

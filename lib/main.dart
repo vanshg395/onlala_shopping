@@ -37,9 +37,9 @@ class MyApp extends StatelessWidget {
             canvasColor: Color(0xFFF3F6F7),
             fontFamily: GoogleFonts.montserrat().fontFamily,
             textTheme: TextTheme(
-              subtitle1: TextStyle(fontSize: 20),
-              bodyText1: TextStyle(fontSize: 16),
-            ),
+                // subtitle1: TextStyle(fontSize: 20),
+                // bodyText1: TextStyle(fontSize: 16),
+                ),
           ),
           home: FutureBuilder(
             future: auth.tryAutoLogin(),

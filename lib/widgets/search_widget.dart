@@ -15,15 +15,8 @@ class SearchProducts extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          ...searchProducts.map((e) => 
-          SearchProductCard(
-            e['product_name'],
-            e['product_des'],
-            e['image'],
-            e['price'],
-            e["id"]
-          )
-          )
+          ...searchProducts.map((e) => SearchProductCard(e['product_name'],
+              e['product_des'], e['image'], e['price'], e["id"]))
         ],
       ),
     );
@@ -37,14 +30,15 @@ class SearchProductCard extends StatelessWidget {
   final String price;
   final String id;
 
-  SearchProductCard(this.productName, this.description, this.url, this.price, this.id);
+  SearchProductCard(
+      this.productName, this.description, this.url, this.price, this.id);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         width: double.infinity,
-        height: 120,
+        height: 100,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -59,18 +53,16 @@ class SearchProductCard extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-              width: 140,
+              width: 120,
               decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(url),
-                  fit: BoxFit.cover
-                )
-              ),
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                  image: DecorationImage(
+                      image: CachedNetworkImageProvider(url),
+                      fit: BoxFit.cover)),
             ),
             Expanded(
               child: Container(
@@ -81,17 +73,17 @@ class SearchProductCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       productName,
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(),
                     ),
                     Text(
                       description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(),
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(),
                     ),
                     Text(
                       '€ $price',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                     ),
