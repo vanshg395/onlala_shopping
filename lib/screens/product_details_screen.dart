@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlala_shopping/screens/cart_screen.dart';
+import 'package:onlala_shopping/utils/currency.dart';
 import 'package:onlala_shopping/widgets/common_button.dart';
 import 'package:onlala_shopping/widgets/common_field.dart';
 import 'package:onlala_shopping/widgets/related_products.dart';
@@ -38,6 +39,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 1;
   FlutterToast flutterToast;
   Map<String, String> _productEnquiry = {"message": "", "product": ""};
+  double _convertedPrice = 0;
+  String _convertedPriceSymbol = '';
   @override
   void initState() {
     super.initState();
@@ -97,9 +100,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     } catch (e) {
       print(e);
     }
-    setState(() {
-      _isLoading = false;
-    });
+    getCurrency();
   }
 
   Future<void> _submit() async {
@@ -360,6 +361,49 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
+  Future<void> getCurrency() async {
+    final response = await http.get(
+        'http://api.ipapi.com/api/check?access_key=95235ad01973864b1878b2ff1c4e9bc6');
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      final resBody = json.decode(response.body);
+      final url =
+          'http://data.fixer.io/api/latest?access_key=ca5a0ea8cb6b2621d111b7c90ac2dcad&base=EUR&symbols=INR,BDT,USD,NGN';
+      final response2 = await http.get(url);
+      print(response2.statusCode);
+      print(response2.body);
+      if (response2.statusCode == 200) {
+        final resBody2 = json.decode(response2.body);
+        if (resBody['country_code'] == 'IN') {
+          final rate = resBody2['rates']['INR'];
+          _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
+          _convertedPriceSymbol = currency['INR']['symbol'];
+        } else if (resBody['country_code'] == 'BD') {
+          final rate = resBody2['rates']['BDT'];
+          _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
+          _convertedPriceSymbol = currency['BDT']['symbol'];
+        } else if (resBody['country_code'] == 'NG') {
+          final rate = resBody2['rates']['NGN'];
+          _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
+          _convertedPriceSymbol = currency['NGN']['symbol'];
+        } else {
+          final rate = resBody2['rates']['USD'];
+          _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
+          _convertedPriceSymbol = currency['USD']['symbol'];
+        }
+      } else {
+        _convertedPrice = _data[0]["sample_details"]["sample_cost"];
+        _convertedPriceSymbol = '\€';
+      }
+    } else {
+      _convertedPrice = _data[0]["sample_details"]["sample_cost"];
+      _convertedPriceSymbol = '\€';
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -534,7 +578,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   height: 10,
                                 ),
                                 Text(
-                                  '\€ ${_data[0]["sample_details"]["sample_cost"].toString()}',
+                                  '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(2)}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle1
