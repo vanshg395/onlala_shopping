@@ -125,7 +125,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ],
           ),
         );
-        Navigator.of(context).pop();
         return;
       }
       setState(() {
