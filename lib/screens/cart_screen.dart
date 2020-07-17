@@ -30,6 +30,43 @@ class _CartScreenState extends State<CartScreen> {
               SizedBox(
                 height: 10,
               ),
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 6,
+                      spreadRadius: 2,
+                      color: Colors.black.withOpacity(0.1),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Disclaimer',
+                      style: Theme.of(context).textTheme.subtitle1.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'All the prices are converted to Euro (€).',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
               ...Provider.of<Cart>(context).items.map(
                 (e) {
                   return GestureDetector(

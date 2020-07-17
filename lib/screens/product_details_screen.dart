@@ -504,7 +504,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
+        title: Text('Item Information'),
         centerTitle: true,
         actions: <Widget>[
           if (Provider.of<Auth>(context, listen: false).isAuth)
@@ -675,7 +675,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     height: 10,
                                   ),
                                   Text(
-                                    '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(2)}',
+                                    '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(_convertedPriceSymbol == 'Rs' ? 0 : 2)}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1
@@ -771,7 +771,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               padding: EdgeInsets.all(10),
                               width: double.infinity,
                               child: Text(
-                                '$_convertedPriceSymbol ${(_data[0]["sample_details"]["sample_cost"] * rate).toStringAsFixed(2)} ',
+                                '$_convertedPriceSymbol ${(_data[0]["sample_details"]["sample_cost"] * rate).toStringAsFixed(_convertedPriceSymbol == 'Rs' ? 0 : 2)} ',
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
@@ -939,6 +939,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Container(
                         width: double.infinity,
                         margin:
@@ -981,9 +984,30 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               color: Theme.of(context).canvasColor,
                               padding: EdgeInsets.all(10),
                               width: double.infinity,
-                              child: Text(
-                                '${(double.parse(_data[0]["bulkorder_details"]["bulk_order_price"]) * rate).toStringAsFixed(2)}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]} ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
-                                style: Theme.of(context).textTheme.bodyText1,
+                              // child: Text(
+                              //   '${(double.parse(_data[0]["bulkorder_details"]["bulk_order_price"]) * rate).toStringAsFixed(_convertedPriceSymbol == 'Rs' ? 0 : 2)}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}    ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
+                              //   style: Theme.of(context).textTheme.bodyText1,
+                              // ),
+                              child: RichText(
+                                text: TextSpan(
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          '${(double.parse(_data[0]["bulkorder_details"]["bulk_order_price"]) * rate).toStringAsFixed(_convertedPriceSymbol == 'Rs' ? 0 : 2)}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}    ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -1119,7 +1143,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 10,
                             ),
                             Text(
-                              'Port',
+                              'Country Port',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             SizedBox(
@@ -1138,7 +1162,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 10,
                             ),
                             Text(
-                              'Tech Transfer',
+                              'Technology Transfer',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             SizedBox(
@@ -1243,39 +1267,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Expanded(
                     child: GestureDetector(
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(2, 0, 2, 10),
-                        decoration: BoxDecoration(
-                          color: !_cartItemExists
-                              ? Theme.of(context).primaryColor
-                              : Colors.green,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        alignment: Alignment.center,
-                        child: !_cartItemExists
-                            ? Text(
-                                'Add to Cart',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .copyWith(
+                          margin: EdgeInsets.fromLTRB(2, 0, 2, 10),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Add to Cart',
+                            textAlign: TextAlign.center,
+                            style:
+                                Theme.of(context).textTheme.bodyText1.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
-                              )
-                            : Text(
-                                'Added to Cart',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                              ),
-                      ),
-                      onTap: !_cartItemExists ? _addToCart : () {},
+                          )),
+                      onTap: _addToCart,
                     ),
                   ),
                   Expanded(
