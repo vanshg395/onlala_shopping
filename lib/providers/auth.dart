@@ -193,6 +193,6 @@ class Auth with ChangeNotifier {
   Future<void> logout() async {
     _token = null;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await prefs.remove('userData');
   }
 }

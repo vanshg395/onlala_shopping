@@ -25,6 +25,7 @@ class Cart with ChangeNotifier {
 
   Future<void> addItem(String jwtToken, String cartItem, int quantity,
       String productName) async {
+    print(cartItem);
     try {
       print('>>>>>>>>>>>>>>addCartItems');
       final url = baseUrl + 'cart/cartlist/add/';
@@ -35,6 +36,7 @@ class Cart with ChangeNotifier {
           },
           body: json.encode({"cart_item": cartItem, "quantity": quantity}));
       print(response.statusCode.toString() + ">>cart");
+      print(response.body.toString() + ">>cart");
 
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final responseBody = json.decode(response.body)["payload"];
@@ -42,7 +44,7 @@ class Cart with ChangeNotifier {
           CartItem(
             name: productName,
             cartId: responseBody["id"],
-            productId: responseBody["id"],
+            productId: cartItem,
             quantity: responseBody["quantity"],
           ),
         );
@@ -70,9 +72,16 @@ class Cart with ChangeNotifier {
             'Authorization': jwtToken
           },
           body: json.encode({"id": cartItem}));
+      print('------------------------');
+      print(cartItem);
+      print(url);
+      print(json.encode({"id": cartItem}));
+
+      print('------------------------');
       print(response.statusCode);
+      print(response.body);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        _items.removeWhere((item) => item.productId == cartItem);
+        _items.removeWhere((item) => item.anotherId == cartItem);
         notifyListeners();
       } else if (response.statusCode == 401) {
         throw HttpException('Please logout and login');
@@ -82,7 +91,7 @@ class Cart with ChangeNotifier {
         throw HttpException('Error');
       }
     } catch (e) {
-      throw e;
+      print(e);
     }
   }
 
@@ -98,6 +107,10 @@ class Cart with ChangeNotifier {
           'Authorization': jwtToken
         },
       );
+      print('>>>>>>>>>>>>>>>>>');
+      print(url);
+      print(jwtToken);
+      print('>>>>>>>>>>>>>>>>>');
 
       print(response.statusCode.toString() + ">>cart");
       print(response.body);
@@ -131,15 +144,15 @@ class Cart with ChangeNotifier {
           }
           _items.add(
             CartItem(
-              name: responseBody["cart_details"][i]["item_name"]
-                  ["product_name"],
-              cartId: responseBody["cart_details"][i]["cart"],
-              productId: responseBody["cart_details"][i]["id"],
-              quantity: responseBody["cart_details"][i]["quantity"],
-              image: productImage,
-              description: productDescription,
-              price: productBulkPrice,
-            ),
+                name: responseBody["cart_details"][i]["item_name"]
+                    ["product_name"],
+                cartId: responseBody["cart_details"][i]["cart"],
+                productId: responseBody["cart_details"][i]["cart_item"],
+                quantity: responseBody["cart_details"][i]["quantity"],
+                image: productImage,
+                description: productDescription,
+                price: productBulkPrice,
+                anotherId: responseBody["cart_details"][i]["id"]),
           );
         }
       } else if (response.statusCode == 401) {
@@ -148,7 +161,8 @@ class Cart with ChangeNotifier {
         print(response.body);
         print("No cart list");
       } else {
-        throw HttpException('Error');
+        print(response.body);
+        print("No cart list");
       }
       notifyListeners();
     } catch (e) {
@@ -169,6 +183,7 @@ class CartItem {
   final String cartId;
   final String productId;
   final int quantity;
+  final String anotherId;
 
   CartItem({
     this.name,
@@ -178,5 +193,6 @@ class CartItem {
     this.cartId,
     this.quantity,
     this.image,
+    this.anotherId,
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onlala_shopping/screens/place_order_screen.dart';
+import 'package:onlala_shopping/screens/product_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/cart_card.dart';
@@ -29,10 +30,10 @@ class _CartScreenState extends State<CartScreen> {
               SizedBox(
                 height: 10,
               ),
-              ...Provider.of<Cart>(context, listen: false)
-                  .items
-                  .map(
-                    (e) => CartCard(
+              ...Provider.of<Cart>(context).items.map(
+                (e) {
+                  return GestureDetector(
+                    child: CartCard(
                       e.name,
                       e.description,
                       e.price,
@@ -40,9 +41,19 @@ class _CartScreenState extends State<CartScreen> {
                       e.productId,
                       refresh,
                       e.image,
+                      e.anotherId,
                     ),
-                  )
-                  .toList(),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) =>
+                              ProductDetailsScreen(e.productId, e.name, ''),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ).toList(),
               SizedBox(
                 height: 20,
               ),

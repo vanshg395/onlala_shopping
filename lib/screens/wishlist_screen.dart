@@ -17,6 +17,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
   }
 
   @override
+  void initState() {
+    print(Provider.of<Wishlist>(context, listen: false).items);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -33,12 +39,22 @@ class _WishlistScreenState extends State<WishlistScreen> {
               ...Provider.of<Wishlist>(context, listen: false)
                   .items
                   .map(
-                    (e) => WishlistCard(
-                      e.name,
-                      e.description,
-                      e.price,
-                      e.productId,
-                      refresh,
+                    (e) => GestureDetector(
+                      child: WishlistCard(
+                        e.name,
+                        e.description,
+                        e.price,
+                        e.productId,
+                        refresh,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) =>
+                                ProductDetailsScreen(e.productId, e.name, ''),
+                          ),
+                        );
+                      },
                     ),
                   )
                   .toList(),

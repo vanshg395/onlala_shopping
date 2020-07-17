@@ -29,7 +29,7 @@ class SuggestedProducts extends StatelessWidget {
                   p['product']['id'],
                   p['product']['product_name'],
                   p['product']['product_description'],
-                  p['bulkorder_details']['bulk_order_price'].toString(),
+                  p['sample_details']['sample_cost'].toString(),
                   p['pictures'].length == 0
                       ? ''
                       : p['pictures'][0]['product_image'],

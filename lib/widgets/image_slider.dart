@@ -39,25 +39,46 @@ class _ImageSliderState extends State<ImageSlider> {
             items: <Widget>[
               ...widget.images
                   .map(
-                    (pic) => Container(
-                      width: double.infinity,
-                      color: Colors.white,
-                      // decoration: BoxDecoration(
-                      //   image: DecorationImage(
-                      //     image:
-                      //         CachedNetworkImageProvider(pic['product_image']),
-                      //     fit: BoxFit.cover,
-                      //   ),
-                      // ),
-                      child: PhotoView(
-                        backgroundDecoration: BoxDecoration(
-                          color: Color(0x00000000),
+                    (pic) => GestureDetector(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                                pic['product_image']),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        minScale: PhotoViewComputedScale.contained,
-                        maxScale: PhotoViewComputedScale.contained,
-                        imageProvider:
-                            CachedNetworkImageProvider(pic['product_image']),
+                        // child: PhotoView(
+                        //   backgroundDecoration: BoxDecoration(
+                        //     color: Color(0x00000000),
+                        //   ),
+                        //   minScale: PhotoViewComputedScale.contained,
+                        //   maxScale: PhotoViewComputedScale.contained,
+                        //   imageProvider:
+                        //       CachedNetworkImageProvider(pic['product_image']),
+                        // ),
                       ),
+                      onTap: () async {
+                        await showDialog(
+                          context: context,
+                          child: Dialog(
+                            child: Container(
+                              height: 300,
+                              child: PhotoView(
+                                backgroundDecoration: BoxDecoration(
+                                  color: Color(0x00000000),
+                                ),
+                                minScale: PhotoViewComputedScale.contained,
+                                maxScale: PhotoViewComputedScale.contained,
+                                imageProvider: CachedNetworkImageProvider(
+                                    pic['product_image']),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   )
                   .toList(),

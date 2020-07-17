@@ -147,7 +147,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   order['call_our_executive'],
                                   order['reports_qc_stand'],
                                   order['timestamp'],
-                                  order['status'],
+                                  order['order_status'],
                                 ),
                               )
                               .toList(),
@@ -297,6 +297,8 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(status == 0);
+    print(status);
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.all(20),
@@ -415,30 +417,6 @@ class OrderCard extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            RichText(
-              text: TextSpan(
-                style: Theme.of(context).textTheme.bodyText1.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                children: [
-                  TextSpan(
-                    text: 'Status: ',
-                  ),
-                  TextSpan(
-                    text: status == 0
-                        ? 'Order Approval Pending'
-                        : status == 1 ? 'Order Approved' : 'Order Completed',
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.7),
-                        ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
             Row(
               children: <Widget>[
                 Text(
@@ -475,6 +453,30 @@ class OrderCard extends StatelessWidget {
                   color: coe ? Colors.green : Colors.red,
                 ),
               ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                children: [
+                  TextSpan(
+                    text: 'Status: ',
+                  ),
+                  TextSpan(
+                    text: status == 0
+                        ? 'Order Created'
+                        : status == 1 ? 'Order Processing' : 'Order Completed',
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.7),
+                        ),
+                  )
+                ],
+              ),
             ),
           ],
         ),

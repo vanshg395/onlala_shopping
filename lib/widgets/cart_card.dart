@@ -12,6 +12,7 @@ class CartCard extends StatefulWidget {
   final String id;
   final Function refresh;
   final String image;
+  final String newId;
 
   CartCard(
     this.name,
@@ -21,6 +22,7 @@ class CartCard extends StatefulWidget {
     this.id,
     this.refresh,
     this.image,
+    this.newId,
   );
 
   @override
@@ -48,6 +50,7 @@ class _CartCardState extends State<CartCard> {
         ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
             width: 100,
@@ -80,7 +83,7 @@ class _CartCardState extends State<CartCard> {
                   ),
                   Text(
                     widget.description ?? '',
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText2.copyWith(),
                   ),
@@ -110,31 +113,86 @@ class _CartCardState extends State<CartCard> {
               ),
             ),
           ),
-          Container(
-            width: 70,
-            child: IconButton(
-              icon: Icon(
-                Icons.delete,
-                size: 36,
-                color: _isLoading ? Colors.grey : Colors.red,
+          Column(
+            children: <Widget>[
+              Container(
+                width: 70,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    size: 36,
+                    color: _isLoading ? Colors.grey : Colors.red,
+                  ),
+                  onPressed: _isLoading
+                      ? () {}
+                      : () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await Provider.of<Cart>(context, listen: false)
+                              .removeItem(
+                                  Provider.of<Auth>(context, listen: false)
+                                      .token,
+                                  widget.newId,
+                                  widget.name);
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          widget.refresh();
+                        },
+                ),
               ),
-              onPressed: _isLoading
-                  ? () {}
-                  : () async {
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      await Provider.of<Cart>(context, listen: false)
-                          .removeItem(
-                              Provider.of<Auth>(context, listen: false).token,
-                              widget.id,
-                              widget.name);
-                      setState(() {
-                        _isLoading = false;
-                      });
-                      widget.refresh();
+              Expanded(
+                child: SizedBox(),
+              ),
+              Row(
+                children: <Widget>[
+                  InkWell(
+                    child: Icon(
+                      Icons.remove,
+                    ),
+                    onTap: () async {
+                      if (int.parse(widget.quantity) == 1) {
+                        await Provider.of<Cart>(context, listen: false)
+                            .removeItem(
+                                Provider.of<Auth>(context, listen: false).token,
+                                widget.newId,
+                                widget.name);
+                      } else {
+                        await Provider.of<Cart>(context, listen: false).addItem(
+                          Provider.of<Auth>(context, listen: false).token,
+                          widget.id,
+                          int.parse(widget.quantity) - 1,
+                          widget.name,
+                        );
+                      }
                     },
-            ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  InkWell(
+                    child: Icon(
+                      Icons.add,
+                    ),
+                    onTap: () async {
+                      await Provider.of<Cart>(context, listen: false).addItem(
+                        Provider.of<Auth>(context, listen: false).token,
+                        widget.id,
+                        int.parse(widget.quantity) + 1,
+                        widget.name,
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
           ),
         ],
       ),

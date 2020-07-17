@@ -93,9 +93,12 @@ class Wishlist with ChangeNotifier {
           'Authorization': jwtToken
         },
       );
+      print(url);
+      print(jwtToken);
       print(response.statusCode.toString() + "> Wishlist");
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body)["payload"];
+        print(responseBody["wishlist"][0]["wished_item"][0]);
         _items = [];
         for (var i = 0;
             i < responseBody["wishlist"][0]["wished_item"].length;

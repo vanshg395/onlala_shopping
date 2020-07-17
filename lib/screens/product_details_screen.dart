@@ -41,6 +41,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Map<String, String> _productEnquiry = {"message": "", "product": ""};
   double _convertedPrice = 0;
   String _convertedPriceSymbol = '';
+  double rate;
+
   @override
   void initState() {
     super.initState();
@@ -223,6 +225,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     await showDialog(
       context: context,
       child: Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Container(
           padding: EdgeInsets.all(20),
           child: Form(
@@ -262,28 +267,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            _data[0]["product"]["product_name"],
-                            style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(2)}',
-                            style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              _data[0]["product"]["product_name"],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(2)}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -460,19 +471,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       if (response2.statusCode == 200) {
         final resBody2 = json.decode(response2.body);
         if (resBody['country_code'] == 'IN') {
-          final rate = resBody2['rates']['INR'];
+          rate = resBody2['rates']['INR'];
           _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
           _convertedPriceSymbol = currency['INR']['symbol'];
         } else if (resBody['country_code'] == 'BD') {
-          final rate = resBody2['rates']['BDT'];
+          rate = resBody2['rates']['BDT'];
           _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
           _convertedPriceSymbol = currency['BDT']['symbol'];
         } else if (resBody['country_code'] == 'NG') {
-          final rate = resBody2['rates']['NGN'];
+          rate = resBody2['rates']['NGN'];
           _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
           _convertedPriceSymbol = currency['NGN']['symbol'];
         } else {
-          final rate = resBody2['rates']['USD'];
+          rate = resBody2['rates']['USD'];
           _convertedPrice = _data[0]["sample_details"]["sample_cost"] * rate;
           _convertedPriceSymbol = currency['USD']['symbol'];
         }
@@ -647,58 +658,60 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  _data[0]["product"]["product_name"],
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      .copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(2)}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      .copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                RichText(
-                                  text: TextSpan(
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    _data[0]["product"]["product_name"],
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1
-                                        .copyWith(),
-                                    children: [
-                                      TextSpan(
-                                        text: 'Minimum Order: ',
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            '${_data[0]["product"]["minimum_order_quantity"].toString()} ${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
+                                        .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(2)}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          .copyWith(),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Minimum Order: ',
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              '${_data[0]["product"]["minimum_order_quantity"].toString()} ${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             IconButton(
                               icon: Icon(Icons.share),
@@ -758,7 +771,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               padding: EdgeInsets.all(10),
                               width: double.infinity,
                               child: Text(
-                                '€ ${_data[0]["sample_details"]["sample_cost"].toString()} ',
+                                '$_convertedPriceSymbol ${(_data[0]["sample_details"]["sample_cost"] * rate).toStringAsFixed(2)} ',
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
@@ -958,7 +971,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 20,
                             ),
                             Text(
-                              'Price in \€ (Negotiable)',
+                              'Price in $_convertedPriceSymbol (Negotiable)',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             SizedBox(
@@ -969,7 +982,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               padding: EdgeInsets.all(10),
                               width: double.infinity,
                               child: Text(
-                                '${_data[0]["bulkorder_details"]["bulk_order_price"]}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]} ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
+                                '${(double.parse(_data[0]["bulkorder_details"]["bulk_order_price"]) * rate).toStringAsFixed(2)}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]} ${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),

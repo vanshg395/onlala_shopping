@@ -12,6 +12,8 @@ class SubcategoryDetailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
+        width: 150,
+        margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
