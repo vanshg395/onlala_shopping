@@ -46,45 +46,6 @@ class CategorySelector extends StatelessWidget {
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
-                              Icons.developer_board,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'Choose Departments',
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (ctx) => DepartmentSelectScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  GestureDetector(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      width: 100,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
                               Icons.dashboard,
                               size: 20,
                               color: Colors.white,

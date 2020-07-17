@@ -68,7 +68,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Orders'),
+        title: Text('Sample Orders'),
         centerTitle: true,
         actions: <Widget>[
           if (Provider.of<Auth>(context).isAuth)

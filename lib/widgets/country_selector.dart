@@ -30,7 +30,7 @@ class CountrySelector extends StatelessWidget {
                   CountrySelectorItem(
                       'assets/img/bangladesh.png', 'Bangladesh'),
                   CountrySelectorItem('assets/img/nigeria.png', 'Nigeria'),
-                  CountrySelectorItem('assets/img/iran.png', 'Iran'),
+                  CountrySelectorItem('assets/img/iran.png', 'Other'),
                 ],
               ),
             ),
@@ -60,14 +60,14 @@ class CountrySelectorItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 shape: BoxShape.circle,
-                image: countryName == 'Iran'
+                image: countryName == 'Other'
                     ? null
                     : DecorationImage(
                         image: AssetImage(imageUrl),
                         fit: BoxFit.cover,
                       ),
               ),
-              child: countryName == 'Iran'
+              child: countryName == 'Other'
                   ? Icon(
                       Icons.map,
                       color: Colors.white,
@@ -78,7 +78,7 @@ class CountrySelectorItem extends StatelessWidget {
               height: 10,
             ),
             Text(
-              countryName == 'Iran' ? 'Others' : countryName,
+              countryName == 'Other' ? 'Others' : countryName,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText1,
               maxLines: 2,

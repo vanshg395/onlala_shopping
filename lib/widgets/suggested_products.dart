@@ -102,7 +102,7 @@ class SuggestedProductCard extends StatelessWidget {
                     ),
                     Text(
                       description,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyText2.copyWith(),
                     ),

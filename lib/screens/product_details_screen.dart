@@ -244,6 +244,91 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   height: 20,
                 ),
                 Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 6,
+                        spreadRadius: 2,
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            _data[0]["product"]["product_name"],
+                            style:
+                                Theme.of(context).textTheme.bodyText2.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '$_convertedPriceSymbol ${_convertedPrice.toStringAsFixed(2)}',
+                            style:
+                                Theme.of(context).textTheme.bodyText2.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 6,
+                        spreadRadius: 2,
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Disclaimer',
+                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Sample Prices are excluding Shipping and Custom charges. (Shipping and Custom Charges will be calculated on checkout.',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
                   margin: EdgeInsets.symmetric(horizontal: 16),
                   child: CommonField(
                     bgColor: Colors.white,
@@ -1205,7 +1290,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               _data[0]["product"]["product_name"],
                               widget.id,
                               _data[0]["product"]["product_description"],
-                              _data[0]["product"]["bulk_order_price"],
+                              _data[0]["sample_details"]["sample_cost"]
+                                  .toString(),
                               widget.url,
                             ),
                           ),
