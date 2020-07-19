@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import './home_screen.dart';
 import './search_screen.dart';
@@ -35,6 +37,27 @@ class _TabsScreenState extends State<TabsScreen> {
     getWishlistDetails();
   }
 
+  Future<void> initiateOneSignal() async {
+    await Permission.notification.request();
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+    OneSignal.shared.init("4f605927-54bb-4834-9d8f-ee22591bece1", iOSSettings: {
+      OSiOSSettings.autoPrompt: false,
+      OSiOSSettings.inAppLaunchUrl: false
+    });
+    OneSignal.shared
+        .setInFocusDisplayType(OSNotificationDisplayType.notification);
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    await OneSignal.shared
+        .promptUserForPushNotificationPermission(fallbackToSettings: true);
+    OneSignal.shared
+        .setNotificationReceivedHandler((OSNotification notification) {
+      // will be called whenever a notification is received
+      print('git it');
+    });
+  }
+
   Future<void> getCartDetails() async {
     if (Provider.of<Auth>(context, listen: false).isAuth) {
       setState(() {
@@ -57,13 +80,14 @@ class _TabsScreenState extends State<TabsScreen> {
       try {
         await Provider.of<Cart>(context, listen: false)
             .getItems(Provider.of<Auth>(context, listen: false).token);
-        setState(() {
-          _requestCount--;
-        });
       } catch (e) {
         print(e);
       }
+      setState(() {
+        _requestCount--;
+      });
     }
+    initiateOneSignal();
   }
 
   @override

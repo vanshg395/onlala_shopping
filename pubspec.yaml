@@ -46,6 +46,8 @@ dependencies:
   dots_indicator: ^1.2.0
   fluttertoast: ^6.0.1
   photo_view: ^0.9.2
+  onesignal_flutter: ^2.0.0
+  permission_handler: ^5.0.1+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -44,21 +44,21 @@ class _ImageSliderState extends State<ImageSlider> {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                                pic['product_image']),
-                            fit: BoxFit.cover,
-                          ),
+                          // image: DecorationImage(
+                          //   image: CachedNetworkImageProvider(
+                          //       pic['product_image']),
+                          //   fit: BoxFit.cover,
+                          // ),
                         ),
-                        // child: PhotoView(
-                        //   backgroundDecoration: BoxDecoration(
-                        //     color: Color(0x00000000),
-                        //   ),
-                        //   minScale: PhotoViewComputedScale.contained,
-                        //   maxScale: PhotoViewComputedScale.contained,
-                        //   imageProvider:
-                        //       CachedNetworkImageProvider(pic['product_image']),
-                        // ),
+                        child: PhotoView(
+                          backgroundDecoration: BoxDecoration(
+                            color: Color(0x00000000),
+                          ),
+                          minScale: PhotoViewComputedScale.contained,
+                          maxScale: PhotoViewComputedScale.contained,
+                          imageProvider:
+                              CachedNetworkImageProvider(pic['product_image']),
+                        ),
                       ),
                       onTap: () async {
                         await showDialog(
