@@ -155,6 +155,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           }
                         },
                       ),
+                      onFieldSubmitted: (value) {
+                        _search(value);
+                      },
                     ),
                   ),
                 ),

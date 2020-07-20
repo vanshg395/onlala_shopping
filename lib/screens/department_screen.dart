@@ -120,7 +120,7 @@ class _DepartmentSelectScreenState extends State<DepartmentSelectScreen> {
       bottomNavigationBar: _selectedDepts.length > 0
           ? GestureDetector(
               child: Container(
-                height: 80,
+                height: 60,
                 color: Theme.of(context).primaryColor,
                 alignment: Alignment.center,
                 child: Text(

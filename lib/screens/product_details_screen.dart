@@ -509,6 +509,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('>>>>>>>');
+    // print(_data[0]["bulkorder_details"]["bulk_order_price"]);
+    print('>>>>>>>');
     return Scaffold(
       appBar: AppBar(
         title: Text('Item Information'),
@@ -999,16 +1002,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 text: TextSpan(
                                   style: Theme.of(context).textTheme.bodyText1,
                                   children: [
-                                    TextSpan(
-                                      text:
-                                          '${(double.parse(_data[0]["bulkorder_details"]["bulk_order_price"]) * rate).toStringAsFixed(_convertedPriceSymbol == 'Rs' ? 0 : 2)}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}    ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                    ),
+                                    // TextSpan(
+                                    //   text:
+                                    //       '${(double.parse(_data[0]["bulkorder_details"]["bulk_order_price"]) * rate).toStringAsFixed(_convertedPriceSymbol == 'Rs' ? 0 : 2)}/${_data[0]["bulkorder_details"]["bulk_order_price_unit"]}    ',
+                                    //   style: Theme.of(context)
+                                    //       .textTheme
+                                    //       .bodyText1
+                                    //       .copyWith(
+                                    //           color: Theme.of(context)
+                                    //               .primaryColor),
+                                    // ),
                                     TextSpan(
                                       text:
                                           '${_data[0]["bulkorder_details"]["bulk_order_price_type"]}',
@@ -1255,8 +1258,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 2, 10),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                            width: 2,
+                          ),
                         ),
                         alignment: Alignment.center,
                         child: Text(
@@ -1264,7 +1271,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyText1.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: Theme.of(context).primaryColor,
                               ),
                         ),
                       ),
@@ -1274,31 +1281,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Expanded(
                     child: GestureDetector(
                       child: Container(
-                          margin: EdgeInsets.fromLTRB(2, 0, 2, 10),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Add to Cart',
-                            textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.bodyText1.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                          )),
-                      onTap: _addToCart,
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(2, 0, 10, 10),
+                        margin: EdgeInsets.fromLTRB(2, 0, 2, 10),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                            width: 2,
+                          ),
                         ),
                         alignment: Alignment.center,
                         child: Text(
@@ -1306,7 +1296,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyText1.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: Theme.of(context).primaryColor,
                               ),
                         ),
                       ),
@@ -1324,6 +1314,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         );
                       },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Container(
+                          margin: EdgeInsets.fromLTRB(2, 0, 10, 10),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Add to Cart',
+                            textAlign: TextAlign.center,
+                            style:
+                                Theme.of(context).textTheme.bodyText1.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                          )),
+                      onTap: _addToCart,
                     ),
                   ),
                 ],

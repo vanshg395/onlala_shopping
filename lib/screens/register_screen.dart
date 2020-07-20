@@ -721,7 +721,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 DropdownMenuItem(
                   child: Text(
                     'Other',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                      color: Theme.of(context).cardColor,
+                      fontFamily: Theme.of(context)
+                          .primaryTextTheme
+                          .display1
+                          .fontFamily,
+                      fontSize: 16,
+                    ),
                   ),
                   value: 'Other',
                 ),
