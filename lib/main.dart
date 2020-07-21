@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Onlala Shppping',
           theme: ThemeData(
             primaryColor: Color(0xFF255AE7),
